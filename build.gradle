@@ -1,0 +1,81 @@
+import groovyx.net.http.RESTClient
+
+import static groovyx.net.http.ContentType.JSON
+
+buildscript {
+    ext.kotlin_version = '1.2.30'
+
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org._10ne.gradle:rest-gradle-plugin:0.4.2"
+
+    }
+}
+
+plugins {
+    id "org.tenne.rest" version "0.4.2"
+}
+
+group 'egdf'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'kotlin2js'
+apply plugin: 'kotlin-dce-js'
+
+runDceKotlinJs.dceOptions.devMode = false
+runDceTestKotlinJs.dceOptions.devMode = true
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
+    testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
+}
+
+compileKotlin2Js {
+    kotlinOptions.outputFile = "${buildDir}/screeps/main.js"
+    kotlinOptions.moduleKind = "umd"
+    kotlinOptions.sourceMap = true
+
+    runDceKotlinJs.keep "main.loop"
+}
+
+/**
+ * build and deploy to
+ *
+ */
+task("deploy") {
+    dependsOn build
+    doLast {
+        String kotlin = new File("$buildDir/kotlin-js-min/main/kotlin.js").getText('UTF-8')
+        String screepsCode = new File("$buildDir/kotlin-js-min/main/main.js").getText('UTF-8')
+        String branchName = "kotlin"
+
+        RESTClient client = new RESTClient()
+        client.uri = "https://screeps.com/api/user/code"
+        client.headers["Authorization"] = 'Basic ' + ("$screepsUser:$screepsPassword".toString().bytes.encodeBase64())
+        client.headers["Content-Type"] = "application/json"
+        client.post(body: [branch: branchName, modules: [main: screepsCode, kotlin: kotlin]],
+                requestContentType: JSON)
+        client.handler.success = { resp, data ->
+            println resp
+            resp.setData(data)
+            println data
+        }
+        client.handler.failure = { resp, data ->
+            println resp
+            resp.setData(data)
+            println data
+        }
+    }
+
+
+}
