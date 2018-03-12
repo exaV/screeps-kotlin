@@ -1,3 +1,5 @@
+import screeps.game.tutorial1.gameLoop
+
 fun loop() {
-    console.log("Hello World! from Kotlin!")
+    gameLoop()
 }
