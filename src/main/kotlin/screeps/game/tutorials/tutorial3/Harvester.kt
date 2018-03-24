@@ -1,4 +1,4 @@
-package screeps.game.tutorial3
+package screeps.game.tutorials.tutorial3
 
 import types.*
 

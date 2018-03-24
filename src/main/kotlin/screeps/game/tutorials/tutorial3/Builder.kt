@@ -1,6 +1,6 @@
-package screeps.game.tutorial3
+package screeps.game.tutorials.tutorial3
 
-import screeps.game.tutorial2.TutorialMemory
+import screeps.game.tutorials.tutorial2.TutorialMemory
 import types.*
 
 object Builder {

@@ -1,6 +1,6 @@
-package screeps.game.tutorial2
+package screeps.game.tutorials.tutorial2
 
-import screeps.game.tutorial1.Harvester
+import screeps.game.tutorials.tutorial1.Harvester
 import types.Game
 import types.StructureSpawn
 import types.creepsMap

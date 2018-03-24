@@ -1,9 +1,9 @@
-package screeps.game.tutorial4
+package screeps.game.tutorials.tutorial4
 
-import screeps.game.tutorial2.TutorialMemory
-import screeps.game.tutorial2.Upgrader
-import screeps.game.tutorial3.Builder
-import screeps.game.tutorial3.Harvester
+import screeps.game.tutorials.tutorial2.TutorialMemory
+import screeps.game.tutorials.tutorial2.Upgrader
+import screeps.game.tutorials.tutorial3.Builder
+import screeps.game.tutorials.tutorial3.Harvester
 import types.*
 import types.base.global.Memory
 

@@ -1,4 +1,4 @@
-package screeps.game.tutorial2
+package screeps.game.tutorials.tutorial2
 
 import types.Creep
 import types.ERR_NOT_IN_RANGE
