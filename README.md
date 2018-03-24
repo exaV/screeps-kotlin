@@ -16,3 +16,6 @@ Credentials can be provided with a 'gradle.properties' file.
     screepsPassword=<your-password>
 
 
+### Usage
+
+Call your main function from Main.loop
