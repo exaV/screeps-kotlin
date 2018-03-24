@@ -12,6 +12,8 @@ fun <T> jsonToMap(json: Json): Map<String, T> {
     return map
 }
 
-class VisualizePath(val visualizePathStyle :Style = Style("#ffaa00"))
+class VisualizePath(val visualizePathStyle: Style = Style("#ffaa00")) {
+    constructor(stroke: String) : this(Style(stroke))
+}
 
 class Style(val stroke: String)

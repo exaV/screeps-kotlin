@@ -44,6 +44,7 @@ external interface StructureSpawn : OwnedStructure {
 
 }
 
+
 external interface StructureController : OwnedStructure {
     val level: Number
     val progress: Number

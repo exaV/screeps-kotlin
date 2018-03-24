@@ -10,10 +10,10 @@ fun gameLoop() {
     val creeps = Game.creepsMap()
 
     for ((creepName, creep) in creeps) {
-        if (creep.memory.role == "harvester") {
+        if ((creep.memory as TutorialMemory).role == "harvester") {
             Harvester.run(creep, mainSpawn)
         }
-        if (creep.memory.role == "upgrader") {
+        if ((creep.memory as TutorialMemory).role == "upgrader") {
             Upgrader.run(creep);
         }
     }

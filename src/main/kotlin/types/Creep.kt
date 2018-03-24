@@ -2,7 +2,7 @@ package types
 
 external interface Creep : RoomObject {
     val carry: dynamic
-    val memory: dynamic
+    val memory: CreepMemory
     val carryCapacity: Number
     val fatigue: Number
     val hits: Number
@@ -22,5 +22,6 @@ external interface Creep : RoomObject {
     fun transfer(target: Creep, resourceType: String, amount: Number = definedExternally): Number
     fun transfer(target: Structure, resourceType: String, amount: Number = definedExternally): Number
     fun upgradeController(target: StructureController): Number
-
+    fun say(message: String, toPublic: Boolean? = definedExternally): Number
+    fun build(target: ConstructionSite): Number
 }

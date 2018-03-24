@@ -5,7 +5,7 @@ import kotlin.js.Json
 
 external interface Room {
     val prototype: Room
-    val energyAvailable: Number
+    val energyAvailable: Double
     val energyCapacityAvailable: Number
     val memory: dynamic
     val mode: String
@@ -33,8 +33,8 @@ external interface Room {
         asArray: Boolean? = definedExternally /* null */
     ): dynamic /* LookAtResultMatrix<dynamic /* String /* "creep" */ | String /* "source" */ | String /* "energy" */ | String /* "resource" */ | String /* "mineral" */ | String /* "structure" */ | String /* "flag" */ | String /* "constructionSite" */ | String /* "nuke" */ | String /* "terrain" */ */> | Array<Any? /* Any? & `T$79` & `T$95` */> */
 
-    fun find(FIND_CONSTANT: Number): Array<Any>
-
+    fun find(FIND_CONSTANT: Number): Array<RoomObject>
+    fun find(FIND_CONSTANT: Number, opts: dynamic): Array<RoomObject>
 }
 
 @Suppress("UNCHECKED_CAST")
@@ -42,6 +42,12 @@ fun Room.findCreeps() = find(FIND_CREEPS) as Array<Creep>
 
 @Suppress("UNCHECKED_CAST")
 fun Room.findEnergy() = find(FIND_SOURCES) as Array<Source>
+
+@Suppress("UNCHECKED_CAST")
+fun Room.findConstructionSites() = find(FIND_CONSTRUCTION_SITES) as Array<ConstructionSite>
+
+@Suppress("UNCHECKED_CAST")
+fun Room.findStructures() = find(FIND_STRUCTURES) as Array<Structure>
 
 external interface CPUShardLimits
 
@@ -73,7 +79,7 @@ external object Game {
     var creeps: Json = definedExternally
     var gcl: GlobalControlLevel
     var resources: Json
-    var rooms: RoomMap
+    var rooms: Json
     var spawns: Json
     var structures: StructuresMap
     var constructionSites: ConstructionSiteMap
@@ -85,6 +91,7 @@ external object Game {
 
 fun Game.creepsMap(): Map<String, Creep> = jsonToMap(creeps)
 fun Game.spawnsMap(): Map<String, StructureSpawn> = jsonToMap(creeps)
+fun Game.roomsMap(): Map<String, Room> = jsonToMap(creeps)
 
 external interface Shard {
     var name: String
@@ -114,6 +121,10 @@ external interface SignDefinition {
     var datetime: Date
 }
 
+external interface CreepMemory
+external interface FlagMemory
+external interface RoomMemory
+external interface SpawnMemory
 external interface CreepMap : TMap<Creep>
 external interface RoomMap : TMap<Room>
 external interface SpawnsMap : TMap<StructureSpawn>
