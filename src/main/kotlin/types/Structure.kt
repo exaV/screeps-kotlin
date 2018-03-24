@@ -44,6 +44,22 @@ external interface StructureSpawn : OwnedStructure {
 
 }
 
+external interface StructureController : OwnedStructure {
+    val level: Number
+    val progress: Number
+    val progressTotal: Number
+    val reservation: ReservationDefinition?
+    val safeModeAvailable: Number
+    val sign: SignDefinition?
+    val ticksToDowngrade: Number
+    val upgradeBlocked: Number
+    var safeModeCooldown: Number? get() = definedExternally; set(value) = definedExternally
+    var safeMode: Number? get() = definedExternally; set(value) = definedExternally
+    fun activateSafeMode(): dynamic
+    fun unclaim(): dynamic
+
+}
+
 external interface BodyType
 external object WORK : BodyType
 external object CARRY : BodyType

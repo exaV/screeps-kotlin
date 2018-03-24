@@ -6,18 +6,7 @@ fun gameLoop() {
 
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"]!! as StructureSpawn)
     for ((_, creep: Creep) in Game.creepsMap()) {
-
-
-        if (creep.carry.energy < creep.carryCapacity) {
-            val sources = creep.room.findEnergy()
-            if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0].pos, VisualizePath());
-            }
-        } else if (mainSpawn.energy < mainSpawn.energyCapacity) {
-            if (creep.transfer(mainSpawn, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(mainSpawn.pos, VisualizePath());
-            }
-        }
+        Harvester.run(creep, mainSpawn)
     }
 
     if (Game.creepsMap().size < 2) {

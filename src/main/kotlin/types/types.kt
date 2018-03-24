@@ -1,5 +1,6 @@
 package types
 
+import kotlin.js.Date
 import kotlin.js.Json
 
 external interface Room {
@@ -9,15 +10,28 @@ external interface Room {
     val memory: dynamic
     val mode: String
     val name: String
+    val controller: StructureController?
     fun createConstructionSite(x: Number, y: Number, structureType: dynamic): dynamic
     fun createConstructionSite(pos: RoomPosition, structureType: dynamic): dynamic
-    fun createFlag(pos: RoomPosition, name: String? = definedExternally, color: dynamic = definedExternally, secondaryColor: dynamic = definedExternally): dynamic
+    fun createFlag(
+        pos: RoomPosition,
+        name: String? = definedExternally,
+        color: dynamic = definedExternally,
+        secondaryColor: dynamic = definedExternally
+    ): dynamic
+
     fun findExitTo(room: String): dynamic
     fun findExitTo(room: Room): dynamic
     fun getPositionAt(x: Number, y: Number): RoomPosition?
     fun lookAt(x: Number, y: Number): Array<Any? /* Any? & `T$79` */>
     fun lookAt(target: RoomPosition): Array<Any? /* Any? & `T$79` */>
-    fun lookAtArea(top: Number, left: Number, bottom: Number, right: Number, asArray: Boolean? = definedExternally /* null */): dynamic /* LookAtResultMatrix<dynamic /* String /* "creep" */ | String /* "source" */ | String /* "energy" */ | String /* "resource" */ | String /* "mineral" */ | String /* "structure" */ | String /* "flag" */ | String /* "constructionSite" */ | String /* "nuke" */ | String /* "terrain" */ */> | Array<Any? /* Any? & `T$79` & `T$95` */> */
+    fun lookAtArea(
+        top: Number,
+        left: Number,
+        bottom: Number,
+        right: Number,
+        asArray: Boolean? = definedExternally /* null */
+    ): dynamic /* LookAtResultMatrix<dynamic /* String /* "creep" */ | String /* "source" */ | String /* "energy" */ | String /* "resource" */ | String /* "mineral" */ | String /* "structure" */ | String /* "flag" */ | String /* "constructionSite" */ | String /* "nuke" */ | String /* "terrain" */ */> | Array<Any? /* Any? & `T$79` & `T$95` */> */
 
     fun find(FIND_CONSTANT: Number): Array<Any>
 
@@ -25,30 +39,9 @@ external interface Room {
 
 @Suppress("UNCHECKED_CAST")
 fun Room.findCreeps() = find(FIND_CREEPS) as Array<Creep>
+
 @Suppress("UNCHECKED_CAST")
 fun Room.findEnergy() = find(FIND_SOURCES) as Array<Source>
-
-external interface Creep : RoomObject {
-    val carry: dynamic
-    val carryCapacity: Number
-    val fatigue: Number
-    val hits: Number
-    val hitsMax: Number
-    val id: String
-    val my: Boolean
-    val name: String
-    val owner: Owner
-    val spawning: Boolean
-    val saying: String
-    val ticksToLive: Number?
-    fun attack(target: Creep): dynamic
-    fun harvest(target: dynamic): Number
-    fun moveTo(target: RoomPosition)
-    fun moveTo(target: RoomPosition, opts: dynamic)
-    fun transfer(target: Creep, resourceType: String, amount: Number = definedExternally): Number
-    fun transfer(target: Structure, resourceType: String, amount: Number = definedExternally): Number
-
-}
 
 external interface CPUShardLimits
 
@@ -107,6 +100,18 @@ external interface ConstructionSite : RoomObject {
     var progressTotal: Number
     var structureType: String
     fun remove(): Number
+}
+
+external interface ReservationDefinition {
+    var username: String
+    var ticksToEnd: Number
+}
+
+external interface SignDefinition {
+    var username: String
+    var text: String
+    var time: Number
+    var datetime: Date
 }
 
 external interface CreepMap : TMap<Creep>
