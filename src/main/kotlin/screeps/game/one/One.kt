@@ -3,7 +3,7 @@ package screeps.game.one
 
 import screeps.game.one.behaviours.BusyBehaviour
 import screeps.game.one.behaviours.IdleBehaviour
-import screeps.game.one.behaviours.RefillBehaviour
+import screeps.game.one.behaviours.RefillEnergy
 import screeps.game.tutorials.tutorial4.houseKeeping
 import types.*
 
@@ -13,7 +13,7 @@ enum class BodyDefinition(val bodyType: Array<BodyType>) {
     BIG_WORKER(arrayOf(WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE))
 }
 
-class CreepOptions(state: CreepState) {
+class CreepSpawnOptions(state: CreepState) {
     val memory: CreepMemory = object : CreepMemory {
         val state: String = state.name
     }
@@ -21,7 +21,7 @@ class CreepOptions(state: CreepState) {
 
 fun StructureSpawn.spawn(bodyDefinition: BodyDefinition) {
     val newName = "${bodyDefinition.name}_${Game.time}"
-    val code = this.spawnCreep(bodyDefinition.bodyType, newName, CreepOptions(CreepState.REFILL))
+    val code = this.spawnCreep(bodyDefinition.bodyType, newName, CreepSpawnOptions(CreepState.REFILL))
     when (code) {
         OK -> console.log("spawning $newName with body ${bodyDefinition.bodyType}")
         ERR_BUSY -> console.log("busy")
@@ -104,7 +104,7 @@ fun gameLoop() {
             when (creepMemory.state) {
                 CreepState.UNKNOWN -> TODO()
                 CreepState.IDLE -> IdleBehaviour.run(creep, creepMemory, mainSpawn)
-                CreepState.REFILL -> RefillBehaviour.run(creep, creepMemory)
+                CreepState.REFILL -> RefillEnergy.run(creep, creepMemory)
                 else -> BusyBehaviour.run(creep, creepMemory, mainSpawn) //TODO make dis better
 
             }

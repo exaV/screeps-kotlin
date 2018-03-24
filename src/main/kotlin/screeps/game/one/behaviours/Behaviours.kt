@@ -3,33 +3,9 @@ package screeps.game.one.behaviours
 import screeps.game.one.BetterCreepMemory
 import screeps.game.one.CreepState
 import screeps.game.one.findClosest
-import screeps.game.one.findClosestNotEmpty
 import types.*
 import kotlin.js.Math.random
 
-object RefillBehaviour {
-    fun run(creep: Creep, creepMemory: BetterCreepMemory) {
-        val energySources = creep.room.findEnergy()
-        if (creep.carry.energy < creep.carryCapacity && energySources.isNotEmpty()) {
-            val closestSource = creep.findClosestNotEmpty(energySources)
-            
-            val code = creep.harvest(closestSource)
-            when (code) {
-                ERR_NOT_IN_RANGE -> {
-                    val moveCode = creep.moveTo(closestSource.pos, VisualizePath())
-                    when (moveCode) {
-                        OK -> kotlin.run { }
-                    //TODO handle no path
-                        else -> println("unexpected code $moveCode when moving $creep to ${closestSource.pos}")
-                    }
-                }
-            }
-
-        } else {
-            creepMemory.state = CreepState.IDLE
-        }
-    }
-}
 
 object IdleBehaviour {
     fun run(creep: Creep, creepMemory: BetterCreepMemory, spawn: StructureSpawn) {
