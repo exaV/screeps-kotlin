@@ -19,3 +19,4 @@ Credentials can be provided with a 'gradle.properties' file.
 ### Usage
 
 Call your main function from Main.loop
+Have a look at the tutorials in src/main/kotlin screeps.game.tutorials (call the tutorials gameloop() in Main.loop to test them)
