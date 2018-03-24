@@ -30,6 +30,22 @@ fun StructureSpawn.spawn(bodyDefinition: BodyDefinition) {
     }
 }
 
+fun <T : RoomObject> Creep.findClosest(roomObjects: Collection<T>): T? {
+
+    var closest: T? = null
+    var minDistance = Double.MAX_VALUE
+    for (roomObject in roomObjects) {
+        val dist = (roomObject.pos.x - this.pos.x) * (roomObject.pos.x - this.pos.x) +
+                (roomObject.pos.y - this.pos.y) * (roomObject.pos.y - this.pos.y)
+
+        if (dist < minDistance) {
+            minDistance = dist
+            closest = roomObject
+        }
+    }
+    return closest
+}
+
 fun <T : RoomObject> Creep.findClosest(roomObjects: Array<out T>): T? {
     var closest: T? = null
     var minDistance = Double.MAX_VALUE
@@ -45,10 +61,11 @@ fun <T : RoomObject> Creep.findClosest(roomObjects: Array<out T>): T? {
     return closest
 }
 
-fun Creep.findClosestEnergySource(): Source? {
-    val sources = this.room.findEnergy()
-    return findClosest(sources)
+fun <T : RoomObject> Creep.findClosestNotEmpty(roomObjects: Array<out T>): T {
+    require(roomObjects.isNotEmpty())
+    return findClosest(roomObjects)!!
 }
+
 
 fun measureCpu(block: () -> Unit): Int {
     val startCpu = Game.cpu.limit

@@ -3,20 +3,31 @@ package screeps.game.one.behaviours
 import screeps.game.one.BetterCreepMemory
 import screeps.game.one.CreepState
 import screeps.game.one.findClosest
-import screeps.game.one.findClosestEnergySource
+import screeps.game.one.findClosestNotEmpty
 import types.*
 import kotlin.js.Math.random
 
 object RefillBehaviour {
     fun run(creep: Creep, creepMemory: BetterCreepMemory) {
         println("running refill ${creep.carry.energy} < ${creep.carryCapacity}")
-        if (creep.carry.energy < creep.carryCapacity) {
-            val closestSource = creep.findClosestEnergySource()!!
+        val energySources = creep.room.findEnergy()
+        if (creep.carry.energy < creep.carryCapacity && energySources.isNotEmpty()) {
+            val closestSource = creep.findClosestNotEmpty(energySources)
+
             println("closest = $closestSource")
 
-            if (creep.harvest(closestSource) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(closestSource.pos, VisualizePath())
+            val code = creep.harvest(closestSource)
+            when (code) {
+                ERR_NOT_IN_RANGE -> {
+                    val moveCode = creep.moveTo(closestSource.pos, VisualizePath())
+                    when (moveCode) {
+                        OK -> kotlin.run { }
+                    //TODO handle no path
+                        else -> println("unexpected code $moveCode when moving $creep to ${closestSource.pos}")
+                    }
+                }
             }
+
         } else {
             creepMemory.state = CreepState.IDLE
         }
@@ -73,9 +84,14 @@ object BusyBehaviour {
 
 
             if (targets.isNotEmpty()) {
-                if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0].pos, VisualizePath(stroke = "#ffffff"));
+                val closest: StructureSpawn = creep.findClosest(targets)!!
+
+                val code = creep.transfer(closest, RESOURCE_ENERGY)
+                when (code) {
+                    ERR_NOT_IN_RANGE -> creep.moveTo(closest.pos, VisualizePath(stroke = "#ffffff"))
+                    ERR_FULL -> creepMemory.state = CreepState.IDLE
                 }
+
             }
         }
 

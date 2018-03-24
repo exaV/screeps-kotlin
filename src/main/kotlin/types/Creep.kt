@@ -18,7 +18,7 @@ external interface Creep : RoomObject {
     fun attack(target: Creep): dynamic
     fun harvest(target: dynamic): Number
     fun moveTo(target: RoomPosition)
-    fun moveTo(target: RoomPosition, opts: dynamic)
+    fun moveTo(target: RoomPosition, opts: dynamic): Int
     fun transfer(target: Creep, resourceType: String, amount: Number = definedExternally): Number
     fun transfer(target: Structure, resourceType: String, amount: Number = definedExternally): Number
     fun upgradeController(target: StructureController): Number
