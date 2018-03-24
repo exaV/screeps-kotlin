@@ -85,8 +85,9 @@ object BusyBehaviour {
 
                 val code = creep.transfer(closest, RESOURCE_ENERGY)
                 when (code) {
+                    OK -> kotlin.run { }
                     ERR_NOT_IN_RANGE -> creep.moveTo(closest.pos, VisualizePath(stroke = "#ffffff"))
-                    ERR_FULL -> creepMemory.state = CreepState.IDLE
+                    else -> creepMemory.state = CreepState.IDLE
                 }
 
             }
