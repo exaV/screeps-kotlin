@@ -46,7 +46,7 @@ external interface StructureSpawn : OwnedStructure {
 
 
 external interface StructureController : OwnedStructure {
-    val level: Number
+    val level: Int
     val progress: Number
     val progressTotal: Number
     val reservation: ReservationDefinition?

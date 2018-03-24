@@ -91,7 +91,7 @@ private fun populationControl(
     }
 }
 
-private fun houseKeeping(creeps: Map<String, Creep>) {
+public fun houseKeeping(creeps: Map<String, Creep>) {
     for ((creepName, _) in jsonToMap<Creep>(Memory.creeps)) {
         if (creeps[creepName] == null) {
             console.log("deleting obselete memory entry for creep $creepName")

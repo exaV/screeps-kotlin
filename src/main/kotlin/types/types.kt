@@ -6,7 +6,7 @@ import kotlin.js.Json
 external interface Room {
     val prototype: Room
     val energyAvailable: Double
-    val energyCapacityAvailable: Number
+    val energyCapacityAvailable: Double
     val memory: dynamic
     val mode: String
     val name: String
@@ -82,7 +82,7 @@ external object Game {
     var rooms: Json
     var spawns: Json
     var structures: StructuresMap
-    var constructionSites: ConstructionSiteMap
+    var constructionSites: Json
     var shard: Shard
     var time: Number
     fun <T> getObjectById(id: String?): T?
@@ -90,8 +90,9 @@ external object Game {
 }
 
 fun Game.creepsMap(): Map<String, Creep> = jsonToMap(creeps)
-fun Game.spawnsMap(): Map<String, StructureSpawn> = jsonToMap(creeps)
-fun Game.roomsMap(): Map<String, Room> = jsonToMap(creeps)
+fun Game.spawnsMap(): Map<String, StructureSpawn> = jsonToMap(spawns)
+fun Game.roomsMap(): Map<String, Room> = jsonToMap(rooms)
+fun Game.constructionsSitesMap(): Map<String, ConstructionSite> = jsonToMap(constructionSites)
 
 external interface Shard {
     var name: String
