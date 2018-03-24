@@ -60,9 +60,9 @@ inline operator fun CPUShardLimits.set(shard: String, value: Number) {
 }
 
 external interface CPU {
-    var limit: Number
-    var tickLimit: Number
-    var bucket: Number
+    var limit: Int
+    var tickLimit: Int
+    var bucket: Int
     var shardLimits: CPUShardLimits
     fun getUsed(): Number
     fun setShardLimits(limits: CPUShardLimits): dynamic /* Number /* 0 */ | Number /* -4 */ | Number /* -10 */ */
