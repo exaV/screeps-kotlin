@@ -9,7 +9,7 @@ import types.*
 
 
 enum class BodyDefinition(val bodyType: Array<BodyType>) {
-    BASIC_WORKER(arrayOf(WORK, WORK, CARRY, MOVE)),
+    BASIC_WORKER(arrayOf(WORK, CARRY, MOVE)),
     BIG_WORKER(arrayOf(WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE))
 }
 
