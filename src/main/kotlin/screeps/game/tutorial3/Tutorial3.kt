@@ -9,7 +9,9 @@ fun gameLoop() {
     val rooms = Game.roomsMap()
 
     for ((roomName, room) in rooms) {
-        console.log("Room $roomName has ${room.energyAvailable} energy available");
+        if (room.memory.lastEnergy != room.energyAvailable) {
+            console.log("Room $roomName has ${room.energyAvailable} energy available");
+        }
 
         if (room.energyAvailable > 549) {
             mainSpawn.spawnCreep(arrayOf(WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE), "HarvesterBig")
@@ -17,10 +19,12 @@ fun gameLoop() {
     }
 
     for ((creepName, creep) in creeps) {
-        if ((creep.memory as TutorialMemory).role == "harvester") {
+        val creepMemory = TutorialMemory(creep.memory)
+
+        if (creepMemory.role == "harvester") {
             Harvester.run(creep)
         }
-        if ((creep.memory as TutorialMemory).role == "builder") {
+        if (creepMemory.role == "builder") {
             Builder.run(creep);
         }
     }

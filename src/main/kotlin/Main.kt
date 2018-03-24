@@ -1,4 +1,4 @@
-import screeps.game.tutorial1.gameLoop
+import screeps.game.tutorial3.gameLoop
 
 fun loop() {
     gameLoop()

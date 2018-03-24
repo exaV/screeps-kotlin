@@ -5,7 +5,7 @@ import types.*
 
 object Builder {
     fun run(creep: Creep) {
-        val creepMemory = (creep.memory as TutorialMemory)
+        val creepMemory = TutorialMemory(creep.memory)
 
         if (creepMemory.building == true && creep.carry.energy == 0) {
             creepMemory.building = false;
