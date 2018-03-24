@@ -3,7 +3,7 @@ package types.base.global
 import kotlin.js.Json
 
 external object Memory {
-    var creeps: Json
+    var creeps: Json?
     var flags: Json
     var rooms: Json
     var spawns: Json

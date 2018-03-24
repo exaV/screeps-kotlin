@@ -92,10 +92,13 @@ private fun populationControl(
 }
 
 public fun houseKeeping(creeps: Map<String, Creep>) {
-    for ((creepName, _) in jsonToMap<Creep>(Memory.creeps)) {
+    val creepsFromMemory = Memory.creeps
+    if (creepsFromMemory == null) return
+
+    for ((creepName, _) in jsonToMap<Creep>(creepsFromMemory)) {
         if (creeps[creepName] == null) {
             console.log("deleting obselete memory entry for creep $creepName")
-            delete(Memory.creeps[creepName])
+            delete(Memory.creeps!![creepName])
         }
     }
 }
