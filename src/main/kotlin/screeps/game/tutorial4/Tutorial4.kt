@@ -1,6 +1,7 @@
 package screeps.game.tutorial4
 
 import screeps.game.tutorial2.TutorialMemory
+import screeps.game.tutorial2.Upgrader
 import screeps.game.tutorial3.Builder
 import screeps.game.tutorial3.Harvester
 import types.*
@@ -8,6 +9,7 @@ import types.base.global.Memory
 
 external fun delete(p: dynamic): Boolean = definedExternally
 //...
+
 
 enum class Role {
     HARVESTER,
@@ -21,27 +23,19 @@ class CreepOptions(role: Role) {
     }
 }
 
+val minPopulations = arrayOf(Role.HARVESTER to 2, Role.UPGRADER to 1, Role.BUILDER to 2)
+
 fun gameLoop() {
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"]!! as StructureSpawn)
     val creeps = Game.creepsMap()
     val rooms = Game.roomsMap()
 
-    //housekeeping
-    for ((creepName, _) in jsonToMap<Creep>(Memory.creeps)) {
-        if (creeps[creepName] == null) {
-            console.log("deleting obselete memory entry for creep $creepName")
-            delete(Memory.creeps[creepName])
-        }
-    }
+    //delete memories of creeps that have passed away
+    houseKeeping(creeps)
 
-    val harvesters =
-        creeps.filter { (_, creep) -> TutorialMemory(creep.memory).role == Role.HARVESTER.name.toLowerCase() }
-    if (harvesters.size < 2) {
-        val newName = "Harvester_${Game.time}"
-        if (mainSpawn.spawnCreep(arrayOf(WORK, CARRY, MOVE), newName, CreepOptions(Role.HARVESTER)) == OK) {
-            console.log("spawning $newName")
-        }
-    }
+    //make sure we have at least some creeps
+    populationControl(minPopulations, creeps, mainSpawn)
+
 
     for ((roomName, room) in rooms) {
         if (room.memory.lastEnergy != room.energyAvailable) {
@@ -49,12 +43,17 @@ fun gameLoop() {
         }
 
         if (room.energyAvailable > 549) {
-            mainSpawn.spawnCreep(arrayOf(WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE), "HarvesterBig")
+            mainSpawn.spawnCreep(
+                arrayOf(WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE),
+                "HarvesterBig",
+                CreepOptions(Role.HARVESTER)
+            )
         }
     }
 
-    for ((creepName, creep) in creeps) {
+    for ((_, creep) in creeps) {
         val creepMemory = TutorialMemory(creep.memory)
+
 
         if (creepMemory.role == "harvester") {
             Harvester.run(creep)
@@ -62,6 +61,42 @@ fun gameLoop() {
         if (creepMemory.role == "builder") {
             Builder.run(creep);
         }
+        if (creepMemory.role == "upgrader") {
+            Upgrader.run(creep)
+        }
     }
 
 }
+
+private fun populationControl(
+    minPopulations: Array<Pair<Role, Int>>,
+    creeps: Map<String, Creep>,
+    spawn: StructureSpawn
+) {
+    for ((role, min) in minPopulations) {
+        val current = creeps.filter { (_, creep) -> TutorialMemory(creep.memory).role == role.name.toLowerCase() }
+        if (current.size < min) {
+            val newName = "${role.name}_${Game.time}"
+            val body = arrayOf(WORK, CARRY, MOVE)
+            val code = spawn.spawnCreep(body, newName, CreepOptions(role))
+
+            when (code) {
+                OK -> console.log("spawning $newName with body $body")
+                ERR_BUSY -> console.log("busy")
+                ERR_NOT_ENOUGH_ENERGY -> run { } // do nothing
+                else -> console.log("unhandled error code $code")
+            }
+
+        }
+    }
+}
+
+private fun houseKeeping(creeps: Map<String, Creep>) {
+    for ((creepName, _) in jsonToMap<Creep>(Memory.creeps)) {
+        if (creeps[creepName] == null) {
+            console.log("deleting obselete memory entry for creep $creepName")
+            delete(Memory.creeps[creepName])
+        }
+    }
+}
+
