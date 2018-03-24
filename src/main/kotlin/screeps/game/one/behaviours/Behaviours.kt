@@ -9,13 +9,10 @@ import kotlin.js.Math.random
 
 object RefillBehaviour {
     fun run(creep: Creep, creepMemory: BetterCreepMemory) {
-        println("running refill ${creep.carry.energy} < ${creep.carryCapacity}")
         val energySources = creep.room.findEnergy()
         if (creep.carry.energy < creep.carryCapacity && energySources.isNotEmpty()) {
             val closestSource = creep.findClosestNotEmpty(energySources)
-
-            println("closest = $closestSource")
-
+            
             val code = creep.harvest(closestSource)
             when (code) {
                 ERR_NOT_IN_RANGE -> {
