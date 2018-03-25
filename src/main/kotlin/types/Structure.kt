@@ -46,8 +46,7 @@ external interface StructureSpawn : OwnedStructure {
     val spawning: Spawning?
 
     fun spawnCreep(body: Array<BodyType>, name: String): Number
-    fun spawnCreep(body: Array<BodyType>, name: String, ops: dynamic): Number
-    fun spawnCreep(body: List<BodyType>, name: String, ops: dynamic): Number
+    fun spawnCreep(body: Array<BodyType>, name: String, opts: dynamic): Number
 
 }
 

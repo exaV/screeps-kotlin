@@ -5,8 +5,8 @@ import screeps.game.one.kreeps.CreepSpawnOptions
 import types.*
 
 fun StructureSpawn.spawn(bodyDefinition: BodyDefinition) {
-    val newName = "${bodyDefinition.name}_${Game.time}"
     val body = bodyDefinition.getBiggest(this.energy)
+    val newName = "${bodyDefinition.name}${body.size}_${Game.time}"
 
 
     val code = this.spawnCreep(body.toTypedArray(), newName, CreepSpawnOptions(CreepState.REFILL))
