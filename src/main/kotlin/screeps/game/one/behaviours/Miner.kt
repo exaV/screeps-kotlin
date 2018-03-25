@@ -2,17 +2,16 @@ package screeps.game.one.behaviours
 
 import screeps.game.one.BetterCreepMemory
 import screeps.game.one.CreepState
-import screeps.game.one.kreeps.BodyDefinition
 import types.*
 import kotlin.math.roundToInt
 
-object RefillEnergy {
-    const val MAX_MINER_PER_SOURCE = 3
+object Miner {
+    const val MAX_MINER_PER_SOURCE = 1
 
     fun run(creep: Creep, creepMemory: BetterCreepMemory) {
         val energySources = creep.room.findEnergy()
 
-        if (shouldContinueMininig(creep) && energySources.isNotEmpty()) {
+        if (energySources.isNotEmpty()) {
             var assignedSource = creepMemory.assignedEnergySource
             if (assignedSource == null) {
                 val source = creep.requestSource(energySources)!!
@@ -64,17 +63,6 @@ object RefillEnergy {
 
 
         return null
-    }
-
-    fun shouldContinueMininig(creep: Creep): Boolean {
-        if (creep.name.startsWith(BodyDefinition.BASIC_WORKER.name)) {
-            return creep.carry.energy < creep.carryCapacity
-        } else if (creep.name.startsWith(BodyDefinition.MINER.name)) {
-            return true
-        }
-
-        throw IllegalStateException("stop mining not handled")
-
     }
 
     fun dist2(from: RoomPosition, to: RoomPosition) =
