@@ -16,7 +16,7 @@ fun gameLoop() {
 
     houseKeeping(creeps)
 
-    val minWorkers = mainSpawn.room.findEnergy().size * 3
+    val minWorkers = mainSpawn.room.findEnergy().size * 4
     val minMiners = mainSpawn.room.findEnergy().size
 
 

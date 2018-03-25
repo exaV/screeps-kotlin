@@ -3,6 +3,7 @@ package screeps.game.one.behaviours
 import screeps.game.one.BetterCreepMemory
 import screeps.game.one.CreepState
 import screeps.game.one.findClosest
+import screeps.game.one.kreeps.BodyDefinition
 import types.*
 import kotlin.js.Math.random
 
@@ -11,7 +12,7 @@ object IdleBehaviour {
     fun run(creep: Creep, creepMemory: BetterCreepMemory, spawn: StructureSpawn) {
 
         //make sure spawn does not dry up
-        if (creep.room.energyAvailable < 250) {
+        if (creep.room.energyAvailable < BodyDefinition.BASIC_WORKER.getCost()) {
             creepMemory.state = CreepState.TRANSFERRING_ENERGY
 
             return
@@ -28,7 +29,7 @@ object IdleBehaviour {
 
         //check if we need to upgrade the controller
         val controller = creep.room.controller
-        if (controller != null && controller.level < 8) {
+        if (controller != null && controller.level < 8 && Game.creepsMap().filter { BetterCreepMemory(it.value.memory).upgrading != null }.size < 3) {
             creepMemory.state = CreepState.UPGRADING
             creepMemory.upgrading = controller.id
 
@@ -51,9 +52,9 @@ object BusyBehaviour {
     fun run(creep: Creep, creepMemory: BetterCreepMemory, spawn: StructureSpawn) {
         if (creepMemory.state == CreepState.TRANSFERRING_ENERGY) {
             val targets = creep.room.findStructures()
-                .filter { (it.structureType == STRUCTURE_EXTENSION || it.structureType == STRUCTURE_SPAWN) }
-                .map { (it as StructureSpawn) }
-                .filter { it.energy < it.energyCapacity }
+                    .filter { (it.structureType == STRUCTURE_EXTENSION || it.structureType == STRUCTURE_SPAWN) }
+                    .map { (it as StructureSpawn) }
+                    .filter { it.energy < it.energyCapacity }
 
 
             if (targets.isNotEmpty()) {
