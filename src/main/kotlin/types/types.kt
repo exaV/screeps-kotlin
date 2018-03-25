@@ -33,21 +33,16 @@ external interface Room {
         asArray: Boolean? = definedExternally /* null */
     ): dynamic /* LookAtResultMatrix<dynamic /* String /* "creep" */ | String /* "source" */ | String /* "energy" */ | String /* "resource" */ | String /* "mineral" */ | String /* "structure" */ | String /* "flag" */ | String /* "constructionSite" */ | String /* "nuke" */ | String /* "terrain" */ */> | Array<Any? /* Any? & `T$79` & `T$95` */> */
 
-    fun find(FIND_CONSTANT: Number): Array<RoomObject>
-    fun find(FIND_CONSTANT: Number, opts: dynamic): Array<RoomObject>
+    fun <T : RoomObject> find(FIND_CONSTANT: Number): Array<T>
+    fun <T : RoomObject> find(FIND_CONSTANT: Number, opts: dynamic): Array<T>
 }
 
-@Suppress("UNCHECKED_CAST")
-fun Room.findCreeps() = find(FIND_CREEPS) as Array<Creep>
+fun Room.findCreeps() = find<Creep>(FIND_CREEPS)
+fun Room.findEnergy() = find<Source>(FIND_SOURCES)
+fun Room.findConstructionSites() = find<ConstructionSite>(FIND_CONSTRUCTION_SITES)
+fun Room.findStructures() = find<Structure>(FIND_STRUCTURES)
+fun Room.findDroppedEnergy() = find<Resource>(FIND_DROPPED_ENERGY)
 
-@Suppress("UNCHECKED_CAST")
-fun Room.findEnergy() = find(FIND_SOURCES) as Array<Source>
-
-@Suppress("UNCHECKED_CAST")
-fun Room.findConstructionSites() = find(FIND_CONSTRUCTION_SITES) as Array<ConstructionSite>
-
-@Suppress("UNCHECKED_CAST")
-fun Room.findStructures() = find(FIND_STRUCTURES) as Array<Structure>
 
 external interface CPUShardLimits
 

@@ -3,7 +3,7 @@ package screeps.game.one
 
 import screeps.game.one.behaviours.BusyBehaviour
 import screeps.game.one.behaviours.IdleBehaviour
-import screeps.game.one.behaviours.Miner
+import screeps.game.one.behaviours.RefillEnergy
 import screeps.game.one.kreeps.BodyDefinition
 import screeps.game.tutorials.tutorial4.houseKeeping
 import types.*
@@ -40,7 +40,7 @@ fun gameLoop() {
         when (creepMemory.state) {
             CreepState.UNKNOWN -> TODO()
             CreepState.IDLE -> IdleBehaviour.run(creep, creepMemory, mainSpawn)
-            CreepState.REFILL -> Miner.run(creep, creepMemory)
+            CreepState.REFILL -> RefillEnergy.run(creep, creepMemory)
             else -> BusyBehaviour.run(creep, creepMemory, mainSpawn) //TODO make dis better
 
         }

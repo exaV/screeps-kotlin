@@ -5,6 +5,8 @@ import screeps.game.one.kreeps.CreepSpawnOptions
 import types.*
 
 fun StructureSpawn.spawn(bodyDefinition: BodyDefinition) {
+    if (room.energyAvailable < bodyDefinition.getCost()) return
+
     val body = bodyDefinition.getBiggest(room.energyAvailable)
     val newName = "${bodyDefinition.name}${body.size}_${Game.time}"
 
