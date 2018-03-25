@@ -1,5 +1,7 @@
 package types
 
+import kotlin.js.Json
+
 external var OK: Number /* 0 */ = definedExternally
 external var ERR_NOT_OWNER: Number /* -1 */ = definedExternally
 external var ERR_NO_PATH: Number /* -2 */ = definedExternally
@@ -81,7 +83,7 @@ external var LINK_COOLDOWN: Number /* 1 */ = definedExternally
 external var LINK_LOSS_RATIO: Number /* 0.03 */ = definedExternally
 external var STORAGE_CAPACITY: Number /* 1000000 */ = definedExternally
 external var STORAGE_HITS: Number /* 10000 */ = definedExternally
-external var BODYPART_COST: Any? = definedExternally
+external var BODYPART_COST: Json = definedExternally
 external var BODYPARTS_ALL: Array<dynamic /* String /* "move" */ | String /* "work" */ | String /* "carry" */ | String /* "attack" */ | String /* "ranged_attack" */ | String /* "tough" */ | String /* "heal" */ | String /* "claim" */ */> = definedExternally
 external var CARRY_CAPACITY: Number /* 50 */ = definedExternally
 external var HARVEST_POWER: Number /* 2 */ = definedExternally
@@ -159,3 +161,8 @@ external var RESOURCE_CATALYZED_ZYNTHIUM_ACID: String /* "XZH2O" */ = definedExt
 external var RESOURCE_CATALYZED_ZYNTHIUM_ALKALIDE: String /* "ZXHO2" */ = definedExternally
 external var RESOURCE_CATALYZED_GHODIUM_ACID: String /* "XGH2O" */ = definedExternally
 external var RESOURCE_CATALYZED_GHODIUM_ALKALIDE: String /* "XGHO2" */ = definedExternally
+
+typealias BodyType = String
+external val WORK : BodyType
+external val CARRY : BodyType
+external val MOVE : BodyType

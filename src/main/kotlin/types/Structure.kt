@@ -38,7 +38,6 @@ external interface StructureSpawn : OwnedStructure {
     val name: String
     val spawning: dynamic
 
-    fun spawnCreep(body: Array<String>, name: String): Number
     fun spawnCreep(body: Array<BodyType>, name: String): Number
     fun spawnCreep(body: Array<BodyType>, name: String, ops: dynamic): Number
 
@@ -61,7 +60,4 @@ external interface StructureController : OwnedStructure {
 
 }
 
-external interface BodyType
-external object WORK : BodyType
-external object CARRY : BodyType
-external object MOVE : BodyType
+
