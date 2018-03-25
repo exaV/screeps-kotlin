@@ -45,6 +45,7 @@ object RefillEnergy {
             .filterNotNull()
             .groupingBy { it }
             .eachCount()
+
         println("usedSourcesWithCreepCounts=$usedSourcesWithCreepCounts")
 
         //find a source that is close and has some free spots

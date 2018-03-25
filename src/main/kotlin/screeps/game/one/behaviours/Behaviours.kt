@@ -28,7 +28,7 @@ object IdleBehaviour {
 
         //check if we need to upgrade the controller
         val controller = creep.room.controller
-        if (controller != null && controller.level < 3) {
+        if (controller != null && controller.level < 8) {
             creepMemory.state = CreepState.UPGRADING
             creepMemory.upgrading = controller.id
 
