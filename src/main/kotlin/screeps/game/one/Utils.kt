@@ -9,7 +9,7 @@ fun StructureSpawn.spawn(bodyDefinition: BodyDefinition) {
     val body = bodyDefinition.getBiggest(this.energy)
 
 
-    val code = this.spawnCreep(body, newName, CreepSpawnOptions(CreepState.REFILL))
+    val code = this.spawnCreep(body.toTypedArray(), newName, CreepSpawnOptions(CreepState.REFILL))
     when (code) {
         OK -> println("spawning $newName with body $body")
         ERR_BUSY -> console.log("busy")

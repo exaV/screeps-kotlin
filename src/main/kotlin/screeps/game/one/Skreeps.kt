@@ -21,7 +21,7 @@ fun gameLoop() {
 
 
     if (creeps.filter { it.key.startsWith(BodyDefinition.MINER.name) }.size < minMiners) {
-        mainSpawn.spawning(BodyDefinition.MINER)
+        mainSpawn.spawn(BodyDefinition.MINER)
     }
     if (creeps.filter { it.key.startsWith(BodyDefinition.BASIC_WORKER.name) }.size < minWorkers) {
         //spawn creeps

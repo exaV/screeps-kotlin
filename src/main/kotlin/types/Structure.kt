@@ -43,12 +43,21 @@ external interface StructureSpawn : OwnedStructure {
     val energyCapacity: Int
     val memory: dynamic
     val name: String
-    val spawning: dynamic
+    val spawning: Spawning?
 
     fun spawnCreep(body: Array<BodyType>, name: String): Number
     fun spawnCreep(body: Array<BodyType>, name: String, ops: dynamic): Number
     fun spawnCreep(body: List<BodyType>, name: String, ops: dynamic): Number
 
+}
+
+external interface Spawning {
+    val directions: dynamic
+    val name: String
+    val needTime: Number
+    val remainingTime: Number
+
+    fun cancel(): Number
 }
 
 
