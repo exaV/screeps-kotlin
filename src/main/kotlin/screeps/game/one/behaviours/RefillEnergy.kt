@@ -41,7 +41,7 @@ object RefillEnergy {
     fun Creep.requestSource(energySources: Array<Source>): Source? {
 
         val usedSourcesWithCreepCounts = Game.creepsMap()
-            .map { BetterCreepMemory(this.memory).assignedEnergySource }
+            .map { BetterCreepMemory(it.value.memory).assignedEnergySource }
             .filterNotNull()
             .groupingBy { it }
             .eachCount()
