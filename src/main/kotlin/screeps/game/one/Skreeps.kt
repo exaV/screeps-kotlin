@@ -20,9 +20,11 @@ fun gameLoop() {
     val minMiners = mainSpawn.room.findEnergy().size
 
 
-    if (creeps.size < minWorkers) {
+    if (creeps.filter { it.key.startsWith(BodyDefinition.MINER.name) }.size < minMiners) {
+        mainSpawn.spawning(BodyDefinition.MINER)
+    }
+    if (creeps.filter { it.key.startsWith(BodyDefinition.BASIC_WORKER.name) }.size < minWorkers) {
         //spawn creeps
-        println("spawing...")
         mainSpawn.spawn(BodyDefinition.BASIC_WORKER)
     }
 
@@ -44,7 +46,6 @@ fun gameLoop() {
         }
     }
 
-    // println("Used $cpuUsage this tick")
     println("cpu used this tick: ${Game.cpu.getUsed()}")
 
 }

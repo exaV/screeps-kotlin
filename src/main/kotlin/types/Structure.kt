@@ -4,6 +4,13 @@ external class RoomPosition(x: Double, y: Double, name: String) {
     val x: Double
     val y: Double
     val name: String
+
+    fun <T : RoomObject> findClosestByPath(type: FindConstant, objects: Array<RoomObject>, opts: dynamic = definedExternally): T?
+    fun <T : RoomObject> findClosestByPath(type: FindConstant, opts: dynamic = definedExternally): T?
+
+    fun <T : RoomObject> findClosestByRange(type: FindConstant, objects: Array<RoomObject>, opts: dynamic = definedExternally): T?
+    fun <T : RoomObject> findClosestByRange(type: FindConstant, opts: dynamic = definedExternally): T?
+
 }
 
 external interface RoomObject {
