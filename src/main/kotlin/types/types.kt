@@ -5,8 +5,8 @@ import kotlin.js.Json
 
 external interface Room {
     val prototype: Room
-    val energyAvailable: Double
-    val energyCapacityAvailable: Double
+    val energyAvailable: Int
+    val energyCapacityAvailable: Int
     val memory: dynamic
     val mode: String
     val name: String
