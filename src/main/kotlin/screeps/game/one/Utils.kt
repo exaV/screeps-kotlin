@@ -6,9 +6,12 @@ import types.*
 
 fun StructureSpawn.spawn(bodyDefinition: BodyDefinition) {
     val newName = "${bodyDefinition.name}_${Game.time}"
-    val code = this.spawnCreep(bodyDefinition.bodyType, newName, CreepSpawnOptions(CreepState.REFILL))
+    val body = bodyDefinition.getBiggest(this.energy)
+
+
+    val code = this.spawnCreep(body, newName, CreepSpawnOptions(CreepState.REFILL))
     when (code) {
-        OK -> println("spawning $newName with body ${bodyDefinition.bodyType}")
+        OK -> println("spawning $newName with body $body")
         ERR_BUSY -> console.log("busy")
         ERR_NOT_ENOUGH_ENERGY -> run { } // do nothing
         else -> console.log("unhandled error code $code")

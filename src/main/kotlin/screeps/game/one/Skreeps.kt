@@ -17,6 +17,9 @@ fun gameLoop() {
     houseKeeping(creeps)
 
     val minWorkers = mainSpawn.room.findEnergy().size * 3
+    val minMiners = mainSpawn.room.findEnergy().size
+
+
     if (creeps.size < minWorkers) {
         //spawn creeps
         println("spawing...")
