@@ -1,7 +1,7 @@
 package types
 
 external interface Resource : RoomObject {
-    val amount: Number
+    val amount: Int
     val id: String
     val resourceType: String
 }

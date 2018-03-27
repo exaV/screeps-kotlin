@@ -7,6 +7,38 @@ import screeps.game.one.kreeps.BodyDefinition
 import types.*
 import kotlin.js.Math.random
 
+fun buildRoads(room: Room) {
+    val controller = room.controller
+    if (controller == null) {
+        println("cannot buildRoads() in room which is not under our control")
+        return
+    }
+    println("building roads in room $room")
+
+    val spawns = room.find<StructureSpawn>(FIND_MY_SPAWNS)
+    val energySources = room.findEnergy()
+
+    fun buildPathBetween(a: RoomPosition, b: RoomPosition) {
+        val path = room.findPath(a, b, FindPathOpts(ignoreCreeps = true))
+        for (tile in path) {
+            val code = room.createConstructionSite(tile.x, tile.y, STRUCTURE_ROAD)
+            when (code) {
+                OK -> run { }
+                else -> println("could not place road at $tile code=($code)")
+            }
+        }
+    }
+    //build roads from controller to each spawn
+    for (spawn in spawns) {
+        buildPathBetween(controller.pos, spawn.pos)
+
+        //build roads from each spawn to each source
+        for (source in energySources) {
+            buildPathBetween(source.pos, spawn.pos)
+        }
+    }
+
+}
 
 object IdleBehaviour {
     fun run(creep: Creep, creepMemory: BetterCreepMemory, spawn: StructureSpawn) {
@@ -106,6 +138,7 @@ object BusyBehaviour {
                 println("construction of ${creepMemory.building} is done")
                 creepMemory.building = null
                 creepMemory.state = CreepState.IDLE
+                buildRoads(creep.room)
             }
         }
 

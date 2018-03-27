@@ -8,6 +8,7 @@ import screeps.game.one.kreeps.BodyDefinition
 import screeps.game.tutorials.tutorial4.houseKeeping
 import types.*
 
+
 fun gameLoop() {
 
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"]!! as StructureSpawn)

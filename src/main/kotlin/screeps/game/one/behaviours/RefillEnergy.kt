@@ -8,7 +8,7 @@ import kotlin.math.roundToInt
 
 object RefillEnergy {
     const val MAX_MINER_PER_SOURCE = 1
-    const val MAX_CREEP_PER_MINE = 10
+    const val MAX_CREEP_PER_MINE = 5
 
     fun run(creep: Creep, creepMemory: BetterCreepMemory) {
         if (creep.name.startsWith(BodyDefinition.MINER.name)) {
@@ -49,7 +49,7 @@ object RefillEnergy {
 
 
         //find a source that is close and has some free spots
-        droppedEnergy.sort({ a, b -> (dist2(this.pos, a.pos) - dist2(this.pos, b.pos)).roundToInt() })
+        droppedEnergy.sort({ a, b -> b.amount - a.amount })
 
         for (energy in droppedEnergy) {
             if (usedSourcesWithCreepCounts.getOrElse(energy.id, { 0 }) < MAX_CREEP_PER_MINE) {

@@ -11,8 +11,8 @@ external interface Room {
     val mode: String
     val name: String
     val controller: StructureController?
-    fun createConstructionSite(x: Number, y: Number, structureType: dynamic): dynamic
-    fun createConstructionSite(pos: RoomPosition, structureType: dynamic): dynamic
+    fun createConstructionSite(x: Number, y: Number, structureType: StructureConstant): Number
+    fun createConstructionSite(pos: RoomPosition, structureType: StructureConstant): Number
     fun createFlag(
         pos: RoomPosition,
         name: String? = definedExternally,
@@ -33,8 +33,34 @@ external interface Room {
         asArray: Boolean? = definedExternally /* null */
     ): dynamic /* LookAtResultMatrix<dynamic /* String /* "creep" */ | String /* "source" */ | String /* "energy" */ | String /* "resource" */ | String /* "mineral" */ | String /* "structure" */ | String /* "flag" */ | String /* "constructionSite" */ | String /* "nuke" */ | String /* "terrain" */ */> | Array<Any? /* Any? & `T$79` & `T$95` */> */
 
+    fun findPath(fromPos: RoomPosition, toPos: RoomPosition, opts: FindPathOpts? = definedExternally): Array<PathStep>
+
     fun <T : RoomObject> find(FIND_CONSTANT: Number): Array<T>
     fun <T : RoomObject> find(FIND_CONSTANT: Number, opts: dynamic): Array<T>
+}
+
+class FindPathOpts(
+    val ignoreCreeps: Boolean = false,
+    val ignoreDestructibleStructures: Boolean = false,
+    val ignoreRoads: Boolean = false,
+    val costCallback: dynamic = null,
+    val ignore: Array<RoomPosition> = emptyArray(),
+    val avoid: Array<RoomPosition> = emptyArray(),
+    val maxOps: Int = 2000,
+    val heuristicWeight: Double = 1.2,
+    val serialize: Boolean = false,
+    val maxRooms: Int = 16,
+    val range: Int = 0,
+    val plainCost: Double = 1.0,
+    val swampCost: Double = 5.0
+)
+
+external interface PathStep {
+    var x: Int
+    var dx: Int
+    var y: Int
+    var dy: Int
+    var direction: dynamic /* Number /* 1 */ | Number /* 2 */ | Number /* 3 */ | Number /* 4 */ | Number /* 5 */ | Number /* 6 */ | Number /* 7 */ | Number /* 8 */ */
 }
 
 fun Room.findCreeps() = find<Creep>(FIND_CREEPS)
