@@ -122,7 +122,6 @@ object RefillEnergy {
 
     fun shouldContinueMininig(creep: Creep): Boolean {
         if (creep.name.startsWith(BodyDefinition.BASIC_WORKER.name)) {
-            println("creep energy ${creep.carry.energy} < ${creep.carryCapacity}")
             return creep.carry.energy < creep.carryCapacity
         } else if (creep.name.startsWith(BodyDefinition.MINER.name)) {
             return true
