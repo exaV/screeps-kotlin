@@ -36,8 +36,10 @@ external interface Room {
     fun findPath(fromPos: RoomPosition, toPos: RoomPosition, opts: FindPathOpts? = definedExternally): Array<PathStep>
 
     fun <T : RoomObject> find(FIND_CONSTANT: Number): Array<T>
-    fun <T : RoomObject> find(FIND_CONSTANT: Number, opts: dynamic): Array<T>
+    fun <T : RoomObject> find(FIND_CONSTANT: Number, opts: Filter): Array<T>
 }
+
+class Filter(val filter : dynamic)
 
 class FindPathOpts(
     val ignoreCreeps: Boolean = false,
@@ -67,7 +69,7 @@ fun Room.findCreeps() = find<Creep>(FIND_CREEPS)
 fun Room.findEnergy() = find<Source>(FIND_SOURCES)
 fun Room.findConstructionSites() = find<ConstructionSite>(FIND_CONSTRUCTION_SITES)
 fun Room.findStructures() = find<Structure>(FIND_STRUCTURES)
-fun Room.findDroppedEnergy() = find<Resource>(FIND_DROPPED_ENERGY)
+fun Room.findDroppedEnergy() = find<Resource>(FIND_DROPPED_RESOURCES, Filter("energy"))
 
 
 external interface CPUShardLimits

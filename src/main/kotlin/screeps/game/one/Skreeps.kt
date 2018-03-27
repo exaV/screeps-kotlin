@@ -47,6 +47,6 @@ fun gameLoop() {
         }
     }
 
-    println("cpu used this tick: ${Game.cpu.getUsed()}")
+    //println("cpu used this tick: ${Game.cpu.getUsed()}")
 
 }
