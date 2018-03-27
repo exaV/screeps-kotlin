@@ -36,8 +36,10 @@ object IdleBehaviour {
             return
         }
 
-        if (creep.room.energyCapacityAvailable < creep.room.energyAvailable) {
+        if (creep.room.energyAvailable < creep.room.energyCapacityAvailable) {
             creepMemory.state = CreepState.TRANSFERRING_ENERGY
+
+            return
         }
 
         //get out of the way
