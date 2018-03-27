@@ -8,7 +8,7 @@ import kotlin.math.roundToInt
 
 object RefillEnergy {
     const val MAX_MINER_PER_SOURCE = 1
-    const val MAX_CREEP_PER_MINE = 3
+    const val MAX_CREEP_PER_MINE = 10
 
     fun run(creep: Creep, creepMemory: BetterCreepMemory) {
         if (creep.name.startsWith(BodyDefinition.MINER.name)) {
@@ -16,8 +16,6 @@ object RefillEnergy {
         } else {
             worker(creep, creepMemory)
         }
-
-
     }
 
     private fun worker(creep: Creep, creepMemory: BetterCreepMemory) {

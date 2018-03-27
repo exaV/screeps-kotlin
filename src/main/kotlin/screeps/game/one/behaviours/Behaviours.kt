@@ -42,6 +42,14 @@ object IdleBehaviour {
             return
         }
 
+        //if still idle upgrade controller
+        if (controller != null && controller.level < 8) {
+            creepMemory.state = CreepState.UPGRADING
+            creepMemory.upgrading = controller.id
+
+            return
+        }
+
         //get out of the way
         val xScale = random()
         val yScale = random()
@@ -52,11 +60,20 @@ object IdleBehaviour {
 
 object BusyBehaviour {
     fun run(creep: Creep, creepMemory: BetterCreepMemory, spawn: StructureSpawn) {
+
+        if (creep.carry.energy == 0) {
+            creepMemory.state = CreepState.REFILL
+            creepMemory.upgrading = null
+            creepMemory.building = null
+            return
+        }
+
+
         if (creepMemory.state == CreepState.TRANSFERRING_ENERGY) {
             val targets = creep.room.findStructures()
-                    .filter { (it.structureType == STRUCTURE_EXTENSION || it.structureType == STRUCTURE_SPAWN) }
-                    .map { (it as StructureSpawn) }
-                    .filter { it.energy < it.energyCapacity }
+                .filter { (it.structureType == STRUCTURE_EXTENSION || it.structureType == STRUCTURE_SPAWN) }
+                .map { (it as StructureSpawn) }
+                .filter { it.energy < it.energyCapacity }
 
 
             if (targets.isNotEmpty()) {
@@ -90,12 +107,6 @@ object BusyBehaviour {
                 creepMemory.building = null
                 creepMemory.state = CreepState.IDLE
             }
-        }
-
-        if (creep.carry.energy == 0) {
-            creepMemory.state = CreepState.REFILL
-            creepMemory.upgrading = null
-            creepMemory.building = null
         }
 
     }
