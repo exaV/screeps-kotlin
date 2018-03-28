@@ -1,6 +1,7 @@
 package screeps.game.one.behaviours
 
 import screeps.game.one.BetterCreepMemory
+import screeps.game.one.Context
 import screeps.game.one.CreepState
 import screeps.game.one.kreeps.BodyDefinition
 import types.*
@@ -12,7 +13,7 @@ object RefillEnergy {
 
     val droppedEnergyByRoom : MutableMap<Room,Array<Resource>> = mutableMapOf()
 
-    val usedSourcesWithCreepCounts = Game.creepsMap()
+    val usedSourcesWithCreepCounts = Context.creeps
             .map { BetterCreepMemory(it.value.memory).assignedEnergySource }
             .filterNotNull()
             .groupingBy { it }

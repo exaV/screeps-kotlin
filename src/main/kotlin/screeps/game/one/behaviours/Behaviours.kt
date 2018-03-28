@@ -1,6 +1,7 @@
 package screeps.game.one.behaviours
 
 import screeps.game.one.BetterCreepMemory
+import screeps.game.one.Context
 import screeps.game.one.CreepState
 import screeps.game.one.findClosest
 import screeps.game.one.kreeps.BodyDefinition
@@ -61,7 +62,7 @@ object IdleBehaviour {
 
         //check if we need to upgrade the controller
         val controller = creep.room.controller
-        if (controller != null && controller.level < 8 && Game.creepsMap().filter { BetterCreepMemory(it.value.memory).upgrading != null }.size < 3) {
+        if (controller != null && controller.level < 8 && Context.creeps.filter { BetterCreepMemory(it.value.memory).upgrading != null }.size < 3) {
             creepMemory.state = CreepState.UPGRADING
             creepMemory.upgrading = controller.id
 

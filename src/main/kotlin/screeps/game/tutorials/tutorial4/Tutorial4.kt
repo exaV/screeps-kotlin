@@ -27,7 +27,7 @@ val minPopulations = arrayOf(Role.HARVESTER to 2, Role.UPGRADER to 1, Role.BUILD
 
 fun gameLoop() {
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"]!! as StructureSpawn)
-    val creeps = Game.creepsMap()
+    val creeps = jsonToMap<Creep>(Game.creeps)
     val rooms = Game.roomsMap()
 
     //delete memories of creeps that have passed away

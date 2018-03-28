@@ -1,13 +1,11 @@
 package screeps.game.tutorials.tutorial2
 
 import screeps.game.tutorials.tutorial1.Harvester
-import types.Game
-import types.StructureSpawn
-import types.creepsMap
+import types.*
 
 fun gameLoop() {
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"]!! as StructureSpawn)
-    val creeps = Game.creepsMap()
+    val creeps = jsonToMap<Creep>(Game.creeps)
 
     for ((creepName, creep) in creeps) {
         val creepMemory = TutorialMemory(creep.memory)

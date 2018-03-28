@@ -112,7 +112,6 @@ external object Game {
     fun notify(message: String, groupInterval: Number? = definedExternally /* null */): Nothing?
 }
 
-fun Game.creepsMap(): Map<String, Creep> = jsonToMap(creeps)
 fun Game.spawnsMap(): Map<String, StructureSpawn> = jsonToMap(spawns)
 fun Game.roomsMap(): Map<String, Room> = jsonToMap(rooms)
 fun Game.constructionsSitesMap(): Map<String, ConstructionSite> = jsonToMap(constructionSites)

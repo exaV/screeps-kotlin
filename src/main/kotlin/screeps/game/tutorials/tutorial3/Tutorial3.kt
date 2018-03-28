@@ -5,7 +5,7 @@ import types.*
 
 fun gameLoop() {
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"]!! as StructureSpawn)
-    val creeps = Game.creepsMap()
+    val creeps = jsonToMap<Creep>(Game.creeps)
     val rooms = Game.roomsMap()
 
     for ((roomName, room) in rooms) {

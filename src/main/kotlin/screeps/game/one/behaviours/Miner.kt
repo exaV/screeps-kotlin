@@ -1,6 +1,7 @@
 package screeps.game.one.behaviours
 
 import screeps.game.one.BetterCreepMemory
+import screeps.game.one.Context
 import screeps.game.one.CreepState
 import types.*
 import kotlin.math.roundToInt
@@ -42,7 +43,7 @@ object Miner {
 
     fun Creep.requestSource(energySources: Array<Source>): Source? {
 
-        val usedSourcesWithCreepCounts = Game.creepsMap()
+        val usedSourcesWithCreepCounts = Context.creeps
                 .map { BetterCreepMemory(it.value.memory).assignedEnergySource }
                 .filterNotNull()
                 .groupingBy { it }

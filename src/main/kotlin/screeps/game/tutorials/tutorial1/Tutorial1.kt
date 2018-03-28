@@ -4,12 +4,13 @@ import types.*
 
 fun gameLoop() {
 
+    val creeps = jsonToMap<Creep>(Game.creeps)
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"]!! as StructureSpawn)
-    for ((_, creep: Creep) in Game.creepsMap()) {
+    for ((_, creep: Creep) in creeps) {
         Harvester.run(creep, mainSpawn)
     }
 
-    if (Game.creepsMap().size < 2) {
+    if (creeps.size < 2) {
         val body = arrayOf(WORK, CARRY, MOVE)
         val name = "Harvester_${Game.time}"
         val code = mainSpawn.spawnCreep(body, name);
