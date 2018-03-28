@@ -13,7 +13,6 @@ class RefillEnergy {
         const val MAX_CREEP_PER_MINE = 5
     }
 
-
     val droppedEnergyByRoom : MutableMap<Room,Array<Resource>> = mutableMapOf()
 
     val usedSourcesWithCreepCounts = Context.creeps

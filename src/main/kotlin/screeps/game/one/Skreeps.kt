@@ -21,9 +21,9 @@ fun gameLoop() {
 
     houseKeeping(Context.creeps)
 
-    val minWorkers = mainSpawn.room.findEnergy().size * 4
-    val minMiners = mainSpawn.room.findEnergy().size
-
+    val energySources = mainSpawn.room.findEnergy()
+    val minWorkers = energySources.size * 4
+    val minMiners = energySources.size
 
     if (Context.creeps.filter { it.key.startsWith(BodyDefinition.MINER.name) }.size < minMiners) {
         mainSpawn.spawn(BodyDefinition.MINER)
