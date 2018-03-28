@@ -10,6 +10,14 @@ object RefillEnergy {
     const val MAX_MINER_PER_SOURCE = 1
     const val MAX_CREEP_PER_MINE = 5
 
+    val droppedEnergyByRoom : MutableMap<Room,Array<Resource>> = mutableMapOf()
+
+    val usedSourcesWithCreepCounts = Game.creepsMap()
+            .map { BetterCreepMemory(it.value.memory).assignedEnergySource }
+            .filterNotNull()
+            .groupingBy { it }
+            .eachCount()
+
     fun run(creep: Creep, creepMemory: BetterCreepMemory) {
         if (creep.name.startsWith(BodyDefinition.MINER.name)) {
             miner(creep, creepMemory)
@@ -39,22 +47,17 @@ object RefillEnergy {
     }
 
     fun Creep.requestEnergy(): Resource? {
-        val droppedEnergy = this.room.findDroppedEnergy()
 
-        val usedSourcesWithCreepCounts = Game.creepsMap()
-                .map { BetterCreepMemory(it.value.memory).assignedEnergySource }
-                .filterNotNull()
-                .groupingBy { it }
-                .eachCount()
-
+        val droppedEnergy = droppedEnergyByRoom.getOrPut(this.room, {
+            val e = this.room.findDroppedEnergy()
+            e.sort({ a, b -> b.amount - a.amount })
+            e
+        })
 
         //find a source that is close and has some free spots
-        droppedEnergy.sort({ a, b -> b.amount - a.amount })
-
         for (energy in droppedEnergy) {
             if (usedSourcesWithCreepCounts.getOrElse(energy.id, { 0 }) < MAX_CREEP_PER_MINE) {
                 //assign creep to energy source
-
                 return energy
             }
         }
@@ -63,21 +66,22 @@ object RefillEnergy {
     }
 
     private fun miner(creep: Creep, creepMemory: BetterCreepMemory) {
-        val energySources = creep.room.findEnergy()
 
-        if (shouldContinueMininig(creep) && energySources.isNotEmpty()) {
+        if (shouldContinueMininig(creep)) {
             var assignedSource = creepMemory.assignedEnergySource
             if (assignedSource == null) {
+                val energySources = creep.room.findEnergy()
                 val source = creep.requestSource(energySources)
-                if (source == null) return
+                if (source == null){
+                    println("no energy sources available for creep ${creep.name} in ${creep.room}")
+                    return
+                }
                 creepMemory.assignedEnergySource = source.id
                 assignedSource = source.id
 
             }
 
-
             val source = Game.getObjectById<Source>(assignedSource)!!
-
 
             val code = creep.harvest(source)
             when (code) {
@@ -97,11 +101,6 @@ object RefillEnergy {
     }
 
     fun Creep.requestSource(energySources: Array<Source>): Source? {
-        val usedSourcesWithCreepCounts = Game.creepsMap()
-                .map { BetterCreepMemory(it.value.memory).assignedEnergySource }
-                .filterNotNull()
-                .groupingBy { it }
-                .eachCount()
 
         println("usedSourcesWithCreepCounts=$usedSourcesWithCreepCounts")
 
@@ -115,7 +114,6 @@ object RefillEnergy {
 
             }
         }
-
 
         return null
     }
