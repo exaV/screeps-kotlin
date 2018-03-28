@@ -39,13 +39,14 @@ fun gameLoop() {
         }
     }
 
+    val refillEnergy = RefillEnergy()
     for ((_, creep) in Context.creeps) {
         val creepMemory = BetterCreepMemory(creep.memory)
 
         when (creepMemory.state) {
             CreepState.UNKNOWN -> TODO()
             CreepState.IDLE -> IdleBehaviour.run(creep, creepMemory, mainSpawn)
-            CreepState.REFILL -> RefillEnergy.run(creep, creepMemory)
+            CreepState.REFILL -> refillEnergy.run(creep, creepMemory)
             else -> BusyBehaviour.run(creep, creepMemory, mainSpawn) //TODO make dis better
 
         }

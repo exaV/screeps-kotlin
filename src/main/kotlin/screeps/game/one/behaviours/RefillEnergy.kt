@@ -7,9 +7,12 @@ import screeps.game.one.kreeps.BodyDefinition
 import types.*
 import kotlin.math.roundToInt
 
-object RefillEnergy {
-    const val MAX_MINER_PER_SOURCE = 1
-    const val MAX_CREEP_PER_MINE = 5
+class RefillEnergy {
+    companion object {
+        const val MAX_MINER_PER_SOURCE = 1
+        const val MAX_CREEP_PER_MINE = 5
+    }
+
 
     val droppedEnergyByRoom : MutableMap<Room,Array<Resource>> = mutableMapOf()
 
