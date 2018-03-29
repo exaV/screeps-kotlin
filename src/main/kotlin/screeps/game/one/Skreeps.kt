@@ -26,7 +26,11 @@ fun gameLoop() {
     val minMiners = energySources.size
 
     if (Context.creeps.filter { it.key.startsWith(BodyDefinition.MINER.name) }.size < minMiners) {
-        mainSpawn.spawn(BodyDefinition.MINER)
+        if (mainSpawn.room.energyAvailable >= BodyDefinition.MINER_BIG.getCost()) {
+            mainSpawn.spawn(BodyDefinition.MINER_BIG)
+        } else {
+            mainSpawn.spawn(BodyDefinition.MINER)
+        }
     }
     if (Context.creeps.filter { it.key.startsWith(BodyDefinition.BASIC_WORKER.name) }.size < minWorkers) {
         //spawn creeps

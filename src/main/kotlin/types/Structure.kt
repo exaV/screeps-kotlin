@@ -11,6 +11,8 @@ external class RoomPosition(x: Double, y: Double, name: String) {
     fun <T : RoomObject> findClosestByRange(type: FindConstant, objects: Array<RoomObject>, opts: dynamic = definedExternally): T?
     fun <T : RoomObject> findClosestByRange(type: FindConstant, opts: dynamic = definedExternally): T?
 
+    fun <T : RoomObject> findInRange(type: FindConstant, range: Int, opts: Filter = definedExternally): Array<T>
+
 }
 
 external interface RoomObject {

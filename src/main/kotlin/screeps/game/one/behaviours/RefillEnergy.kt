@@ -86,12 +86,14 @@ class RefillEnergy {
 
             val source = Game.getObjectById<Source>(assignedSource)!!
 
+
             val code = creep.harvest(source)
             when (code) {
                 ERR_NOT_IN_RANGE -> {
                     val moveCode = creep.moveTo(source.pos, VisualizePath())
                     when (moveCode) {
-                        OK -> kotlin.run { }
+                        OK -> {
+                        }
                     //TODO handle no path
                         else -> println("unexpected code $moveCode when moving $creep to ${source.pos}")
                     }
@@ -102,6 +104,31 @@ class RefillEnergy {
             creepMemory.state = CreepState.IDLE
         }
     }
+
+    fun containerMining(creep: Creep) {
+        /*Container mining:
+     If RCL > 3 we can place containers to reduce loss to decay of dropped resources.
+     The miner needs to stand exactly on the container and repair it from time to time
+     Obviously this is only beneficial if we already have a big miner
+      */
+
+        val useContainerMining = creep.room.controller?.level ?: 0 >= 3 && creep.name.startsWith(BodyDefinition.MINER_BIG.name)
+        if (useContainerMining) {
+            //check if there is already a container for this source
+            val containers = creep.pos.findInRange<Structure>(FIND_MY_STRUCTURES, 3).filter { it.structureType == STRUCTURE_CONTAINER }
+            when (containers.size) {
+                0 -> creep.room.createConstructionSite(creep.pos, STRUCTURE_CONTAINER) //TODO deal with return
+                1 -> {
+                    //set target and move to
+                    //
+                }
+
+            }
+
+
+        }
+    }
+
 
     fun Creep.requestSource(energySources: Array<Source>): Source? {
 

@@ -119,6 +119,8 @@ object BusyBehaviour {
                     else -> creepMemory.state = CreepState.IDLE
                 }
 
+            } else {
+                creepMemory.state = CreepState.IDLE
             }
         }
 
