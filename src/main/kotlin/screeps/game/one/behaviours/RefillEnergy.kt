@@ -106,6 +106,7 @@ class RefillEnergy {
     }
 
     fun containerMining(creep: Creep) {
+        //TODO
         /*Container mining:
      If RCL > 3 we can place containers to reduce loss to decay of dropped resources.
      The miner needs to stand exactly on the container and repair it from time to time

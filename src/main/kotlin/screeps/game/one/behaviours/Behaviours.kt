@@ -55,16 +55,16 @@ object IdleBehaviour {
         val constructionSite = creep.findClosest(creep.room.findConstructionSites())
         if (constructionSite != null) {
             creepMemory.state = CreepState.CONSTRUCTING
-            creepMemory.building = constructionSite.id
+            creepMemory.targetId = constructionSite.id
 
             return
         }
 
         //check if we need to upgrade the controller
         val controller = creep.room.controller
-        if (controller != null && controller.level < 8 && Context.creeps.filter { BetterCreepMemory(it.value.memory).upgrading != null }.size < 3) {
+        if (controller != null && controller.level < 8 && Context.creeps.filter { BetterCreepMemory(it.value.memory).state == CreepState.UPGRADING }.size < 3) {
             creepMemory.state = CreepState.UPGRADING
-            creepMemory.upgrading = controller.id
+            creepMemory.targetId = controller.id
 
             return
         }
@@ -78,7 +78,7 @@ object IdleBehaviour {
         //if still idle upgrade controller
         if (controller != null && controller.level < 8) {
             creepMemory.state = CreepState.UPGRADING
-            creepMemory.upgrading = controller.id
+            creepMemory.targetId = controller.id
 
             return
         }
@@ -96,8 +96,7 @@ object BusyBehaviour {
 
         if (creep.carry.energy == 0) {
             creepMemory.state = CreepState.REFILL
-            creepMemory.upgrading = null
-            creepMemory.building = null
+            creepMemory.targetId = null
             return
         }
 
@@ -132,17 +131,21 @@ object BusyBehaviour {
         }
 
         if (creepMemory.state == CreepState.CONSTRUCTING) {
-            val constructionSite = Game.constructionsSitesMap()[creepMemory.building!!]
+            val constructionSite = Game.constructionsSitesMap()[creepMemory.targetId!!]
             if (constructionSite != null) {
                 if (creep.build(constructionSite) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(constructionSite.pos, VisualizePath(stroke = "#ffffff"));
                 }
             } else {
-                println("construction of ${creepMemory.building} is done")
-                creepMemory.building = null
+                println("construction of ${creepMemory.targetId} is done")
+                creepMemory.targetId = null
                 creepMemory.state = CreepState.IDLE
                 buildRoads(creep.room)
             }
+        }
+
+        if (creepMemory.state == CreepState.REPAIR) {
+
         }
 
     }

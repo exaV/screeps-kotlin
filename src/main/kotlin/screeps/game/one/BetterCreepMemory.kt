@@ -7,19 +7,16 @@ class BetterCreepMemory(val memory: CreepMemory) {
         get() = CreepState.valueOf(memory.asDynamic().state ?: CreepState.UNKNOWN.name)
         set(value) = run { memory.asDynamic().state = value.name }
 
-    var building: String?
-        get() = memory.asDynamic().building
-        set(value) = run { memory.asDynamic().building = value }
-
-    var upgrading: String?
-        get() = memory.asDynamic().upgrading
-        set(value) = run { memory.asDynamic().upgrading = value }
+    var targetId: String?
+        get() = memory.asDynamic().targetId
+        set(value) = run { memory.asDynamic().targetId = value }
 
     var assignedEnergySource: String?
         get() = memory.asDynamic().energysource
         set(value) = run { memory.asDynamic().energysource = value }
+
 }
 
 enum class CreepState {
-    UNKNOWN, IDLE, BUSY, REFILL, TRANSFERRING_ENERGY, CONSTRUCTING, UPGRADING
+    UNKNOWN, IDLE, BUSY, REFILL, TRANSFERRING_ENERGY, CONSTRUCTING, UPGRADING, REPAIR
 }
