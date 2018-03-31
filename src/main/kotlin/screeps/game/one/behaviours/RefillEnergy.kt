@@ -1,10 +1,7 @@
 package screeps.game.one.behaviours
 
-import screeps.game.one.Context
-import screeps.game.one.CreepState
-import screeps.game.one.assignedEnergySource
+import screeps.game.one.*
 import screeps.game.one.kreeps.BodyDefinition
-import screeps.game.one.state
 import types.*
 
 class RefillEnergy {
@@ -76,6 +73,7 @@ class RefillEnergy {
         when (creep.withdraw(source, RESOURCE_ENERGY)) {
             OK -> kotlin.run { }
             ERR_NOT_IN_RANGE -> creep.moveTo(source.pos)
+            ERR_NOT_ENOUGH_RESOURCES -> creep.memory.assignedEnergySource = null
             else -> println("${creep.name} could now withdraw from ${source.id}")
         }
     }
@@ -139,7 +137,14 @@ class RefillEnergy {
                 -minerOutput.toDouble() / (creepsAssignedToMiner + 1)
             }
         }
-        return null
+
+
+        val containers = room.findStructures().filter { it.structureType == STRUCTURE_CONTAINER }
+            .filter { (it as StructureContainer).store.energy > 0 }
+        if (containers.isNotEmpty()) {
+            println("assigning creep $name's energysource to a container")
+        }
+        return findClosest(containers)
     }
 
     private fun miner(creep: Creep) {
