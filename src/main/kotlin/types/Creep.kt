@@ -25,6 +25,7 @@ external interface Creep : RoomObject {
     fun say(message: String, toPublic: Boolean? = definedExternally): Number
     fun build(target: ConstructionSite): Number
     fun pickup(target: Resource): Number
+    fun repair(structure: OwnedStructure): Number
 }
 
 external interface Carry {

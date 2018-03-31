@@ -145,7 +145,22 @@ object BusyBehaviour {
         }
 
         if (creepMemory.state == CreepState.REPAIR) {
+            require(creepMemory.targetId != null)
+            val structure = Game.getObjectById<OwnedStructure>(creepMemory.targetId!!)
 
+            fun done() {
+                println("finished repairing ${creepMemory.targetId}")
+                creepMemory.state = CreepState.IDLE
+                creepMemory.targetId = null
+            }
+            if (structure == null || structure.hits == structure.hitsMax) {
+                done()
+            } else {
+                require(structure.my)
+                if (creep.repair(structure) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(structure.pos)
+                }
+            }
         }
 
     }
