@@ -2,7 +2,7 @@
 
 ### Types
 Most of the types were generated with ts2kt (0.1.3) from https://github.com/screepers/screeps-typescript-starter
-and manually improved
+and manually improved. The originaltypes are in the [typescript folder](https://github.com/exaV/screeps-kotlin/tree/master/typescript).
 
 ### Deployment
 
