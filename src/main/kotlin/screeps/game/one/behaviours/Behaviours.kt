@@ -56,7 +56,7 @@ class IdleBehaviour {
             if (Context.targets.containsKey(id)) continue //TODO this may not work forever
 
 
-            if (structure.hits < structure.hitsMax) {
+            if (structure.hits < structure.hitsMax / 2) {
                 structureThatNeedRepairing.add(structure)
             }
         }
