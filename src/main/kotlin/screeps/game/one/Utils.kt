@@ -62,24 +62,24 @@ fun <T : RoomObject> Creep.findClosestNotEmpty(roomObjects: Array<out T>): T {
 /**
  * Lazy property that computed at most once per tick
  */
-private class TickLazy<T>(val tickInitializer: () -> Map<String, T>) : ReadOnlyProperty<Context, Map<String, T>> {
-    var map: Map<String, T> = emptyMap()
-    var tick: Number = 0
+private class TickLazy<T>(val computeOncePerTick: () -> T) : ReadOnlyProperty<Any?, T> {
+    var value: T? = null
+    var tick: Number = -1
 
-    override fun getValue(thisRef: Context, property: KProperty<*>): Map<String, T> {
+    override fun getValue(thisRef: Any?, property: KProperty<*>): T {
         val currentTick = Game.time
 
         if (Game.time != tick) {
             tick = currentTick
-            map = tickInitializer()
+            value = computeOncePerTick()
         }
-        return this.map
+        return value!!
     }
 }
 
 /**
  * Creates a lazy property that computed at most once per tick
  */
-fun <T> tickLazy(initializer: () -> Map<String, T>): ReadOnlyProperty<Context, Map<String, T>> {
-    return TickLazy(initializer)
+fun <T> lazyPerTick(computeOncePerTick: () -> T): ReadOnlyProperty<Any?, T> {
+    return TickLazy(computeOncePerTick)
 }
