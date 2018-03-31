@@ -40,10 +40,11 @@ external interface Room {
 }
 
 external class LookAt {
-    val type: String
+    val type: LookConstant
     val creep: Creep?
     val structure: Structure?
     val terrain: String?
+    val constructionSite: ConstructionSite?
 }
 
 class Filter(val filter : dynamic)

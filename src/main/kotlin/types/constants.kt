@@ -164,6 +164,20 @@ external var RESOURCE_CATALYZED_ZYNTHIUM_ALKALIDE: String /* "ZXHO2" */ = define
 external var RESOURCE_CATALYZED_GHODIUM_ACID: String /* "XGH2O" */ = definedExternally
 external var RESOURCE_CATALYZED_GHODIUM_ALKALIDE: String /* "XGHO2" */ = definedExternally
 
+typealias LookConstant = String
+
+external val LOOK_CREEPS: LookConstant = definedExternally
+external val LOOK_ENERGY: LookConstant = definedExternally
+external val LOOK_RESOURCES: LookConstant = definedExternally
+external val LOOK_SOURCES: LookConstant = definedExternally
+external val LOOK_MINERALS: LookConstant = definedExternally
+external val LOOK_STRUCTURES: LookConstant = definedExternally
+external val LOOK_FLAGS: LookConstant = definedExternally
+external val LOOK_CONSTRUCTION_SITES: LookConstant = definedExternally
+external val LOOK_NUKES: LookConstant = definedExternally
+external val LOOK_TERRAIN: LookConstant = definedExternally
+external val LOOK_TOMBSTONES: LookConstant = definedExternally
+
 typealias BodyType = String
 external val WORK : BodyType
 external val CARRY : BodyType

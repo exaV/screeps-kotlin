@@ -23,9 +23,12 @@ fun buildRoads(room: Room) {
         val path = room.findPath(a, b, FindPathOpts(ignoreCreeps = true))
         for (tile in path) {
             val stuff = room.lookAt(tile.x, tile.y)
-            val roadExistsAtTile = stuff.any { it.type == "structure" && it.structure!!.structureType == STRUCTURE_ROAD }
+            val roadExistsAtTile = stuff.any {
+                (it.type == LOOK_STRUCTURES && it.structure!!.structureType == STRUCTURE_ROAD)
+                        || (it.type == LOOK_CONSTRUCTION_SITES && it.constructionSite!!.structureType == STRUCTURE_ROAD)
+            }
             if (roadExistsAtTile) continue
-            
+
             val code = room.createConstructionSite(tile.x, tile.y, STRUCTURE_ROAD)
             when (code) {
                 OK -> run { }
