@@ -26,7 +26,7 @@ fun StructureSpawn.spawn(bodyDefinition: BodyDefinition) {
 fun <T : RoomObject> Creep.findClosest(roomObjects: Collection<T>): T? {
 
     var closest: T? = null
-    var minDistance = Double.MAX_VALUE
+    var minDistance = Int.MAX_VALUE
     for (roomObject in roomObjects) {
         val dist = (roomObject.pos.x - this.pos.x) * (roomObject.pos.x - this.pos.x) +
                 (roomObject.pos.y - this.pos.y) * (roomObject.pos.y - this.pos.y)
@@ -41,7 +41,7 @@ fun <T : RoomObject> Creep.findClosest(roomObjects: Collection<T>): T? {
 
 fun <T : RoomObject> Creep.findClosest(roomObjects: Array<out T>): T? {
     var closest: T? = null
-    var minDistance = Double.MAX_VALUE
+    var minDistance = Int.MAX_VALUE
     for (roomObject in roomObjects) {
         val dist = (roomObject.pos.x - this.pos.x) * (roomObject.pos.x - this.pos.x) +
                 (roomObject.pos.y - this.pos.y) * (roomObject.pos.y - this.pos.y)

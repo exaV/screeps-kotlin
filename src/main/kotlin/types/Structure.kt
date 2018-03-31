@@ -1,8 +1,8 @@
 package types
 
 external class RoomPosition(x: Double, y: Double, name: String) {
-    val x: Double
-    val y: Double
+    val x: Int
+    val y: Int
     val name: String
 
     fun <T : RoomObject> findClosestByPath(type: FindConstant, objects: Array<RoomObject>, opts: dynamic = definedExternally): T?

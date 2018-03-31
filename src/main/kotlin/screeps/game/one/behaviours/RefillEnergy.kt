@@ -6,7 +6,6 @@ import screeps.game.one.assignedEnergySource
 import screeps.game.one.kreeps.BodyDefinition
 import screeps.game.one.state
 import types.*
-import kotlin.math.roundToInt
 
 class RefillEnergy {
     companion object {
@@ -87,48 +86,78 @@ class RefillEnergy {
 
             val source = Game.getObjectById<Source>(assignedSource)!!
 
-
-            val code = creep.harvest(source)
-            when (code) {
-                ERR_NOT_IN_RANGE -> {
-                    val moveCode = creep.moveTo(source.pos, VisualizePath())
-                    when (moveCode) {
-                        OK -> {
+            val useContainerMining = creep.room.controller?.level ?: 0 >= 3 && creep.name.startsWith(BodyDefinition.MINER_BIG.name)
+            if (useContainerMining) {
+                containerMining(creep, source)
+            } else {
+                val code = creep.harvest(source)
+                when (code) {
+                    ERR_NOT_IN_RANGE -> {
+                        val moveCode = creep.moveTo(source.pos, VisualizePath())
+                        when (moveCode) {
+                            OK -> {
+                            }
+                        //TODO handle no path
+                            else -> println("unexpected code $moveCode when moving $creep to ${source.pos}")
                         }
-                    //TODO handle no path
-                        else -> println("unexpected code $moveCode when moving $creep to ${source.pos}")
                     }
                 }
             }
+
 
         } else {
             creep.memory.state = CreepState.IDLE
         }
     }
 
-    fun containerMining(creep: Creep) {
+    fun containerMining(creep: Creep, source: Source) {
+        val sourceToContainerMaxRange = 3
+
         //TODO
         /*Container mining:
      If RCL > 3 we can place containers to reduce loss to decay of dropped resources.
      The miner needs to stand exactly on the container and repair it from time to time
      Obviously this is only beneficial if we already have a big miner
-      */
+  */
 
-        val useContainerMining = creep.room.controller?.level ?: 0 >= 3 && creep.name.startsWith(BodyDefinition.MINER_BIG.name)
-        if (useContainerMining) {
-            //check if there is already a container for this source
-            val containers = creep.pos.findInRange<Structure>(FIND_MY_STRUCTURES, 3).filter { it.structureType == STRUCTURE_CONTAINER }
-            when (containers.size) {
-                0 -> creep.room.createConstructionSite(creep.pos, STRUCTURE_CONTAINER) //TODO deal with return
-                1 -> {
-                    //set target and move to
-                    //
+        //TODO make sure the computations happen not all the time
+        //TODO make sure pathToSource.last() is the tile just before the source and not the source's tile itself
+        //TODO this assumes the container can be built by workers -> workers must be present
+
+        val pathToSource = source.room.findPath(creep.pos, source.pos)
+        if (creep.pos.x != pathToSource.last().x || creep.pos.y != pathToSource.last().y) {
+            creep.moveByPath(pathToSource)
+        }
+
+        //check if there is already a container for this source
+        val containers = source.pos.findInRange<Structure>(FIND_MY_STRUCTURES, sourceToContainerMaxRange).filter { it.structureType == STRUCTURE_CONTAINER }
+        println("using container mining with containers $containers")
+        when (containers.size) {
+            0 -> {
+                //if there is a road leading up to the source build the container there
+                //TODO if container is building we just wait near the target
+                val code = source.room.createConstructionSite(pathToSource.last().x, pathToSource.last().y, STRUCTURE_CONTAINER)
+                when (code) {
+                    OK -> println("building container for source ${source.id}]")
+                    else -> print("error placing construction site for source ${source.id}")
                 }
 
             }
-
-
+            1 -> {
+                val container = containers.single()
+                //set target and move to
+                if (creep.pos.x != container.pos.x || creep.pos.y != container.pos.y) {
+                    creep.moveTo(container.pos) //TODO deal with return
+                } else {
+                    creep.harvest(source)
+                }
+            }
+            else -> {
+                //TODO what?
+                println("Error! multiple containers within $sourceToContainerMaxRange range of source ${source.id}")
+            }
         }
+
     }
 
 
@@ -137,7 +166,7 @@ class RefillEnergy {
         println("usedSourcesWithCreepCounts=$usedSourcesWithCreepCounts")
 
         //find a source that is close and has some free spots
-        energySources.sort({ a, b -> (dist2(this.pos, a.pos) - dist2(this.pos, b.pos)).roundToInt() })
+        energySources.sort({ a, b -> (dist2(this.pos, a.pos) - dist2(this.pos, b.pos)) })
 
         for (energySource in energySources) {
             if (usedSourcesWithCreepCounts.getOrElse(energySource.id, { 0 }) < MAX_MINER_PER_SOURCE) {
