@@ -47,19 +47,17 @@ fun buildRoads(room: Room) {
 
 class IdleBehaviour {
     fun structuresThatNeedRepairing(): List<Structure> {
-        val structureThatNeedRepairing = ArrayList<Structure>(Context.structures.size)
+        if (Context.rooms.size > 1) println("not repairing structures in all rooms")
+        val room = Context.rooms.values.first()
 
-        for ((id, structure) in Context.structures) {
-            if (Context.targets.containsKey(id)) continue //TODO this may not work forever
+        val toRepair = room.findStructures().filterNot { Context.targets.containsKey(it.id) }
+            .filter { it.hits < it.hitsMax / 2 }
+            .sortedBy { it.hits }
+            .take(5)
 
+        println("structureThatNeedRepairing=$toRepair")
 
-            if (structure.hits < structure.hitsMax / 2) {
-                structureThatNeedRepairing.add(structure)
-            }
-        }
-
-        structureThatNeedRepairing.sortBy { it.hits }
-        return structureThatNeedRepairing.take(5)
+        return toRepair
     }
 
     val structureThatNeedRepairing = structuresThatNeedRepairing()

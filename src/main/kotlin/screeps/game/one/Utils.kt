@@ -12,8 +12,6 @@ fun StructureSpawn.spawn(bodyDefinition: BodyDefinition) {
     val body = bodyDefinition.getBiggest(room.energyAvailable)
     val newName = "${bodyDefinition.name}${body.size}_${Game.time}"
 
-    println("attempting to spawn $newName with $body")
-
     val code = this.spawnCreep(body.toTypedArray(), newName, CreepSpawnOptions(CreepState.REFILL))
     when (code) {
         OK -> println("spawning $newName with body $body")
