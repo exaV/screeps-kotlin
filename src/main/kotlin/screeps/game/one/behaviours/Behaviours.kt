@@ -47,7 +47,7 @@ fun buildRoads(room: Room) {
 
 class IdleBehaviour {
     fun structuresThatNeedRepairing(): List<Structure> {
-        if (Context.rooms.size > 1) println("not repairing structures in all rooms")
+        if (Context.rooms.size > 1) println("not repairing myStuctures in all rooms")
         val room = Context.rooms.values.first()
 
         val toRepair = room.findStructures().filterNot { Context.targets.containsKey(it.id) }

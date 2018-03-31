@@ -9,20 +9,38 @@ import screeps.game.tutorials.tutorial4.houseKeeping
 import types.*
 
 
-object Context{
+object Context {
     //built-in
     val creeps: Map<String, Creep> by lazyPerTick { jsonToMap<Creep>(Game.creeps) }
     val rooms: Map<String, Room> by lazyPerTick { jsonToMap<Room>(Game.rooms) }
-    val structures: Map<String, Structure> by lazyPerTick { jsonToMap<Structure>(Game.structures) }
+    val myStuctures: Map<String, Structure> by lazyPerTick { jsonToMap<Structure>(Game.structures) }
     val constructionSites: Map<String, ConstructionSite> by lazyPerTick { jsonToMap<ConstructionSite>(Game.constructionSites) }
-
 
     //synthesized
     val targets: Map<String, Creep> by lazyPerTick { creepsByTarget() }
 
     private fun creepsByTarget(): Map<String, Creep> {
-        return Context.creeps.filter { it.value.memory.targetId != null }.mapKeys { (_, creep) -> creep.memory.targetId!! }
+        return Context.creeps.filter { it.value.memory.targetId != null }
+            .mapKeys { (_, creep) -> creep.memory.targetId!! }
     }
+}
+
+fun getAvailableExtension(controllerLevel: Int) = when (controllerLevel) {
+    1 -> 0
+    2 -> 5
+    3 -> 10
+    4 -> 20
+    5 -> 30
+    6 -> 40
+    7 -> 50
+    8 -> 60
+    else -> throw IllegalArgumentException("unexpected conrollerLevel $controllerLevel")
+}
+
+fun buildExtensions(room: Room) {
+    require(room.controller?.my == true)
+
+
 }
 
 fun gameLoop() {
