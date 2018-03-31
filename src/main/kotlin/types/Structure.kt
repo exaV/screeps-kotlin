@@ -87,4 +87,20 @@ external interface StructureController : OwnedStructure {
 
 }
 
+external class StructureContainer : Structure {
+    val store: Storage
+    val storeCapacity: Int
+    val ticksToDecay: Int
+
+    override val pos: RoomPosition
+    override val room: Room
+    override val hits: Double
+    override val hitsMax: Double
+    override val structureType: String
+    override fun destroy(): Number
+    override fun isActive(): Boolean
+    override fun notifyWhenAttacked(enabled: Boolean): Number
+    override val id: String
+}
+
 

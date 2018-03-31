@@ -1,7 +1,7 @@
 package types
 
 external class Creep : RoomObject {
-    val carry: Carry
+    val carry: Storage
     val memory: CreepMemory
     val carryCapacity: Int
     val fatigue: Number
@@ -13,6 +13,7 @@ external class Creep : RoomObject {
     val spawning: Boolean
     val saying: String
     val ticksToLive: Number?
+    val body: Array<BodyPart>
 
     override val pos: RoomPosition
     override val room: Room
@@ -36,10 +37,17 @@ external class Creep : RoomObject {
     fun say(message: String, toPublic: Boolean? = definedExternally): Number
     fun build(target: ConstructionSite): Number
     fun pickup(target: Resource): Number
-    fun repair(structure: OwnedStructure): Number
+    fun repair(structure: Structure): Number
+    fun withdraw(structureContainer: Structure, resourceType: String, amount: Number = definedExternally): Number
 }
 
-external interface Carry {
+external interface Storage {
     val energy: Int
     val power: Int?
+}
+
+external interface BodyPart {
+    val boost: String?
+    val type: BodyType
+    val hits: Int
 }

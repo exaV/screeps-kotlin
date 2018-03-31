@@ -10,7 +10,7 @@ import types.*
 class RefillEnergy {
     companion object {
         const val MAX_MINER_PER_SOURCE = 1
-        const val MAX_CREEP_PER_DROPPED_ENERGY = 5
+        const val MAX_CREEP_PER_DROPPED_ENERGY = 1
     }
 
     val droppedEnergyByRoom: MutableMap<Room, Array<Resource>> = mutableMapOf()
@@ -36,34 +36,24 @@ class RefillEnergy {
         * miner
         * container
         * source
-        * in the future... storage
+        * in the future... carry
 
          */
-
-
         if (shouldContinueMininig(creep)) {
-            val assignedSource = creep.memory.assignedEnergySource
+            val source: GameObject? = getSourceFromMemory(creep) ?: creep.requestEnergy()
 
-            val source: Any = if (assignedSource != null) {
-                val assigned = Game.getObjectById<Creep>(assignedSource)
-                if (assigned == null) {
-                    creep.memory.assignedEnergySource = null
-                    return true //TODO what
-                } else assigned
+            if (source == null) {
+                println("no energy available for worker ${creep.name}")
+                return false
             } else {
-                val assignTo = creep.requestEnergy()
-                if (assignTo == null) {
-                    println("no energy available for worker ${creep.name}")
-                } else {
-                    creep.memory.assignedEnergySource = assignTo.id
-                    assignTo
-                }
+                creep.memory.assignedEnergySource = source.id
             }
 
             when (source) {
                 is Creep -> refillFromMinerCreep(creep, source)
                 is Source -> println("my source is Source")
                 is Resource -> refillFromResource(creep, source)
+                is StructureContainer -> refillFromContainer(creep, source)
                 else -> println("dont know the type of my source")
             }
 
@@ -71,6 +61,22 @@ class RefillEnergy {
         } else {
             creep.memory.state = CreepState.IDLE
             return true
+        }
+    }
+
+    private fun getSourceFromMemory(creep: Creep): GameObject? {
+        val assigned = Game.getObjectById<GameObject>(creep.memory.assignedEnergySource)
+        if (assigned == null) {
+            creep.memory.assignedEnergySource = null
+        }
+        return assigned
+    }
+
+    private fun refillFromContainer(creep: Creep, source: Structure) {
+        when (creep.withdraw(source, RESOURCE_ENERGY)) {
+            OK -> kotlin.run { }
+            ERR_NOT_IN_RANGE -> creep.moveTo(source.pos)
+            else -> println("${creep.name} could now withdraw from ${source.id}")
         }
     }
 
@@ -83,15 +89,23 @@ class RefillEnergy {
     private fun refillFromMinerCreep(creep: Creep, miner: Creep) {
         require(miner.name.startsWith(BodyDefinition.MINER.name))
 
-        val tileWithResource = miner.room.lookAt(miner.pos)
-            .firstOrNull { it.type == LOOK_RESOURCES && it.resource!!.resourceType == RESOURCE_ENERGY }
-        if (tileWithResource == null) {
-            println("assigned miner ${miner.id} is not yet mining")
-            return
-        }
-        refillFromResource(creep, tileWithResource.resource!!)
-    }
+        val minerTile = miner.room.lookAt(miner.pos)
 
+        val tileWithResource =
+            minerTile.firstOrNull { it.type == LOOK_RESOURCES && it.resource!!.resourceType == RESOURCE_ENERGY }
+        if (tileWithResource != null) {
+            refillFromResource(creep, tileWithResource.resource!!)
+        } else {
+            val tileWithContainer =
+                minerTile.firstOrNull { it.type == LOOK_STRUCTURES && it.structure!!.structureType == STRUCTURE_CONTAINER }
+
+            if (tileWithContainer != null) {
+                refillFromContainer(creep, tileWithContainer.structure!!)
+            } else {
+                println("assigned miner ${miner.id} is not yet mining")
+            }
+        }
+    }
 
     fun Creep.requestEnergy(): GameObject? {
 
@@ -100,7 +114,6 @@ class RefillEnergy {
             e.sort({ a, b -> b.amount - a.amount })
             e
         })
-
 
         val miners = minersByRoom.getOrPut(this.room, {
             Context.creeps.filter { it.key.startsWith(BodyDefinition.MINER.name) && it.value.room.name == this.room.name }
@@ -115,15 +128,18 @@ class RefillEnergy {
             }
         }
 
-
-        //assign to a container
-
-        //assing to a miner
-
-
+        //assign to a miner
+        if (miners.isNotEmpty()) {
+            //biggest miner first
+            // TODO this could be bad because usedSourcesWithCreepCounts only updated in the beginning of the tick
+            // and many could be assigned to same miner
+            return miners.maxBy {
+                val creepsAssignedToMiner = usedSourcesWithCreepCounts[it.id] ?: 0
+                val minerOutput = it.body.count { it.type == WORK } * 2
+                -minerOutput.toDouble() / (creepsAssignedToMiner + 1)
+            }
+        }
         return null
-
-
     }
 
     private fun miner(creep: Creep) {
@@ -198,15 +214,12 @@ class RefillEnergy {
         }
 
         //check if there is already a container for this source
-        val containers = source.pos.findInRange<Structure>(FIND_MY_STRUCTURES, sourceToContainerMaxRange)
+        val containers = source.pos.findInRange<Structure>(FIND_STRUCTURES, sourceToContainerMaxRange)
             .filter { it.structureType == STRUCTURE_CONTAINER }
         when (containers.size) {
             0 -> {
-                //if there is a road leading up to the source build the container there
-                if (source.room.lookAt(
-                        containertile.x,
-                        containertile.y
-                    ).any { it.type == LOOK_CONSTRUCTION_SITES && it.constructionSite!!.structureType == STRUCTURE_CONTAINER }
+                if (source.room.lookAt(containertile.x, containertile.y)
+                        .any { it.type == LOOK_CONSTRUCTION_SITES && it.constructionSite!!.structureType == STRUCTURE_CONTAINER }
                 ) {
                     return
                 }
@@ -214,7 +227,7 @@ class RefillEnergy {
                 val code = source.room.createConstructionSite(containertile.x, containertile.y, STRUCTURE_CONTAINER)
                 when (code) {
                     OK -> println("building container for source ${source.id}]")
-                    else -> print("error placing construction site for source ${source.id}")
+                    else -> println("error placing construction site for source ${source.id}")
                 }
 
             }

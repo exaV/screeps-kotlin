@@ -117,7 +117,7 @@ external object Game {
     val constructionSites: Json
     val shard: Shard
     val time: Number
-    fun <T> getObjectById(id: String?): T?
+    fun <T : GameObject> getObjectById(id: String?): T?
     fun notify(message: String, groupInterval: Number? = definedExternally /* null */): Nothing?
 }
 
