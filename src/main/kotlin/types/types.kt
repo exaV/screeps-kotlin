@@ -23,8 +23,8 @@ external interface Room {
     fun findExitTo(room: String): dynamic
     fun findExitTo(room: Room): dynamic
     fun getPositionAt(x: Number, y: Number): RoomPosition?
-    fun lookAt(x: Number, y: Number): Array<Any? /* Any? & `T$79` */>
-    fun lookAt(target: RoomPosition): Array<Any? /* Any? & `T$79` */>
+    fun lookAt(x: Number, y: Number): Array<LookAt>
+    fun lookAt(target: RoomPosition): Array<LookAt>
     fun lookAtArea(
         top: Number,
         left: Number,
@@ -37,6 +37,13 @@ external interface Room {
 
     fun <T : RoomObject> find(FIND_CONSTANT: Number): Array<T>
     fun <T : RoomObject> find(FIND_CONSTANT: Number, opts: Filter): Array<T>
+}
+
+external class LookAt {
+    val type: String
+    val creep: Creep?
+    val structure: Structure?
+    val terrain: String?
 }
 
 class Filter(val filter : dynamic)

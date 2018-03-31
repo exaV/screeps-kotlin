@@ -22,10 +22,14 @@ fun buildRoads(room: Room) {
     fun buildPathBetween(a: RoomPosition, b: RoomPosition) {
         val path = room.findPath(a, b, FindPathOpts(ignoreCreeps = true))
         for (tile in path) {
+            val stuff = room.lookAt(tile.x, tile.y)
+            val roadExistsAtTile = stuff.any { it.type == "structure" && it.structure!!.structureType == STRUCTURE_ROAD }
+            if (roadExistsAtTile) continue
+            
             val code = room.createConstructionSite(tile.x, tile.y, STRUCTURE_ROAD)
             when (code) {
                 OK -> run { }
-                else -> println("could not place road at $tile code=($code)")
+                else -> println("could not place road at [x=${tile.x},y=${tile.y}] code=($code)")
             }
         }
     }
