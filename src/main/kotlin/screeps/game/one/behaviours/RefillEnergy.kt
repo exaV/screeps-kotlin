@@ -25,21 +25,21 @@ class RefillEnergy {
         if (creep.name.startsWith(BodyDefinition.MINER.name)) {
             miner(creep)
         } else {
-            worker(creep)
+            val canWork = worker(creep)
         }
     }
 
-    private fun worker(creep: Creep) {
+    private fun worker(creep: Creep): Boolean {
         if (shouldContinueMininig(creep)) {
             val assignedEnergy: Resource = if (creep.memory.assignedEnergySource != null) {
                 val energy: Resource? = Game.getObjectById<Resource>(creep.memory.assignedEnergySource) ?: creep.requestEnergy()
                 if (energy == null) {
                     println("not enough sources for ${creep.name}")
-                    return
+                    return false
                 } else energy
             } else {
                 val energy = creep.requestEnergy()
-                if (energy == null) return //TODO what to do
+                if (energy == null) return false//TODO what to do
 
                 creep.memory.assignedEnergySource = energy.id
                 energy
@@ -48,8 +48,10 @@ class RefillEnergy {
             if (creep.pickup(assignedEnergy) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(assignedEnergy.pos)
             }
+            return true
         } else {
             creep.memory.state = CreepState.IDLE
+            return true
         }
     }
 
@@ -73,7 +75,6 @@ class RefillEnergy {
     }
 
     private fun miner(creep: Creep) {
-
         if (shouldContinueMininig(creep)) {
             var assignedSource = creep.memory.assignedEnergySource
             if (assignedSource == null) {
@@ -85,10 +86,13 @@ class RefillEnergy {
                 }
                 creep.memory.assignedEnergySource = source.id
                 assignedSource = source.id
-
             }
 
-            val source = Game.getObjectById<Source>(assignedSource)!!
+            val source = Game.getObjectById<Source>(assignedSource)
+            if (source == null) {
+                creep.memory.assignedEnergySource = null
+                return
+            }
 
             val useContainerMining = creep.room.controller?.level ?: 0 >= 3 && creep.name.startsWith(BodyDefinition.MINER_BIG.name)
             if (useContainerMining) {
@@ -111,6 +115,7 @@ class RefillEnergy {
 
         } else {
             creep.memory.state = CreepState.IDLE
+            creep.memory.assignedEnergySource = null
         }
     }
 

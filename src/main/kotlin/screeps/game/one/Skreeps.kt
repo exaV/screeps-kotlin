@@ -41,8 +41,7 @@ fun gameLoop() {
         } else {
             mainSpawn.spawn(BodyDefinition.MINER)
         }
-    }
-    if (Context.creeps.filter { it.key.startsWith(BodyDefinition.BASIC_WORKER.name) }.size < minWorkers) {
+    } else if (Context.creeps.filter { it.key.startsWith(BodyDefinition.BASIC_WORKER.name) }.size < minWorkers) {
         //spawn creeps
         mainSpawn.spawn(BodyDefinition.BASIC_WORKER)
     }
