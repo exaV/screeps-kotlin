@@ -1,9 +1,10 @@
 package screeps.game.one.behaviours
 
-import screeps.game.one.BetterCreepMemory
 import screeps.game.one.Context
 import screeps.game.one.CreepState
+import screeps.game.one.assignedEnergySource
 import screeps.game.one.kreeps.BodyDefinition
+import screeps.game.one.state
 import types.*
 import kotlin.math.roundToInt
 
@@ -16,28 +17,28 @@ class RefillEnergy {
     val droppedEnergyByRoom : MutableMap<Room,Array<Resource>> = mutableMapOf()
 
     val usedSourcesWithCreepCounts = Context.creeps
-            .map { BetterCreepMemory(it.value.memory).assignedEnergySource }
+            .map { it.value.memory.assignedEnergySource }
             .filterNotNull()
             .groupingBy { it }
             .eachCount()
 
-    fun run(creep: Creep, creepMemory: BetterCreepMemory) {
+    fun run(creep: Creep) {
         if (creep.name.startsWith(BodyDefinition.MINER.name)) {
-            miner(creep, creepMemory)
+            miner(creep)
         } else {
-            worker(creep, creepMemory)
+            worker(creep)
         }
     }
 
-    private fun worker(creep: Creep, creepMemory: BetterCreepMemory) {
+    private fun worker(creep: Creep) {
         if (shouldContinueMininig(creep)) {
-            val assignedEnergy: Resource = if (creepMemory.assignedEnergySource != null) {
-                Game.getObjectById<Resource>(creepMemory.assignedEnergySource) ?: creep.requestEnergy() ?: return
+            val assignedEnergy: Resource = if (creep.memory.assignedEnergySource != null) {
+                Game.getObjectById<Resource>(creep.memory.assignedEnergySource) ?: creep.requestEnergy() ?: return
             } else {
                 val energy = creep.requestEnergy()
                 if (energy == null) return //TODO what to do
 
-                creepMemory.assignedEnergySource = energy.id
+                creep.memory.assignedEnergySource = energy.id
                 energy
             }
 
@@ -45,7 +46,7 @@ class RefillEnergy {
                 creep.moveTo(assignedEnergy.pos)
             }
         } else {
-            creepMemory.state = CreepState.IDLE
+            creep.memory.state = CreepState.IDLE
         }
     }
 
@@ -68,10 +69,10 @@ class RefillEnergy {
         return null
     }
 
-    private fun miner(creep: Creep, creepMemory: BetterCreepMemory) {
+    private fun miner(creep: Creep) {
 
         if (shouldContinueMininig(creep)) {
-            var assignedSource = creepMemory.assignedEnergySource
+            var assignedSource = creep.memory.assignedEnergySource
             if (assignedSource == null) {
                 val energySources = creep.room.findEnergy()
                 val source = creep.requestSource(energySources)
@@ -79,7 +80,7 @@ class RefillEnergy {
                     println("no energy sources available for creep ${creep.name} in ${creep.room}")
                     return
                 }
-                creepMemory.assignedEnergySource = source.id
+                creep.memory.assignedEnergySource = source.id
                 assignedSource = source.id
 
             }
@@ -101,7 +102,7 @@ class RefillEnergy {
             }
 
         } else {
-            creepMemory.state = CreepState.IDLE
+            creep.memory.state = CreepState.IDLE
         }
     }
 

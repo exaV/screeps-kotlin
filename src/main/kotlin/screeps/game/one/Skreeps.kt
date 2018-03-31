@@ -24,7 +24,7 @@ fun gameLoop() {
     Context.rooms = Game.roomsMap()
     Context.creeps = jsonToMap(Game.creeps)
     Context.structures = jsonToMap(Game.structures)
-    Context.targets = Context.creeps.filter { BetterCreepMemory(it.value.memory).targetId != null }.mapKeys { (_, creep) -> BetterCreepMemory(creep.memory).targetId!! }
+    Context.targets = Context.creeps.filter { it.value.memory.targetId != null }.mapKeys { (_, creep) -> creep.memory.targetId!! }
 
     houseKeeping(Context.creeps)
 
@@ -53,13 +53,12 @@ fun gameLoop() {
     val refillEnergy = RefillEnergy()
     val idleBehaviour = IdleBehaviour()
     for ((_, creep) in Context.creeps) {
-        val creepMemory = BetterCreepMemory(creep.memory)
 
-        when (creepMemory.state) {
+        when (creep.memory.state) {
             CreepState.UNKNOWN -> TODO()
-            CreepState.IDLE -> idleBehaviour.run(creep, creepMemory, mainSpawn)
-            CreepState.REFILL -> refillEnergy.run(creep, creepMemory)
-            else -> BusyBehaviour.run(creep, creepMemory) //TODO make dis better
+            CreepState.IDLE -> idleBehaviour.run(creep, mainSpawn)
+            CreepState.REFILL -> refillEnergy.run(creep)
+            else -> BusyBehaviour.run(creep) //TODO make dis better
 
         }
     }

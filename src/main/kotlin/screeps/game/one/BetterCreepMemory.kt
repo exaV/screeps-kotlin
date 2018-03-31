@@ -2,20 +2,17 @@ package screeps.game.one
 
 import types.CreepMemory
 
-class BetterCreepMemory(val memory: CreepMemory) {
-    var state: CreepState
-        get() = CreepState.valueOf(memory.asDynamic().state ?: CreepState.UNKNOWN.name)
-        set(value) = run { memory.asDynamic().state = value.name }
+var CreepMemory.state: CreepState
+    get() = CreepState.valueOf(this.asDynamic().state ?: CreepState.UNKNOWN.name)
+    set(value) = run { this.asDynamic().state = value.name }
 
-    var targetId: String?
-        get() = memory.asDynamic().targetId
-        set(value) = run { memory.asDynamic().targetId = value }
+var CreepMemory.targetId: String?
+    get() = this.asDynamic().targetId
+    set(value) = run { this.asDynamic().targetId = value }
 
-    var assignedEnergySource: String?
-        get() = memory.asDynamic().energysource
-        set(value) = run { memory.asDynamic().energysource = value }
-
-}
+var CreepMemory.assignedEnergySource: String?
+    get() = this.asDynamic().energysource
+    set(value) = run { this.asDynamic().energysource = value }
 
 enum class CreepState {
     UNKNOWN, IDLE, BUSY, REFILL, TRANSFERRING_ENERGY, CONSTRUCTING, UPGRADING, REPAIR

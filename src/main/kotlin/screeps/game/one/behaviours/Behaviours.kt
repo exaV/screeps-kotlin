@@ -1,9 +1,6 @@
 package screeps.game.one.behaviours
 
-import screeps.game.one.BetterCreepMemory
-import screeps.game.one.Context
-import screeps.game.one.CreepState
-import screeps.game.one.findClosest
+import screeps.game.one.*
 import screeps.game.one.kreeps.BodyDefinition
 import types.*
 import kotlin.js.Math.random
@@ -68,8 +65,8 @@ class IdleBehaviour {
     val structureThatNeedRepairing = structuresThatNeedRepairing()
     var structureThatNeedRepairingIndex = 0
 
-    fun run(creep: Creep, creepMemory: BetterCreepMemory, spawn: StructureSpawn) {
-        creepMemory.targetId = null //just making sure it is reset
+    fun run(creep: Creep, spawn: StructureSpawn) {
+        creep.memory.targetId = null //just making sure it is reset
 
         val constructionSite = creep.findClosest(creep.room.findConstructionSites())
         val controller = creep.room.controller
@@ -77,33 +74,33 @@ class IdleBehaviour {
         when {
         //make sure spawn does not dry up
             creep.room.energyAvailable < BodyDefinition.BASIC_WORKER.getCost() -> {
-                creepMemory.state = CreepState.TRANSFERRING_ENERGY
+                creep.memory.state = CreepState.TRANSFERRING_ENERGY
             }
 
         //check if we need to construct something
             constructionSite != null -> {
-                creepMemory.state = CreepState.CONSTRUCTING
-                creepMemory.targetId = constructionSite.id
+                creep.memory.state = CreepState.CONSTRUCTING
+                creep.memory.targetId = constructionSite.id
             }
         //check if we need to upgrade the controller
-            controller != null && controller.level < 8 && Context.creeps.filter { BetterCreepMemory(it.value.memory).state == CreepState.UPGRADING }.size < 3 -> {
-                creepMemory.state = CreepState.UPGRADING
-                creepMemory.targetId = controller.id
+            controller != null && controller.level < 8 && Context.creeps.filter { it.value.memory.state == CreepState.UPGRADING }.size < 3 -> {
+                creep.memory.state = CreepState.UPGRADING
+                creep.memory.targetId = controller.id
             }
             structureThatNeedRepairing.isNotEmpty() && structureThatNeedRepairingIndex < structureThatNeedRepairing.size -> {
                 val structure = structureThatNeedRepairing[structureThatNeedRepairingIndex++]
-                creepMemory.state = CreepState.REPAIR
-                creepMemory.targetId = structure.id
+                creep.memory.state = CreepState.REPAIR
+                creep.memory.targetId = structure.id
                 println("repairing ${structure.structureType} (${structure.id})")
             }
             creep.room.energyAvailable < creep.room.energyCapacityAvailable -> {
-                creepMemory.state = CreepState.TRANSFERRING_ENERGY
+                creep.memory.state = CreepState.TRANSFERRING_ENERGY
 
             }
         //if still idle upgrade controller
             controller != null && controller.level < 8 -> {
-                creepMemory.state = CreepState.UPGRADING
-                creepMemory.targetId = controller.id
+                creep.memory.state = CreepState.UPGRADING
+                creep.memory.targetId = controller.id
             }
             else -> { //get out of the way
                 val xScale = random()
@@ -117,16 +114,16 @@ class IdleBehaviour {
 }
 
 object BusyBehaviour {
-    fun run(creep: Creep, creepMemory: BetterCreepMemory) {
+    fun run(creep: Creep) {
 
         if (creep.carry.energy == 0) {
-            creepMemory.state = CreepState.REFILL
-            creepMemory.targetId = null
+            creep.memory.state = CreepState.REFILL
+            creep.memory.targetId = null
             return
         }
 
 
-        if (creepMemory.state == CreepState.TRANSFERRING_ENERGY) {
+        if (creep.memory.state == CreepState.TRANSFERRING_ENERGY) {
             val targets = creep.room.findStructures()
                 .filter { (it.structureType == STRUCTURE_EXTENSION || it.structureType == STRUCTURE_SPAWN) }
                 .map { (it as StructureSpawn) }
@@ -140,43 +137,43 @@ object BusyBehaviour {
                 when (code) {
                     OK -> kotlin.run { }
                     ERR_NOT_IN_RANGE -> creep.moveTo(closest.pos, VisualizePath(stroke = "#ffffff"))
-                    else -> creepMemory.state = CreepState.IDLE
+                    else -> creep.memory.state = CreepState.IDLE
                 }
 
             } else {
-                creepMemory.state = CreepState.IDLE
+                creep.memory.state = CreepState.IDLE
             }
         }
 
-        if (creepMemory.state == CreepState.UPGRADING) {
+        if (creep.memory.state == CreepState.UPGRADING) {
             val controller = creep.room.controller!!
             if (creep.upgradeController(controller) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(controller.pos);
             }
         }
 
-        if (creepMemory.state == CreepState.CONSTRUCTING) {
-            val constructionSite = Game.constructionsSitesMap()[creepMemory.targetId!!]
+        if (creep.memory.state == CreepState.CONSTRUCTING) {
+            val constructionSite = Game.constructionsSitesMap()[creep.memory.targetId!!]
             if (constructionSite != null) {
                 if (creep.build(constructionSite) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(constructionSite.pos, VisualizePath(stroke = "#ffffff"));
                 }
             } else {
-                println("construction of ${creepMemory.targetId} is done")
-                creepMemory.targetId = null
-                creepMemory.state = CreepState.IDLE
+                println("construction of ${creep.memory.targetId} is done")
+                creep.memory.targetId = null
+                creep.memory.state = CreepState.IDLE
                 buildRoads(creep.room)
             }
         }
 
-        if (creepMemory.state == CreepState.REPAIR) {
-            require(creepMemory.targetId != null)
-            val structure = Game.getObjectById<OwnedStructure>(creepMemory.targetId!!)
+        if (creep.memory.state == CreepState.REPAIR) {
+            require(creep.memory.targetId != null)
+            val structure = Game.getObjectById<OwnedStructure>(creep.memory.targetId!!)
 
             fun done() {
-                println("finished repairing ${creepMemory.targetId}")
-                creepMemory.state = CreepState.IDLE
-                creepMemory.targetId = null
+                println("finished repairing ${creep.memory.targetId}")
+                creep.memory.state = CreepState.IDLE
+                creep.memory.targetId = null
             }
             if (structure == null || structure.hits == structure.hitsMax) {
                 done()
