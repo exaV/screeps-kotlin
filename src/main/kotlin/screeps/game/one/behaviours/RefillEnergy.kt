@@ -121,12 +121,18 @@ class RefillEnergy {
   */
 
         //TODO make sure the computations happen not all the time
-        //TODO make sure pathToSource.last() is the tile just before the source and not the source's tile itself
         //TODO this assumes the container can be built by workers -> workers must be present
+        data class Pos(val x: Int, val y: Int)
 
         val pathToSource = source.room.findPath(creep.pos, source.pos)
-        if (creep.pos.x != pathToSource.last().x || creep.pos.y != pathToSource.last().y) {
-            creep.moveByPath(pathToSource)
+
+        //figure out where to place the container
+        val containertile: Pos = if (pathToSource.size < 2) {
+            Pos(creep.pos.x, creep.pos.y)
+        } else {
+            creep.moveByPath(pathToSource) //mov to location
+            val tileBeforeLast = pathToSource[pathToSource.lastIndex]
+            Pos(tileBeforeLast.x, tileBeforeLast.y)
         }
 
         //check if there is already a container for this source
@@ -135,8 +141,11 @@ class RefillEnergy {
         when (containers.size) {
             0 -> {
                 //if there is a road leading up to the source build the container there
-                //TODO if container is building we just wait near the target
-                val code = source.room.createConstructionSite(pathToSource.last().x, pathToSource.last().y, STRUCTURE_CONTAINER)
+                if (source.room.lookAt(containertile.x, containertile.y).any { it.type == LOOK_CONSTRUCTION_SITES && it.constructionSite!!.structureType == STRUCTURE_CONTAINER }) {
+                    return
+                }
+
+                val code = source.room.createConstructionSite(containertile.x, containertile.y, STRUCTURE_CONTAINER)
                 when (code) {
                     OK -> println("building container for source ${source.id}]")
                     else -> print("error placing construction site for source ${source.id}")
