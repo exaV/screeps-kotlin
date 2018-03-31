@@ -32,7 +32,11 @@ class RefillEnergy {
     private fun worker(creep: Creep) {
         if (shouldContinueMininig(creep)) {
             val assignedEnergy: Resource = if (creep.memory.assignedEnergySource != null) {
-                Game.getObjectById<Resource>(creep.memory.assignedEnergySource) ?: creep.requestEnergy() ?: return
+                val energy: Resource? = Game.getObjectById<Resource>(creep.memory.assignedEnergySource) ?: creep.requestEnergy()
+                if (energy == null) {
+                    println("not enough sources for ${creep.name}")
+                    return
+                } else energy
             } else {
                 val energy = creep.requestEnergy()
                 if (energy == null) return //TODO what to do
@@ -137,7 +141,6 @@ class RefillEnergy {
 
         //check if there is already a container for this source
         val containers = source.pos.findInRange<Structure>(FIND_MY_STRUCTURES, sourceToContainerMaxRange).filter { it.structureType == STRUCTURE_CONTAINER }
-        println("using container mining with containers $containers")
         when (containers.size) {
             0 -> {
                 //if there is a road leading up to the source build the container there
