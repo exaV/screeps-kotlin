@@ -69,59 +69,49 @@ class IdleBehaviour {
     var structureThatNeedRepairingIndex = 0
 
     fun run(creep: Creep, creepMemory: BetterCreepMemory, spawn: StructureSpawn) {
+        creepMemory.targetId = null //just making sure it is reset
 
+        val constructionSite = creep.findClosest(creep.room.findConstructionSites())
+        val controller = creep.room.controller
+
+        when {
         //make sure spawn does not dry up
-        if (creep.room.energyAvailable < BodyDefinition.BASIC_WORKER.getCost()) {
-            creepMemory.state = CreepState.TRANSFERRING_ENERGY
-
-            return
-        }
+            creep.room.energyAvailable < BodyDefinition.BASIC_WORKER.getCost() -> {
+                creepMemory.state = CreepState.TRANSFERRING_ENERGY
+            }
 
         //check if we need to construct something
-        val constructionSite = creep.findClosest(creep.room.findConstructionSites())
-        if (constructionSite != null) {
-            creepMemory.state = CreepState.CONSTRUCTING
-            creepMemory.targetId = constructionSite.id
-
-            return
-        }
-
+            constructionSite != null -> {
+                creepMemory.state = CreepState.CONSTRUCTING
+                creepMemory.targetId = constructionSite.id
+            }
         //check if we need to upgrade the controller
-        val controller = creep.room.controller
-        if (controller != null && controller.level < 8 && Context.creeps.filter { BetterCreepMemory(it.value.memory).state == CreepState.UPGRADING }.size < 3) {
-            creepMemory.state = CreepState.UPGRADING
-            creepMemory.targetId = controller.id
+            controller != null && controller.level < 8 && Context.creeps.filter { BetterCreepMemory(it.value.memory).state == CreepState.UPGRADING }.size < 3 -> {
+                creepMemory.state = CreepState.UPGRADING
+                creepMemory.targetId = controller.id
+            }
+            structureThatNeedRepairing.isNotEmpty() && structureThatNeedRepairingIndex < structureThatNeedRepairing.size -> {
+                val structure = structureThatNeedRepairing[structureThatNeedRepairingIndex++]
+                creepMemory.state = CreepState.REPAIR
+                creepMemory.targetId = structure.id
+                println("repairing ${structure.structureType} (${structure.id})")
+            }
+            creep.room.energyAvailable < creep.room.energyCapacityAvailable -> {
+                creepMemory.state = CreepState.TRANSFERRING_ENERGY
 
-            return
-        }
-
-        if (creep.room.energyAvailable < creep.room.energyCapacityAvailable) {
-            creepMemory.state = CreepState.TRANSFERRING_ENERGY
-
-            return
-        }
-
-        if (structureThatNeedRepairing.isNotEmpty() && structureThatNeedRepairingIndex < structureThatNeedRepairing.size) {
-            val structure = structureThatNeedRepairing[structureThatNeedRepairingIndex++]
-            creepMemory.state = CreepState.REPAIR
-            creepMemory.targetId = structure.id
-            println("repairing ${structure.structureType} (${structure.id})")
-
-            return
-        }
-
+            }
         //if still idle upgrade controller
-        if (controller != null && controller.level < 8) {
-            creepMemory.state = CreepState.UPGRADING
-            creepMemory.targetId = controller.id
+            controller != null && controller.level < 8 -> {
+                creepMemory.state = CreepState.UPGRADING
+                creepMemory.targetId = controller.id
+            }
+            else -> { //get out of the way
+                val xScale = random()
+                val yScale = random()
+                creep.moveTo(RoomPosition(spawn.pos.x + xScale * 10, spawn.pos.y + yScale * 10, ""))
+            }
 
-            return
         }
-
-        //get out of the way
-        val xScale = random()
-        val yScale = random()
-        creep.moveTo(RoomPosition(spawn.pos.x + xScale * 10, spawn.pos.y + yScale * 10, ""))
 
     }
 }
