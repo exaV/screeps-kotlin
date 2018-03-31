@@ -153,7 +153,7 @@ object BusyBehaviour {
         }
 
         if (creep.memory.state == CreepState.CONSTRUCTING) {
-            val constructionSite = Game.constructionsSitesMap()[creep.memory.targetId!!]
+            val constructionSite = Context.constructionSites[creep.memory.targetId!!]
             if (constructionSite != null) {
                 if (creep.build(constructionSite) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(constructionSite.pos, VisualizePath(stroke = "#ffffff"));

@@ -13,6 +13,7 @@ object Context{
     var creeps : Map<String,Creep> = emptyMap()
     var rooms : Map<String,Room> = emptyMap()
     var structures: Map<String, Structure> = emptyMap()
+    var constructionSites: Map<String, ConstructionSite> = emptyMap()
 
     //synthesized
     var targets: Map<String, Creep> = emptyMap()
@@ -24,6 +25,7 @@ fun gameLoop() {
     Context.rooms = Game.roomsMap()
     Context.creeps = jsonToMap(Game.creeps)
     Context.structures = jsonToMap(Game.structures)
+    Context.constructionSites = jsonToMap(Game.constructionSites)
     Context.targets = Context.creeps.filter { it.value.memory.targetId != null }.mapKeys { (_, creep) -> creep.memory.targetId!! }
 
     houseKeeping(Context.creeps)
