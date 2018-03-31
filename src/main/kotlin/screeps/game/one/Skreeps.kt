@@ -8,25 +8,26 @@ import screeps.game.one.kreeps.BodyDefinition
 import screeps.game.tutorials.tutorial4.houseKeeping
 import types.*
 
+
 object Context{
     //built-in
-    var creeps : Map<String,Creep> = emptyMap()
-    var rooms : Map<String,Room> = emptyMap()
-    var structures: Map<String, Structure> = emptyMap()
-    var constructionSites: Map<String, ConstructionSite> = emptyMap()
+    val creeps: Map<String, Creep> by tickLazy { jsonToMap<Creep>(Game.creeps) }
+    val rooms: Map<String, Room> by tickLazy { jsonToMap<Room>(Game.rooms) }
+    val structures: Map<String, Structure> by tickLazy { jsonToMap<Structure>(Game.structures) }
+    val constructionSites: Map<String, ConstructionSite> by tickLazy { jsonToMap<ConstructionSite>(Game.constructionSites) }
+
 
     //synthesized
-    var targets: Map<String, Creep> = emptyMap()
+    val targets: Map<String, Creep> by tickLazy { creepsByTarget() }
+
+    private fun creepsByTarget(): Map<String, Creep> {
+        return Context.creeps.filter { it.value.memory.targetId != null }.mapKeys { (_, creep) -> creep.memory.targetId!! }
+    }
 }
 
 fun gameLoop() {
 
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"]!! as StructureSpawn)
-    Context.rooms = Game.roomsMap()
-    Context.creeps = jsonToMap(Game.creeps)
-    Context.structures = jsonToMap(Game.structures)
-    Context.constructionSites = jsonToMap(Game.constructionSites)
-    Context.targets = Context.creeps.filter { it.value.memory.targetId != null }.mapKeys { (_, creep) -> creep.memory.targetId!! }
 
     houseKeeping(Context.creeps)
 
