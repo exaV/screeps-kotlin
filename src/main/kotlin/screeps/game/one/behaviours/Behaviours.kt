@@ -41,7 +41,26 @@ fun buildRoads(room: Room) {
 
 }
 
-object IdleBehaviour {
+class IdleBehaviour {
+    fun structuresThatNeedRepairing(): List<Structure> {
+        val structureThatNeedRepairing = ArrayList<Structure>(Context.structures.size)
+
+        for ((id, structure) in Context.structures) {
+            if (Context.targets.containsKey(id)) continue //TODO this may not work forever
+
+
+            if (structure.hits < structure.hitsMax) {
+                structureThatNeedRepairing.add(structure)
+            }
+        }
+
+        structureThatNeedRepairing.sortBy { it.hits }
+        return structureThatNeedRepairing.take(5)
+    }
+
+    val structureThatNeedRepairing = structuresThatNeedRepairing()
+    var structureThatNeedRepairingIndex = 0
+
     fun run(creep: Creep, creepMemory: BetterCreepMemory, spawn: StructureSpawn) {
 
         //make sure spawn does not dry up
@@ -75,6 +94,15 @@ object IdleBehaviour {
             return
         }
 
+        if (structureThatNeedRepairing.isNotEmpty() && structureThatNeedRepairingIndex < structureThatNeedRepairing.size) {
+            val structure = structureThatNeedRepairing[structureThatNeedRepairingIndex++]
+            creepMemory.state = CreepState.REPAIR
+            creepMemory.targetId = structure.id
+            println("repairing ${structure.structureType} (${structure.id})")
+
+            return
+        }
+
         //if still idle upgrade controller
         if (controller != null && controller.level < 8) {
             creepMemory.state = CreepState.UPGRADING
@@ -92,7 +120,7 @@ object IdleBehaviour {
 }
 
 object BusyBehaviour {
-    fun run(creep: Creep, creepMemory: BetterCreepMemory, spawn: StructureSpawn) {
+    fun run(creep: Creep, creepMemory: BetterCreepMemory) {
 
         if (creep.carry.energy == 0) {
             creepMemory.state = CreepState.REFILL

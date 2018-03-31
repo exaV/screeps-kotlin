@@ -98,16 +98,16 @@ external interface GlobalControlLevel {
 }
 
 external object Game {
-    var cpu: CPU
-    var creeps: Json = definedExternally
-    var gcl: GlobalControlLevel
-    var resources: Json
-    var rooms: Json
-    var spawns: Json
-    var structures: StructuresMap
-    var constructionSites: Json
-    var shard: Shard
-    var time: Number
+    val cpu: CPU
+    val creeps: Json = definedExternally
+    val gcl: GlobalControlLevel
+    val resources: Json
+    val rooms: Json
+    val spawns: Json
+    val structures: Json
+    val constructionSites: Json
+    val shard: Shard
+    val time: Number
     fun <T> getObjectById(id: String?): T?
     fun notify(message: String, groupInterval: Number? = definedExternally /* null */): Nothing?
 }

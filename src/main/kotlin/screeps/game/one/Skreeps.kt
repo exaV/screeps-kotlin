@@ -9,8 +9,13 @@ import screeps.game.tutorials.tutorial4.houseKeeping
 import types.*
 
 object Context{
+    //built-in
     var creeps : Map<String,Creep> = emptyMap()
     var rooms : Map<String,Room> = emptyMap()
+    var structures: Map<String, Structure> = emptyMap()
+
+    //synthesized
+    var targets: Map<String, Creep> = emptyMap()
 }
 
 fun gameLoop() {
@@ -18,6 +23,8 @@ fun gameLoop() {
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"]!! as StructureSpawn)
     Context.rooms = Game.roomsMap()
     Context.creeps = jsonToMap(Game.creeps)
+    Context.structures = jsonToMap(Game.structures)
+    Context.targets = Context.creeps.filter { BetterCreepMemory(it.value.memory).targetId != null }.mapKeys { (_, creep) -> BetterCreepMemory(creep.memory).targetId!! }
 
     houseKeeping(Context.creeps)
 
@@ -37,21 +44,22 @@ fun gameLoop() {
         mainSpawn.spawn(BodyDefinition.BASIC_WORKER)
     }
 
-    for ((roomName, room) in Context.rooms) {
+    for ((_, room) in Context.rooms) {
         if (room.memory.lastEnergy != room.energyAvailable) {
             room.memory.lastEnergy = room.energyAvailable
         }
     }
 
     val refillEnergy = RefillEnergy()
+    val idleBehaviour = IdleBehaviour()
     for ((_, creep) in Context.creeps) {
         val creepMemory = BetterCreepMemory(creep.memory)
 
         when (creepMemory.state) {
             CreepState.UNKNOWN -> TODO()
-            CreepState.IDLE -> IdleBehaviour.run(creep, creepMemory, mainSpawn)
+            CreepState.IDLE -> idleBehaviour.run(creep, creepMemory, mainSpawn)
             CreepState.REFILL -> refillEnergy.run(creep, creepMemory)
-            else -> BusyBehaviour.run(creep, creepMemory, mainSpawn) //TODO make dis better
+            else -> BusyBehaviour.run(creep, creepMemory) //TODO make dis better
 
         }
     }
