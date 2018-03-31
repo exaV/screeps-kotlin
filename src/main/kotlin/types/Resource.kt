@@ -1,7 +1,9 @@
 package types
 
-external interface Resource : RoomObject {
+external class Resource : RoomObject {
     val amount: Int
-    val id: String
     val resourceType: String
+    override val id: String = definedExternally
+    override val room: Room = definedExternally
+    override val pos: RoomPosition = definedExternally
 }

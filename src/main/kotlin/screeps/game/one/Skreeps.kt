@@ -63,6 +63,7 @@ fun gameLoop() {
             else -> BusyBehaviour.run(creep) //TODO make dis better
 
         }
+
     }
 
     //println("cpu used this tick: ${Game.cpu.getUsed()}")

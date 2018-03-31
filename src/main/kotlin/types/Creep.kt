@@ -1,13 +1,12 @@
 package types
 
-external interface Creep : RoomObject {
+external class Creep : RoomObject {
     val carry: Carry
     val memory: CreepMemory
     val carryCapacity: Int
     val fatigue: Number
     val hits: Number
     val hitsMax: Number
-    val id: String
     val my: Boolean
     val name: String
     val owner: Owner
@@ -15,16 +14,22 @@ external interface Creep : RoomObject {
     val saying: String
     val ticksToLive: Number?
 
+    override val pos: RoomPosition
+    override val room: Room
+    override val id: String
+
     fun attack(target: Creep): dynamic
     fun harvest(target: Source): Number
     // fun harvest(target: Mineral): Number
     fun moveTo(target: RoomPosition)
+
     fun moveTo(target: RoomPosition, opts: dynamic): Int
     fun moveByPath(path: Array<PathStep>): Number
     /**
      * must be serialized path string
      */
     fun moveByPath(path: String): Number
+
     fun transfer(target: Creep, resourceType: String, amount: Number = definedExternally): Number
     fun transfer(target: Structure, resourceType: String, amount: Number = definedExternally): Number
     fun upgradeController(target: StructureController): Number

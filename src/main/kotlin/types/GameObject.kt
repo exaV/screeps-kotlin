@@ -1,5 +1,5 @@
 package types
 
-external interface GameObjectId {
+external interface GameObject {
     val id: String
 }

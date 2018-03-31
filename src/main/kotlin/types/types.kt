@@ -45,9 +45,10 @@ external class LookAt {
     val structure: Structure?
     val terrain: String?
     val constructionSite: ConstructionSite?
+    val resource: Resource?
 }
 
-class Filter(val filter : dynamic)
+class Filter(val filter: dynamic)
 
 class FindPathOpts(
     val ignoreCreeps: Boolean = false,
@@ -128,14 +129,17 @@ external interface Shard {
     var ptr: Boolean
 }
 
-external interface ConstructionSite : RoomObject {
-    var id: String
+external class ConstructionSite : RoomObject {
     var my: Boolean
     var owner: Owner
     var progress: Number
     var progressTotal: Number
     var structureType: String
     fun remove(): Number
+
+    override val pos: RoomPosition
+    override val room: Room
+    override val id: String
 }
 
 external interface ReservationDefinition {
