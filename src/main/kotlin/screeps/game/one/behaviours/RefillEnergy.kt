@@ -178,7 +178,7 @@ class RefillEnergy {
                 val code = creep.harvest(source)
                 when (code) {
                     ERR_NOT_IN_RANGE -> {
-                        val moveCode = creep.moveTo(source.pos)
+                        val moveCode = creep.moveTo(source.pos, MoveToOpts())
                         when (moveCode) {
                             OK -> {
                             }
@@ -243,7 +243,7 @@ class RefillEnergy {
                 val container = containers.single()
                 //set target and move to
                 if (creep.pos.x != container.pos.x || creep.pos.y != container.pos.y) {
-                    creep.moveTo(container.pos) //TODO deal with return
+                    creep.moveTo(container.pos, MoveToOpts()) //TODO deal with return
                 } else {
                     creep.harvest(source)
                 }

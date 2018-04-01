@@ -154,7 +154,7 @@ object BusyBehaviour {
         if (creep.memory.state == CreepState.UPGRADING) {
             val controller = creep.room.controller!!
             if (creep.upgradeController(controller) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(controller.pos);
+                creep.moveTo(controller.pos, MoveToOpts())
             }
         }
 
@@ -162,7 +162,7 @@ object BusyBehaviour {
             val constructionSite = Context.constructionSites[creep.memory.targetId!!]
             if (constructionSite != null) {
                 if (creep.build(constructionSite) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(constructionSite.pos);
+                    creep.moveTo(constructionSite.pos, MoveToOpts());
                 }
             } else {
                 println("construction of ${creep.memory.targetId} is done")
@@ -185,7 +185,7 @@ object BusyBehaviour {
                 done()
             } else {
                 if (creep.repair(structure) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(structure.pos)
+                    creep.moveTo(structure.pos, MoveToOpts())
                 }
             }
         }

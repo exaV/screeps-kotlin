@@ -55,8 +55,6 @@ open class FindPathOpts(
     val ignoreDestructibleStructures: Boolean = false,
     val ignoreRoads: Boolean = false,
     val costCallback: dynamic = null,
-    val ignore: Array<RoomPosition> = emptyArray(),
-    val avoid: Array<RoomPosition> = emptyArray(),
     val maxOps: Int = 2000,
     val heuristicWeight: Double = 1.2,
     val serialize: Boolean = false,
