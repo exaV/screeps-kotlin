@@ -3,7 +3,6 @@ package screeps.game.one.behaviours
 import screeps.game.one.*
 import screeps.game.one.kreeps.BodyDefinition
 import types.*
-import kotlin.js.Math.random
 
 fun buildRoads(room: Room) {
     val controller = room.controller
@@ -69,10 +68,17 @@ class IdleBehaviour {
         val constructionSite = creep.findClosest(creep.room.findConstructionSites())
         val controller = creep.room.controller
 
+        val towersInNeedOfRefill = Context.towers.filter { it.room == creep.room && it.energy < it.energyCapacity }
         when {
         //make sure spawn does not dry up
             creep.room.energyAvailable < BodyDefinition.BASIC_WORKER.getCost() -> {
                 creep.memory.state = CreepState.TRANSFERRING_ENERGY
+            }
+
+        //make sure towe does not dry up
+            towersInNeedOfRefill.isNotEmpty() -> {
+                creep.memory.state = CreepState.TRANSFERRING_ENERGY
+                creep.memory.targetId = towersInNeedOfRefill.first().id
             }
 
         //check if we need to construct something
@@ -101,9 +107,9 @@ class IdleBehaviour {
                 creep.memory.targetId = controller.id
             }
             else -> { //get out of the way
-                val xScale = random()
-                val yScale = random()
-                creep.moveTo(RoomPosition(spawn.pos.x + xScale * 10, spawn.pos.y + yScale * 10, ""))
+                //val xScale = random()
+                //val yScale = random()
+                //creep.moveTo(RoomPosition(spawn.pos.x + xScale * 10, spawn.pos.y + yScale * 10, ""))
             }
 
         }
@@ -122,26 +128,32 @@ object BusyBehaviour {
 
 
         if (creep.memory.state == CreepState.TRANSFERRING_ENERGY) {
-            val targets = creep.room.findStructures()
-                .filter { (it.structureType == STRUCTURE_EXTENSION || it.structureType == STRUCTURE_SPAWN) }
-                .map { (it as StructureSpawn) }
-                .filter { it.energy < it.energyCapacity }
+            fun findTarget(): Structure? {
+                val targets = creep.room.findStructures()
+                        .filter { (it.structureType == STRUCTURE_EXTENSION || it.structureType == STRUCTURE_SPAWN) }
+                        .map { (it as StructureSpawn) }
+                        .filter { it.energy < it.energyCapacity }
 
+                if (targets.isNotEmpty()) {
+                    return creep.findClosest(targets)!!
+                } else return null;
+            }
 
-            if (targets.isNotEmpty()) {
-                val closest: StructureSpawn = creep.findClosest(targets)!!
+            val target = if (creep.memory.targetId != null) Game.getObjectById(creep.memory.targetId) else findTarget()
 
-                val code = creep.transfer(closest, RESOURCE_ENERGY)
+            if (target != null) {
+                val code = creep.transfer(target, RESOURCE_ENERGY)
                 when (code) {
                     OK -> kotlin.run { }
-                    ERR_NOT_IN_RANGE -> creep.moveTo(closest.pos, VisualizePath(stroke = "#ffffff"))
+                    ERR_NOT_IN_RANGE -> creep.moveTo(target.pos, VisualizePath(stroke = "#ffffff"))
                     else -> creep.memory.state = CreepState.IDLE
                 }
-
             } else {
                 creep.memory.state = CreepState.IDLE
+                creep.memory.targetId = null
             }
         }
+
 
         if (creep.memory.state == CreepState.UPGRADING) {
             val controller = creep.room.controller!!

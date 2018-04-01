@@ -18,6 +18,7 @@ object Context {
 
     //synthesized
     val targets: Map<String, Creep> by lazyPerTick { creepsByTarget() }
+    val towers: List<StructureTower> by lazyPerTick { Context.myStuctures.values.filter { it.structureType == STRUCTURE_TOWER }.map { it as StructureTower } }
 
     private fun creepsByTarget(): Map<String, Creep> {
         return Context.creeps.filter { it.value.memory.targetId != null }
@@ -63,6 +64,38 @@ fun buildExtensions(room: Room) {
 
 }
 
+val StructureController.availableTowers
+    get() = when (level) {
+        3, 4 -> 1
+        5, 6 -> 2
+        7 -> 3
+        8 -> 6
+        else -> 0
+    }
+
+fun buildTower(room: Room, toPlace: Int) {
+    require(room.controller?.my == true)
+    val spawn = room.find<StructureSpawn>(FIND_MY_SPAWNS).first()
+
+    require(toPlace >= 0)
+    var placed = 0
+
+    var x = spawn.pos.x
+    var y = spawn.pos.y + 1
+
+    while (placed < toPlace) {
+        y += 1
+        val success = room.createConstructionSite(x, y, STRUCTURE_TOWER)
+        when (success) {
+            OK -> placed += 1
+            ERR_INVALID_TARGET -> run { }
+            else -> println("unexpected return value $success when attempting to place tower")
+        }
+    }
+
+}
+
+
 
 fun gameLoop() {
 
@@ -86,6 +119,21 @@ fun gameLoop() {
     }
 
     for ((_, room) in Context.rooms) {
+        val numberOfTowers = Context.constructionSites.values.count { it.room.name == room.name && it.structureType == STRUCTURE_TOWER } + Context.myStuctures.values.count { it.room.name == room.name && it.structureType == STRUCTURE_TOWER }
+        val towersToPlace = room.controller!!.availableTowers - numberOfTowers
+        if (towersToPlace > 0) {
+            buildTower(room, towersToPlace)
+        }
+
+        val hostiles = room.find<Creep>(FIND_HOSTILE_CREEPS)
+
+        for (tower in Context.towers) {
+            if (tower.room.name != room.name) continue
+            if (hostiles.isNotEmpty() && tower.energy > 0) {
+                tower.attack(hostiles.minBy { it.hits }!!)
+            }
+        }
+
         if (room.memory.lastEnergy != room.energyAvailable) {
             room.memory.lastEnergy = room.energyAvailable
         }

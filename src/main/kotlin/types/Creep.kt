@@ -5,8 +5,8 @@ external class Creep : RoomObject {
     val memory: CreepMemory
     val carryCapacity: Int
     val fatigue: Number
-    val hits: Number
-    val hitsMax: Number
+    val hits: Int
+    val hitsMax: Int
     val my: Boolean
     val name: String
     val owner: Owner

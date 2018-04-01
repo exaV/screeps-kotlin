@@ -25,6 +25,8 @@ external class RoomPosition(x: Double, y: Double, name: String) {
 
 }
 
+fun RoomPosition.copy(x: Int = this.x, y: Int = this.y, name: String = this.name) = RoomPosition(x.toDouble(), y.toDouble(), name)
+
 external interface RoomObject : GameObject {
     val pos: RoomPosition
     val room: Room
