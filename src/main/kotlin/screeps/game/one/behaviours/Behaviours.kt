@@ -49,14 +49,10 @@ class IdleBehaviour {
         if (Context.rooms.size > 1) println("not repairing myStuctures in all rooms")
         val room = Context.rooms.values.first()
 
-        val toRepair = room.findStructures().filterNot { Context.targets.containsKey(it.id) }
+        return room.findStructures().filterNot { Context.targets.containsKey(it.id) }
             .filter { it.hits < it.hitsMax / 2 }
             .sortedBy { it.hits }
-            .take(5)
-
-        println("structureThatNeedRepairing=$toRepair")
-
-        return toRepair
+                .take(5) //TODO only repairing 5 is arbitrary
     }
 
     val structureThatNeedRepairing = structuresThatNeedRepairing()

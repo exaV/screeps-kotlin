@@ -106,7 +106,7 @@ class RefillEnergy {
         }
     }
 
-    fun Creep.requestEnergy(): GameObject? {
+    private fun Creep.requestEnergy(): GameObject? {
 
         val droppedEnergy = droppedEnergyByRoom.getOrPut(this.room, {
             val e = this.room.findDroppedEnergy()
@@ -194,7 +194,7 @@ class RefillEnergy {
         }
     }
 
-    fun containerMining(creep: Creep, source: Source) {
+    private fun containerMining(creep: Creep, source: Source) {
         val sourceToContainerMaxRange = 3
 
         //TODO
@@ -255,7 +255,7 @@ class RefillEnergy {
     }
 
 
-    fun Creep.requestSource(energySources: Array<Source>): Source? {
+    private fun Creep.requestSource(energySources: Array<Source>): Source? {
 
         println("usedSourcesWithCreepCounts=$usedSourcesWithCreepCounts")
 
@@ -273,7 +273,7 @@ class RefillEnergy {
         return null
     }
 
-    fun shouldContinueMininig(creep: Creep): Boolean {
+    private fun shouldContinueMininig(creep: Creep): Boolean {
         if (creep.name.startsWith(BodyDefinition.BASIC_WORKER.name)) {
             return creep.carry.energy < creep.carryCapacity
         } else if (creep.name.startsWith(BodyDefinition.MINER.name)) {
