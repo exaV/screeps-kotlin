@@ -76,15 +76,17 @@ fun gameLoop() {
     val refillEnergy = RefillEnergy()
     val idleBehaviour = IdleBehaviour()
     for ((_, creep) in Context.creeps) {
+        if (creep.spawning) continue
 
         when (creep.memory.state) {
-            CreepState.UNKNOWN -> TODO()
+            CreepState.UNKNOWN -> {
+                println("creep ${creep.name} was in UKNOWN state. Resuming from IDLE")
+                idleBehaviour.run(creep, mainSpawn)
+            }
             CreepState.IDLE -> idleBehaviour.run(creep, mainSpawn)
             CreepState.REFILL -> refillEnergy.run(creep)
             else -> BusyBehaviour.run(creep) //TODO make dis better
-
         }
-
     }
 
     //println("cpu used this tick: ${Game.cpu.getUsed()}")

@@ -3,7 +3,11 @@ package screeps.game.one
 import types.CreepMemory
 
 var CreepMemory.state: CreepState
-    get() = CreepState.valueOf(this.asDynamic().state ?: CreepState.UNKNOWN.name)
+    get() = try {
+        CreepState.valueOf(this.asDynamic().state ?: CreepState.UNKNOWN.name)
+    } catch (e: IllegalStateException) {
+        CreepState.UNKNOWN
+    }
     set(value) = run { this.asDynamic().state = value.name }
 
 var CreepMemory.targetId: String?
