@@ -178,9 +178,9 @@ class RefillEnergy {
                 val code = creep.harvest(source)
                 when (code) {
                     ERR_NOT_IN_RANGE -> {
-                        val moveCode = creep.moveTo(source.pos, MoveToOpts())
+                        val moveCode = creep.moveTo(source.pos, MoveToOpts(ignoreCreeps = false))
                         when (moveCode) {
-                            OK -> {
+                            OK, ERR_TIRED -> {
                             }
                         //TODO handle no path
                             else -> println("unexpected code $moveCode when moving $creep to ${source.pos}")

@@ -55,4 +55,4 @@ class MoveToOpts(val reusePath: Int = 5,
                  val serializeMemory: Boolean = true,
                  val noPathFinding: Boolean = false,
                  val visualizePathStyle: Style = Style(stroke = "#ffaa00"),
-                 ignoreCreeps: Boolean = true) : FindPathOpts(ignoreCreeps = ignoreCreeps)
+                 ignoreCreeps: Boolean = false) : FindPathOpts(ignoreCreeps = ignoreCreeps)
