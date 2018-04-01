@@ -104,3 +104,24 @@ external class StructureContainer : Structure {
 }
 
 
+external class StructureTower : OwnedStructure {
+    val energy: Int
+    val energyCapacity: Int
+    fun attack(target: Creep): Number
+    fun heal(target: Creep): Number
+    fun repair(target: Structure): Number
+
+
+    override val pos: RoomPosition
+    override val room: Room
+    override val hits: Double
+    override val hitsMax: Double
+    override val structureType: String
+    override fun destroy(): Number
+    override fun isActive(): Boolean
+    override fun notifyWhenAttacked(enabled: Boolean): Number
+    override val my: Boolean
+    override val owner: Owner
+    override val id: String
+}
+

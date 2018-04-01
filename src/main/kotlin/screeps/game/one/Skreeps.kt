@@ -25,23 +25,44 @@ object Context {
     }
 }
 
-fun getAvailableExtension(controllerLevel: Int) = when (controllerLevel) {
-    1 -> 0
-    2 -> 5
-    3 -> 10
-    4 -> 20
-    5 -> 30
-    6 -> 40
-    7 -> 50
-    8 -> 60
-    else -> throw IllegalArgumentException("unexpected conrollerLevel $controllerLevel")
+val StructureController.availableExtensions
+    get() = when (level) {
+        1 -> 0
+        2 -> 5
+        3 -> 10
+        4 -> 20
+        5 -> 30
+        6 -> 40
+        7 -> 50
+        8 -> 60
+        else -> 0 //will not happen
 }
 
 fun buildExtensions(room: Room) {
     require(room.controller?.my == true)
 
+    val spawn = room.find<StructureSpawn>(FIND_MY_SPAWNS).first()
+
+    val startPos = spawn.pos
+    val numberOfExtensions: Int = room.find<Structure>(FIND_STRUCTURES).count { it.structureType == STRUCTURE_EXTENSION }
+    val toPlace = room.controller!!.availableExtensions - numberOfExtensions
+    var placed = 0
+
+    val energySources = room.findEnergy()
+
+    require(toPlace >= 0)
+    val constructionSites = ArrayList<ConstructionSite>()
+    while (placed < toPlace) {
+        //find a road from spawn to energy source
+        for (source in energySources) {
+
+        }
+
+
+    }
 
 }
+
 
 fun gameLoop() {
 
