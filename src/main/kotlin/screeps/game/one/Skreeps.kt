@@ -64,14 +64,32 @@ fun buildExtensions(room: Room) {
     }
 }
 
+val StructureController.availableStorage
+    get() = when {
+        level >= 4 -> 1
+        else -> 0
+    }
+
+
 fun buildStorage(room: Room) {
+    if (room.controller?.my != true) return //not our room
+    if (room.controller?.availableStorage != 1) return //cannot build storage yet
+
+    val hasStorage = room.storage != null
+            || Context.constructionSites.values.any { it.structureType == STRUCTURE_STORAGE && it.room.name == room.name }
+    if (hasStorage) return //already built or being  built
+
     val spawn = room.find<StructureSpawn>(FIND_MY_SPAWNS).first()
 
     var placed = false
     var pos = spawn.pos.copy(spawn.pos.x - 2)
     while (!placed) {
-
-
+        val code = room.createConstructionSite(pos, STRUCTURE_STORAGE)
+        when (code) {
+            OK -> placed = true
+            ERR_INVALID_TARGET -> pos = pos.copy(x = pos.x - 1)
+            else -> println("unexpected return value $code when attempting to place storage")
+        }
     }
 }
 
@@ -84,17 +102,25 @@ val StructureController.availableTowers
         else -> 0
     }
 
-fun buildTower(room: Room, toPlace: Int) {
+fun buildTowers(room: Room) {
+    if (room.controller?.my != true) return //not under control
+
+    val numberOfTowers =
+        Context.constructionSites.values.count { it.room.name == room.name && it.structureType == STRUCTURE_TOWER } + Context.myStuctures.values.count { it.room.name == room.name && it.structureType == STRUCTURE_TOWER }
+    val towersToPlace = room.controller!!.availableTowers - numberOfTowers
+    if (towersToPlace == 0) return //no need to place towers
+
+
     require(room.controller?.my == true)
     val spawn = room.find<StructureSpawn>(FIND_MY_SPAWNS).first()
 
-    require(toPlace >= 0)
+    require(towersToPlace >= 0)
     var placed = 0
 
     var x = spawn.pos.x
     var y = spawn.pos.y + 1
 
-    while (placed < toPlace) {
+    while (placed < towersToPlace) {
         y += 1
         val success = room.createConstructionSite(x, y, STRUCTURE_TOWER)
         when (success) {
@@ -129,12 +155,8 @@ fun gameLoop() {
     }
 
     for ((_, room) in Context.rooms) {
-        val numberOfTowers =
-            Context.constructionSites.values.count { it.room.name == room.name && it.structureType == STRUCTURE_TOWER } + Context.myStuctures.values.count { it.room.name == room.name && it.structureType == STRUCTURE_TOWER }
-        val towersToPlace = room.controller!!.availableTowers - numberOfTowers
-        if (towersToPlace > 0) {
-            buildTower(room, towersToPlace)
-        }
+        buildStorage(room)
+        buildTowers(room)
 
         val hostiles = room.find<Creep>(FIND_HOSTILE_CREEPS)
 

@@ -127,3 +127,20 @@ external class StructureTower : OwnedStructure {
     override val id: String
 }
 
+external class StructureStorage : OwnedStructure {
+    val store: Storage
+    val storeCapacity: Int
+
+    override val pos: RoomPosition
+    override val room: Room
+    override val hits: Double
+    override val hitsMax: Double
+    override val structureType: String
+    override fun destroy(): Number
+    override fun isActive(): Boolean
+    override fun notifyWhenAttacked(enabled: Boolean): Number
+    override val my: Boolean
+    override val owner: Owner
+    override val id: String
+}
+

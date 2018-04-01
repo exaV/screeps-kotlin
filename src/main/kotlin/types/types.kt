@@ -4,13 +4,15 @@ import kotlin.js.Date
 import kotlin.js.Json
 
 external interface Room {
-    val prototype: Room
     val energyAvailable: Int
     val energyCapacityAvailable: Int
     val memory: dynamic
-    val mode: String
     val name: String
     val controller: StructureController?
+    val storage: StructureStorage?
+    val terminal: dynamic
+    val visual: dynamic
+
     fun createConstructionSite(x: Number, y: Number, structureType: StructureConstant): Number
     fun createConstructionSite(pos: RoomPosition, structureType: StructureConstant): Number
     fun createFlag(
