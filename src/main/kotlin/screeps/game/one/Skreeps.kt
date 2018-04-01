@@ -143,15 +143,18 @@ fun gameLoop() {
     val minWorkers = energySources.size * 4
     val minMiners = energySources.size
 
-    if (Context.creeps.filter { it.key.startsWith(BodyDefinition.MINER.name) }.size < minMiners) {
+    if (Context.creeps.count { it.key.startsWith(BodyDefinition.MINER.name) } < minMiners) {
         if (mainSpawn.room.energyAvailable >= BodyDefinition.MINER_BIG.getCost()) {
             mainSpawn.spawn(BodyDefinition.MINER_BIG)
         } else {
             mainSpawn.spawn(BodyDefinition.MINER)
         }
-    } else if (Context.creeps.filter { it.key.startsWith(BodyDefinition.BASIC_WORKER.name) }.size < minWorkers) {
+    } else if (Context.creeps.count { it.key.startsWith(BodyDefinition.BASIC_WORKER.name) } < minWorkers) {
         //spawn creeps
         mainSpawn.spawn(BodyDefinition.BASIC_WORKER)
+    } else if (Context.creeps.count { it.key.startsWith(BodyDefinition.HAULER.name) } < minMiners
+        && Context.myStuctures.any { it.value.structureType == STRUCTURE_STORAGE }) {
+        mainSpawn.spawn(BodyDefinition.HAULER)
     }
 
     for ((_, room) in Context.rooms) {
