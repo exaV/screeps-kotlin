@@ -77,6 +77,11 @@ class IdleBehaviour {
                 creep.memory.targetId = towersInNeedOfRefill.first().id
             }
 
+            creep.name.startsWith(BodyDefinition.HAULER.name) && creep.room.storage != null -> {
+                creep.memory.state = CreepState.TRANSFERRING_ENERGY
+                creep.memory.targetId = creep.room.storage!!.id
+            }
+
         //check if we need to construct something
             constructionSite != null -> {
                 creep.memory.state = CreepState.CONSTRUCTING
