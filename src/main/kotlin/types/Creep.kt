@@ -54,5 +54,13 @@ external interface BodyPart {
 class MoveToOpts(val reusePath: Int = 5,
                  val serializeMemory: Boolean = true,
                  val noPathFinding: Boolean = false,
-                 val visualizePathStyle: Style = Style(stroke = "#ffaa00"),
-                 ignoreCreeps: Boolean = false) : FindPathOpts(ignoreCreeps = ignoreCreeps)
+                 val visualizePathStyle: Style = Style(),
+
+                 val ignoreCreeps: Boolean = false,
+                 val ignoreDestructibleStructures: Boolean = false,
+                 val ignoreRoads: Boolean = false,
+                 val maxOps: Int = 2000,
+                 val serialize: Boolean = false,
+                 val maxRooms: Int = 16,
+                 val heuristicWeight: Double = 1.2,
+                 val range: Int = 0) //some options are not included: plaincost, swampcost and costCallback

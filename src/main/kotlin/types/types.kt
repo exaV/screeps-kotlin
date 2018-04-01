@@ -50,18 +50,15 @@ external class LookAt {
 
 class Filter(val filter: dynamic)
 
-open class FindPathOpts(
-    val ignoreCreeps: Boolean = false,
-    val ignoreDestructibleStructures: Boolean = false,
-    val ignoreRoads: Boolean = false,
-    val costCallback: dynamic = null,
-    val maxOps: Int = 2000,
-    val heuristicWeight: Double = 1.2,
-    val serialize: Boolean = false,
-    val maxRooms: Int = 16,
-    val range: Int = 0,
-    val plainCost: Double = 1.0,
-    val swampCost: Double = 5.0
+class FindPathOpts(
+        val ignoreCreeps: Boolean = false,
+        val ignoreDestructibleStructures: Boolean = false,
+        val ignoreRoads: Boolean = false,
+        val maxOps: Int = 2000,
+        val heuristicWeight: Double = 1.2,
+        val serialize: Boolean = false,
+        val maxRooms: Int = 16,
+        val range: Int = 0
 )
 
 external interface PathStep {
