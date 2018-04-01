@@ -284,14 +284,11 @@ class RefillEnergy {
     }
 
     private fun shouldContinueMininig(creep: Creep): Boolean {
-        if (creep.name.startsWith(BodyDefinition.BASIC_WORKER.name)) {
-            return creep.carry.energy < creep.carryCapacity
-        } else if (creep.name.startsWith(BodyDefinition.MINER.name)) {
+        if (creep.name.startsWith(BodyDefinition.MINER.name)) {
             return true
+        } else {
+            return creep.carry.energy < creep.carryCapacity
         }
-
-        throw IllegalStateException("stop mining not handled")
-
     }
 
     fun dist2(from: RoomPosition, to: RoomPosition) =
