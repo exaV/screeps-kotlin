@@ -13,11 +13,14 @@ class RefillEnergy {
     val droppedEnergyByRoom: MutableMap<Room, Array<Resource>> = mutableMapOf()
     val minersByRoom: MutableMap<Room, Array<Creep>> = mutableMapOf()
 
-    val usedSourcesWithCreepCounts = Context.creeps
-        .map { it.value.memory.assignedEnergySource }
-        .filterNotNull()
-        .groupingBy { it }
-            .eachCount().toMutableMap()
+    val usedSourcesWithCreepCounts by lazyPerTick {
+        Context.creeps
+                .map { it.value.memory.assignedEnergySource }
+                .filterNotNull()
+                .groupingBy { it }
+                .eachCount()
+                .toMutableMap()
+    }
 
     fun run(creep: Creep) {
         if (creep.name.startsWith(BodyDefinition.MINER.name)) {
@@ -44,7 +47,6 @@ class RefillEnergy {
                 return false
             } else {
                 creep.memory.assignedEnergySource = source.id
-                usedSourcesWithCreepCounts[source.id] = usedSourcesWithCreepCounts.getOrElse(source.id, { 0 }) + 1
             }
 
             when (source) {
@@ -135,7 +137,7 @@ class RefillEnergy {
             return miners.maxBy {
                 val creepsAssignedToMiner = usedSourcesWithCreepCounts[it.id] ?: 0
                 val minerOutput = it.body.count { it.type == WORK } * 2
-                -minerOutput.toDouble() / (creepsAssignedToMiner + 1)
+                minerOutput.toDouble() / (creepsAssignedToMiner + 1)
             }
         }
 
@@ -266,7 +268,6 @@ class RefillEnergy {
             if (usedSourcesWithCreepCounts.getOrElse(energySource.id, { 0 }) < MAX_MINER_PER_SOURCE) {
                 //assign creep to energy source
                 return energySource
-
             }
         }
 
