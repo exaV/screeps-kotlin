@@ -17,7 +17,7 @@ class RefillEnergy {
         .map { it.value.memory.assignedEnergySource }
         .filterNotNull()
         .groupingBy { it }
-        .eachCount()
+            .eachCount().toMutableMap()
 
     fun run(creep: Creep) {
         if (creep.name.startsWith(BodyDefinition.MINER.name)) {
@@ -44,6 +44,7 @@ class RefillEnergy {
                 return false
             } else {
                 creep.memory.assignedEnergySource = source.id
+                usedSourcesWithCreepCounts[source.id] = usedSourcesWithCreepCounts.getOrElse(source.id, { 0 }) + 1
             }
 
             when (source) {
