@@ -4,6 +4,7 @@ import screeps.game.one.*
 import screeps.game.one.building.buildRoads
 import screeps.game.one.kreeps.BodyDefinition
 import types.*
+import types.base.global.Game
 
 class IdleBehaviour {
     fun structuresThatNeedRepairing(): List<Structure> {

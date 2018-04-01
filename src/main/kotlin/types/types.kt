@@ -1,7 +1,6 @@
 package types
 
 import kotlin.js.Date
-import kotlin.js.Json
 
 external interface Room {
     val energyAvailable: Int
@@ -102,23 +101,6 @@ external interface GlobalControlLevel {
     var progress: Number
     var progressTotal: Number
 }
-
-external object Game {
-    val cpu: CPU
-    val creeps: Json = definedExternally
-    val gcl: GlobalControlLevel
-    val resources: Json
-    val rooms: Json
-    val spawns: Json
-    val structures: Json
-    val constructionSites: Json
-    val shard: Shard
-    val time: Number
-    fun <T : GameObject> getObjectById(id: String?): T?
-    fun notify(message: String, groupInterval: Number? = definedExternally /* null */): Nothing?
-}
-
-fun Game.roomsMap(): Map<String, Room> = jsonToMap(rooms)
 
 external interface Shard {
     var name: String

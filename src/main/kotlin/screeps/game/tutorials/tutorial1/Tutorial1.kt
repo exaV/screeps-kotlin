@@ -1,6 +1,7 @@
 package screeps.game.tutorials.tutorial1
 
 import types.*
+import types.base.global.Game
 
 fun gameLoop() {
 

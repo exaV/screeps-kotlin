@@ -3,6 +3,7 @@ package screeps.game.one
 import screeps.game.one.kreeps.BodyDefinition
 import screeps.game.one.kreeps.CreepSpawnOptions
 import types.*
+import types.base.global.Game
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 

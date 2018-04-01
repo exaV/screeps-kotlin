@@ -9,6 +9,7 @@ import screeps.game.one.building.buildTowers
 import screeps.game.one.kreeps.BodyDefinition
 import screeps.game.tutorials.tutorial4.houseKeeping
 import types.*
+import types.base.global.Game
 
 
 object Context {

@@ -4,7 +4,9 @@ import screeps.game.tutorials.tutorial2.TutorialMemory
 import screeps.game.tutorials.tutorial2.Upgrader
 import screeps.game.tutorials.tutorial3.Builder
 import screeps.game.tutorials.tutorial3.Harvester
+import screeps.game.tutorials.tutorial3.roomsMap
 import types.*
+import types.base.global.Game
 import types.base.global.Memory
 
 external fun delete(p: dynamic): Boolean = definedExternally

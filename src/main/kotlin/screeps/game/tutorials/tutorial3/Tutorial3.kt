@@ -2,6 +2,7 @@ package screeps.game.tutorials.tutorial3
 
 import screeps.game.tutorials.tutorial2.TutorialMemory
 import types.*
+import types.base.global.Game
 
 fun gameLoop() {
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"]!! as StructureSpawn)
@@ -30,3 +31,5 @@ fun gameLoop() {
     }
 
 }
+
+fun Game.roomsMap(): Map<String, Room> = jsonToMap(rooms)
