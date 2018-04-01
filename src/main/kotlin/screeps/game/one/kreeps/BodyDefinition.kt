@@ -6,7 +6,8 @@ enum class BodyDefinition(val bodyType: Array<BodyType>, val maxSize: Int = 0) {
     BASIC_WORKER(arrayOf(WORK, CARRY, MOVE), maxSize = 3),
     MINER(arrayOf(WORK, WORK, MOVE), maxSize = 2),
     MINER_BIG(arrayOf(WORK, WORK, WORK, WORK, WORK, MOVE, MOVE), maxSize = 1),
-    BIG_WORKER(arrayOf(WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE));
+    BIG_WORKER(arrayOf(WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE)),
+    HAULER(arrayOf(CARRY, CARRY, MOVE));
 
     fun getCost(): Int = bodyType.sumBy { Cost[it] }
     fun getBiggest(availableEnergy: Int): List<BodyType> {
@@ -22,7 +23,6 @@ enum class BodyDefinition(val bodyType: Array<BodyType>, val maxSize: Int = 0) {
         }
 
         return body
-
     }
 
 }

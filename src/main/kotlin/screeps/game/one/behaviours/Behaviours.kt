@@ -15,7 +15,7 @@ fun buildRoads(room: Room) {
     val spawns = room.find<StructureSpawn>(FIND_MY_SPAWNS)
     val energySources = room.findEnergy()
 
-    fun buildPathBetween(a: RoomPosition, b: RoomPosition) {
+    fun buildRoadBetween(a: RoomPosition, b: RoomPosition) {
         val path = room.findPath(a, b, FindPathOpts(ignoreCreeps = true))
         for (tile in path) {
             val stuff = room.lookAt(tile.x, tile.y)
@@ -34,11 +34,11 @@ fun buildRoads(room: Room) {
     }
     //build roads from controller to each spawn
     for (spawn in spawns) {
-        buildPathBetween(controller.pos, spawn.pos)
+        buildRoadBetween(controller.pos, spawn.pos)
 
         //build roads from each spawn to each source
         for (source in energySources) {
-            buildPathBetween(source.pos, spawn.pos)
+            buildRoadBetween(source.pos, spawn.pos)
         }
     }
 

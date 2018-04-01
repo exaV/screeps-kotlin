@@ -1,9 +1,9 @@
 package types
 
-external class RoomPosition(x: Double, y: Double, name: String) {
+external class RoomPosition(x: Int, y: Int, roomName: String) {
     val x: Int
     val y: Int
-    val name: String
+    val roomName: String
 
     fun <T : RoomObject> findClosestByPath(
         type: FindConstant,
@@ -25,7 +25,7 @@ external class RoomPosition(x: Double, y: Double, name: String) {
 
 }
 
-fun RoomPosition.copy(x: Int = this.x, y: Int = this.y, name: String = this.name) = RoomPosition(x.toDouble(), y.toDouble(), name)
+fun RoomPosition.copy(x: Int = this.x, y: Int = this.y, name: String = this.roomName) = RoomPosition(x, y, name)
 
 external interface RoomObject : GameObject {
     val pos: RoomPosition

@@ -18,7 +18,9 @@ object Context {
 
     //synthesized
     val targets: Map<String, Creep> by lazyPerTick { creepsByTarget() }
-    val towers: List<StructureTower> by lazyPerTick { Context.myStuctures.values.filter { it.structureType == STRUCTURE_TOWER }.map { it as StructureTower } }
+    val towers: List<StructureTower> by lazyPerTick {
+        Context.myStuctures.values.filter { it.structureType == STRUCTURE_TOWER }.map { it as StructureTower }
+    }
 
     private fun creepsByTarget(): Map<String, Creep> {
         return Context.creeps.filter { it.value.memory.targetId != null }
@@ -37,7 +39,7 @@ val StructureController.availableExtensions
         7 -> 50
         8 -> 60
         else -> 0 //will not happen
-}
+    }
 
 fun buildExtensions(room: Room) {
     require(room.controller?.my == true)
@@ -45,7 +47,8 @@ fun buildExtensions(room: Room) {
     val spawn = room.find<StructureSpawn>(FIND_MY_SPAWNS).first()
 
     val startPos = spawn.pos
-    val numberOfExtensions: Int = room.find<Structure>(FIND_STRUCTURES).count { it.structureType == STRUCTURE_EXTENSION }
+    val numberOfExtensions: Int =
+        room.find<Structure>(FIND_STRUCTURES).count { it.structureType == STRUCTURE_EXTENSION }
     val toPlace = room.controller!!.availableExtensions - numberOfExtensions
     var placed = 0
 
@@ -58,10 +61,18 @@ fun buildExtensions(room: Room) {
         for (source in energySources) {
 
         }
+    }
+}
+
+fun buildStorage(room: Room) {
+    val spawn = room.find<StructureSpawn>(FIND_MY_SPAWNS).first()
+
+    var placed = false
+    var pos = spawn.pos.copy(spawn.pos.x - 2)
+    while (!placed) {
 
 
     }
-
 }
 
 val StructureController.availableTowers
@@ -96,7 +107,6 @@ fun buildTower(room: Room, toPlace: Int) {
 }
 
 
-
 fun gameLoop() {
 
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"]!! as StructureSpawn)
@@ -119,7 +129,8 @@ fun gameLoop() {
     }
 
     for ((_, room) in Context.rooms) {
-        val numberOfTowers = Context.constructionSites.values.count { it.room.name == room.name && it.structureType == STRUCTURE_TOWER } + Context.myStuctures.values.count { it.room.name == room.name && it.structureType == STRUCTURE_TOWER }
+        val numberOfTowers =
+            Context.constructionSites.values.count { it.room.name == room.name && it.structureType == STRUCTURE_TOWER } + Context.myStuctures.values.count { it.room.name == room.name && it.structureType == STRUCTURE_TOWER }
         val towersToPlace = room.controller!!.availableTowers - numberOfTowers
         if (towersToPlace > 0) {
             buildTower(room, towersToPlace)
@@ -154,5 +165,6 @@ fun gameLoop() {
     }
 
     //println("cpu used this tick: ${Game.cpu.getUsed()}")
+    var pos = mainSpawn.pos.copy(mainSpawn.pos.x - 2)
 
 }
