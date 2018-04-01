@@ -31,6 +31,46 @@ val StructureController.availableExtensions
         else -> 0 //will not happen
     }
 
+fun buildRoads(room: Room) {
+    val controller = room.controller
+    if (controller == null) {
+        println("cannot buildRoads() in room which is not under our control")
+        return
+    }
+    println("building roads in room $room")
+
+    val spawns = room.find<StructureSpawn>(FIND_MY_SPAWNS)
+    val energySources = room.findEnergy()
+
+    fun buildRoadBetween(a: RoomPosition, b: RoomPosition) {
+        val path = room.findPath(a, b, FindPathOpts(ignoreCreeps = true))
+        for (tile in path) {
+            val stuff = room.lookAt(tile.x, tile.y)
+            val roadExistsAtTile = stuff.any {
+                (it.type == LOOK_STRUCTURES && it.structure!!.structureType == STRUCTURE_ROAD)
+                        || (it.type == LOOK_CONSTRUCTION_SITES && it.constructionSite!!.structureType == STRUCTURE_ROAD)
+            }
+            if (roadExistsAtTile) continue
+
+            val code = room.createConstructionSite(tile.x, tile.y, STRUCTURE_ROAD)
+            when (code) {
+                OK -> run { }
+                else -> println("could not place road at [x=${tile.x},y=${tile.y}] code=($code)")
+            }
+        }
+    }
+    //build roads from controller to each spawn
+    for (spawn in spawns) {
+        buildRoadBetween(controller.pos, spawn.pos)
+
+        //build roads from each spawn to each source
+        for (source in energySources) {
+            buildRoadBetween(source.pos, spawn.pos)
+        }
+    }
+
+}
+
 
 fun buildStorage(room: Room) {
     if (room.controller?.my != true) return //not our room

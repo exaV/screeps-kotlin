@@ -1,48 +1,9 @@
 package screeps.game.one.behaviours
 
 import screeps.game.one.*
+import screeps.game.one.building.buildRoads
 import screeps.game.one.kreeps.BodyDefinition
 import types.*
-
-fun buildRoads(room: Room) {
-    val controller = room.controller
-    if (controller == null) {
-        println("cannot buildRoads() in room which is not under our control")
-        return
-    }
-    println("building roads in room $room")
-
-    val spawns = room.find<StructureSpawn>(FIND_MY_SPAWNS)
-    val energySources = room.findEnergy()
-
-    fun buildRoadBetween(a: RoomPosition, b: RoomPosition) {
-        val path = room.findPath(a, b, FindPathOpts(ignoreCreeps = true))
-        for (tile in path) {
-            val stuff = room.lookAt(tile.x, tile.y)
-            val roadExistsAtTile = stuff.any {
-                (it.type == LOOK_STRUCTURES && it.structure!!.structureType == STRUCTURE_ROAD)
-                        || (it.type == LOOK_CONSTRUCTION_SITES && it.constructionSite!!.structureType == STRUCTURE_ROAD)
-            }
-            if (roadExistsAtTile) continue
-
-            val code = room.createConstructionSite(tile.x, tile.y, STRUCTURE_ROAD)
-            when (code) {
-                OK -> run { }
-                else -> println("could not place road at [x=${tile.x},y=${tile.y}] code=($code)")
-            }
-        }
-    }
-    //build roads from controller to each spawn
-    for (spawn in spawns) {
-        buildRoadBetween(controller.pos, spawn.pos)
-
-        //build roads from each spawn to each source
-        for (source in energySources) {
-            buildRoadBetween(source.pos, spawn.pos)
-        }
-    }
-
-}
 
 class IdleBehaviour {
     fun structuresThatNeedRepairing(): List<Structure> {
@@ -52,7 +13,7 @@ class IdleBehaviour {
         return room.findStructures().filterNot { Context.targets.containsKey(it.id) }
             .filter { it.hits < it.hitsMax / 2 }
             .sortedBy { it.hits }
-                .take(5) //TODO only repairing 5 is arbitrary
+            .take(5) //TODO only repairing 5 is arbitrary
     }
 
     val structureThatNeedRepairing = structuresThatNeedRepairing()
@@ -131,9 +92,9 @@ object BusyBehaviour {
         if (creep.memory.state == CreepState.TRANSFERRING_ENERGY) {
             fun findTarget(): Structure? {
                 val targets = creep.room.findStructures()
-                        .filter { (it.structureType == STRUCTURE_EXTENSION || it.structureType == STRUCTURE_SPAWN) }
-                        .map { (it as StructureSpawn) }
-                        .filter { it.energy < it.energyCapacity }
+                    .filter { (it.structureType == STRUCTURE_EXTENSION || it.structureType == STRUCTURE_SPAWN) }
+                    .map { (it as StructureSpawn) }
+                    .filter { it.energy < it.energyCapacity }
 
                 if (targets.isNotEmpty()) {
                     return creep.findClosest(targets)!!
