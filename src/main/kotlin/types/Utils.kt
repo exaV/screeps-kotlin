@@ -7,13 +7,25 @@ import kotlin.js.Json
 fun <T> jsonToMap(json: Json): Map<String, T> {
     val map: MutableMap<String, T> = linkedMapOf()
     for (key in js("Object").keys(json)) {
-        map.put(key, json[key] as T)
+        map[key] = json[key as String] as T
     }
     return map
 }
 
-class VisualizePath(val visualizePathStyle: Style = Style("#ffaa00")) {
+class VisualizePath(val visualizePathStyle: Style = Style(stroke = "#ffaa00")) {
     constructor(stroke: String) : this(Style(stroke))
 }
 
-class Style(val stroke: String)
+enum class LineStyle {
+    SOLID,
+    DASHED,
+    DOTTED
+}
+
+class Style(val stroke: String = "#ffffff",
+            val fill: String? = null,
+            lineStyle: LineStyle = LineStyle.DASHED,
+            val strokeWidth: Double = 0.1,
+            val opacity: Double = 0.5) {
+    val lineStyle: String? = if (lineStyle == LineStyle.SOLID) null else lineStyle.name.toLowerCase()
+}

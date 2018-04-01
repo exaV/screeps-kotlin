@@ -20,13 +20,13 @@ object Builder {
             val targets = creep.room.findConstructionSites()
             if (targets.isNotEmpty()) {
                 if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0].pos, VisualizePath(stroke = "#ffffff"));
+                    creep.moveTo(targets[0].pos);
                 }
             }
         } else {
             val sources = creep.room.findEnergy()
             if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0].pos, VisualizePath(stroke = "#ffaa00"));
+                creep.moveTo(sources[0].pos, MoveToOpts(visualizePathStyle = Style(stroke = "#ffaa00")))
             }
         }
     }

@@ -75,7 +75,7 @@ class RefillEnergy {
     private fun refillFromContainer(creep: Creep, source: Structure) {
         when (creep.withdraw(source, RESOURCE_ENERGY)) {
             OK -> kotlin.run { }
-            ERR_NOT_IN_RANGE -> creep.moveTo(source.pos)
+            ERR_NOT_IN_RANGE -> creep.moveTo(source.pos, MoveToOpts(visualizePathStyle = Style(stroke = "#ffaa00")))
             ERR_NOT_ENOUGH_RESOURCES -> creep.memory.assignedEnergySource = null
             else -> println("${creep.name} could now withdraw from ${source.id}")
         }
@@ -83,7 +83,7 @@ class RefillEnergy {
 
     private fun refillFromResource(creep: Creep, resource: Resource) {
         if (creep.pickup(resource) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(resource.pos)
+            creep.moveTo(resource.pos, MoveToOpts(visualizePathStyle = Style(stroke = "#ffaa00")))
         }
     }
 
@@ -178,7 +178,7 @@ class RefillEnergy {
                 val code = creep.harvest(source)
                 when (code) {
                     ERR_NOT_IN_RANGE -> {
-                        val moveCode = creep.moveTo(source.pos, VisualizePath())
+                        val moveCode = creep.moveTo(source.pos)
                         when (moveCode) {
                             OK -> {
                             }

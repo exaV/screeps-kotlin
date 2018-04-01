@@ -7,11 +7,11 @@ object Harvester {
         if (creep.carry.energy < creep.carryCapacity) {
             val sources = creep.room.findEnergy()
             if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0].pos, VisualizePath());
+                creep.moveTo(sources[0].pos)
             }
         } else if (spawn.energy < spawn.energyCapacity) {
             if (creep.transfer(spawn, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(spawn.pos, VisualizePath());
+                creep.moveTo(spawn.pos)
             }
         }
     }

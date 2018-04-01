@@ -50,7 +50,7 @@ external class LookAt {
 
 class Filter(val filter: dynamic)
 
-class FindPathOpts(
+open class FindPathOpts(
     val ignoreCreeps: Boolean = false,
     val ignoreDestructibleStructures: Boolean = false,
     val ignoreRoads: Boolean = false,

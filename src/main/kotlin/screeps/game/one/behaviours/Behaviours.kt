@@ -141,7 +141,7 @@ object BusyBehaviour {
                 val code = creep.transfer(target, RESOURCE_ENERGY)
                 when (code) {
                     OK -> kotlin.run { }
-                    ERR_NOT_IN_RANGE -> creep.moveTo(target.pos, VisualizePath(stroke = "#ffffff"))
+                    ERR_NOT_IN_RANGE -> creep.moveTo(target.pos)
                     else -> creep.memory.state = CreepState.IDLE
                 }
             } else {
@@ -162,7 +162,7 @@ object BusyBehaviour {
             val constructionSite = Context.constructionSites[creep.memory.targetId!!]
             if (constructionSite != null) {
                 if (creep.build(constructionSite) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(constructionSite.pos, VisualizePath(stroke = "#ffffff"));
+                    creep.moveTo(constructionSite.pos);
                 }
             } else {
                 println("construction of ${creep.memory.targetId} is done")

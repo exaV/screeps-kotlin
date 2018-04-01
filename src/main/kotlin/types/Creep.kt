@@ -22,9 +22,7 @@ external class Creep : RoomObject {
     fun attack(target: Creep): dynamic
     fun harvest(target: Source): Number
     // fun harvest(target: Mineral): Number
-    fun moveTo(target: RoomPosition)
-
-    fun moveTo(target: RoomPosition, opts: dynamic): Int
+    fun moveTo(target: RoomPosition, opts: MoveToOpts? = definedExternally): Int
     fun moveByPath(path: Array<PathStep>): Number
     /**
      * must be serialized path string
@@ -51,3 +49,9 @@ external interface BodyPart {
     val type: BodyType
     val hits: Int
 }
+
+class MoveToOpts(val reusePath: Int = 5,
+                 val serializeMemory: Boolean = true,
+                 val noPathFinding: Boolean = false,
+                 val visualizePathStyle: Style = Style(stroke = "#ffaa00"),
+                 ignoreCreeps: Boolean = true) : FindPathOpts(ignoreCreeps)
