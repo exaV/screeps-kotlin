@@ -22,6 +22,7 @@ enum class BodyDefinition(val bodyType: Array<BodyType>, val maxSize: Int = 0) {
             body.addAll(bodyType)
             size += 1
         }
+        body.sort()
 
         return body
     }
