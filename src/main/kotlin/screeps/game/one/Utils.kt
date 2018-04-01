@@ -10,13 +10,12 @@ fun StructureSpawn.spawn(bodyDefinition: BodyDefinition) {
     if (room.energyAvailable < bodyDefinition.getCost()) return
 
     val body = bodyDefinition.getBiggest(room.energyAvailable)
-    val newName = "${bodyDefinition.name}${body.size}_${Game.time}"
+    val newName = "${bodyDefinition.name}_T${body.tier}_${Game.time}"
 
-    val code = this.spawnCreep(body.toTypedArray(), newName, CreepSpawnOptions(CreepState.REFILL))
+    val code = this.spawnCreep(body.body.toTypedArray(), newName, CreepSpawnOptions(CreepState.REFILL))
     when (code) {
         OK -> println("spawning $newName with body $body")
-        ERR_BUSY -> console.log("busy")
-        ERR_NOT_ENOUGH_ENERGY -> run { } // do nothing
+        ERR_NOT_ENOUGH_ENERGY, ERR_BUSY -> run { } // do nothing
         else -> console.log("unhandled error code $code")
     }
 }

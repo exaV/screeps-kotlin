@@ -79,7 +79,8 @@ class RefillEnergy {
             ERR_NOT_IN_RANGE -> creep.moveTo(source.pos, MoveToOpts(visualizePathStyle = Style(stroke = "#ffaa00")))
             ERR_NOT_ENOUGH_RESOURCES -> creep.memory.assignedEnergySource = null
             else -> {
-                println("${creep.name} could now withdraw from ${source.id}")
+                println("${creep.name} could now withdraw from (${source.id})")
+                creep.say("could now withdraw from (${source.id})")
                 creep.memory.assignedEnergySource = null
             }
         }
