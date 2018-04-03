@@ -2,7 +2,7 @@ package screeps.game.one.kreeps
 
 import types.*
 
-enum class BodyDefinition(val bodyType: Array<BodyType>, val maxSize: Int = 0) {
+enum class BodyDefinition(val bodyPartConstant: Array<BodyPartConstant>, val maxSize: Int = 0) {
     BASIC_WORKER(arrayOf(WORK, CARRY, MOVE), maxSize = 5),
     MINER(arrayOf(WORK, WORK, MOVE), maxSize = 2),
     MINER_BIG(arrayOf(WORK, WORK, WORK, WORK, WORK, MOVE, MOVE), maxSize = 1), //completely drains a Source
@@ -10,22 +10,22 @@ enum class BodyDefinition(val bodyType: Array<BodyType>, val maxSize: Int = 0) {
     HAULER(arrayOf(CARRY, CARRY, MOVE), maxSize = 5),
     SCOUT(arrayOf(MOVE), maxSize = 1);
 
-    fun getCost(): Int = bodyType.sumBy { BODYPART_COST[it] as Int }
+    fun getCost(): Int = bodyPartConstant.sumBy { BODYPART_COST[it] }
 
-    data class Body(val tier: Int, val body: List<BodyType>)
+    data class Body(val tier: Int, val body: List<BodyPartConstant>)
 
     fun getBiggest(availableEnergy: Int): Body {
         var energyCost = availableEnergy
         val cost = getCost()
-        val body = mutableListOf<BodyType>()
+        val body = mutableListOf<BodyPartConstant>()
         var size = 0
 
         while (energyCost - cost > 0 && (maxSize == 0 || size < maxSize)) {
             energyCost -= cost
-            body.addAll(bodyType)
+            body.addAll(bodyPartConstant)
             size += 1
         }
-        body.sort()
+        body.sortBy { it.stringValue() }
 
         return Body(size, body)
     }

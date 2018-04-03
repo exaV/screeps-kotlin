@@ -39,7 +39,7 @@ external interface Owner {
 external interface Structure : RoomObject {
     val hits: Double
     val hitsMax: Double
-    val structureType: String
+    val structureType: StructureConstant
 
     fun destroy(): Number
     fun isActive(): Boolean
@@ -58,8 +58,8 @@ external interface StructureSpawn : OwnedStructure {
     val name: String
     val spawning: Spawning?
 
-    fun spawnCreep(body: Array<BodyType>, name: String): Number
-    fun spawnCreep(body: Array<BodyType>, name: String, opts: dynamic): Number
+    fun spawnCreep(body: Array<BodyPartConstant>, name: String): Number
+    fun spawnCreep(body: Array<BodyPartConstant>, name: String, opts: dynamic): Number
 
 }
 
@@ -98,7 +98,7 @@ external class StructureContainer : Structure {
     override val room: Room
     override val hits: Double
     override val hitsMax: Double
-    override val structureType: String
+    override val structureType: StructureConstant
     override fun destroy(): Number
     override fun isActive(): Boolean
     override fun notifyWhenAttacked(enabled: Boolean): Number
@@ -118,7 +118,7 @@ external class StructureTower : OwnedStructure {
     override val room: Room
     override val hits: Double
     override val hitsMax: Double
-    override val structureType: String
+    override val structureType: StructureConstant
     override fun destroy(): Number
     override fun isActive(): Boolean
     override fun notifyWhenAttacked(enabled: Boolean): Number
@@ -135,7 +135,7 @@ external class StructureStorage : OwnedStructure {
     override val room: Room
     override val hits: Double
     override val hitsMax: Double
-    override val structureType: String
+    override val structureType: StructureConstant
     override fun destroy(): Number
     override fun isActive(): Boolean
     override fun notifyWhenAttacked(enabled: Boolean): Number

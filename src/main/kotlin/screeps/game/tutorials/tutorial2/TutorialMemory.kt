@@ -1,6 +1,6 @@
 package screeps.game.tutorials.tutorial2
 
-import types.CreepMemory
+import types.base.global.CreepMemory
 
 
 class TutorialMemory(val memory: CreepMemory) {

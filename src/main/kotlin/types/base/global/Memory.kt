@@ -1,12 +1,12 @@
 package types.base.global
 
-import kotlin.js.Json
+import types.MutableJsDict
 
 external object Memory {
-    var creeps: Json?
-    var flags: Json
-    var rooms: Json
-    var spawns: Json
+    var creeps: MutableJsDict<String, CreepMemory>
+    var flags: MutableJsDict<String, FlagMemory>?
+    var rooms: MutableJsDict<String, RoomMemory>
+    var spawns: MutableJsDict<String, SpawnMemory>?
 
 }
 
@@ -17,3 +17,8 @@ inline operator fun Memory.get(name: String): Any? = asDynamic()[name]
 inline operator fun Memory.set(name: String, value: Any) {
     asDynamic()[name] = value
 }
+
+external interface CreepMemory
+external interface FlagMemory
+external interface RoomMemory
+external interface SpawnMemory

@@ -148,7 +148,7 @@ class RefillEnergy {
             // and many could be assigned to same miner
             return miners.maxBy {
                 val creepsAssignedToMiner = usedSourcesWithCreepCounts[it.id] ?: 0
-                val minerOutput = it.body.count { it.type == WORK } * 2
+                val minerOutput = it.body.count { it.partConstant == WORK } * 2
                 minerOutput.toDouble() / (creepsAssignedToMiner + 1)
             }
         }

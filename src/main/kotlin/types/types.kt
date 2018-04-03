@@ -1,82 +1,45 @@
 package types
 
+import types.base.global.Game
 import kotlin.js.Date
 
-external interface Room {
-    val energyAvailable: Int
-    val energyCapacityAvailable: Int
-    val memory: dynamic
-    val name: String
-    val controller: StructureController?
-    val storage: StructureStorage?
-    val terminal: dynamic
-    val visual: dynamic
+external interface JsDict<K, V>
 
-    fun createConstructionSite(x: Number, y: Number, structureType: StructureConstant): Number
-    fun createConstructionSite(pos: RoomPosition, structureType: StructureConstant): Number
-    fun createFlag(
-        pos: RoomPosition,
-        name: String? = definedExternally,
-        color: dynamic = definedExternally,
-        secondaryColor: dynamic = definedExternally
-    ): dynamic
+@Suppress("NOTHING_TO_INLINE")
+inline operator fun <K, V> JsDict<K, V>.get(key: K): V = asDynamic()[key] as V
 
-    fun findExitTo(room: String): dynamic
-    fun findExitTo(room: Room): dynamic
-    fun getPositionAt(x: Number, y: Number): RoomPosition?
-    fun lookAt(x: Number, y: Number): Array<LookAt>
-    fun lookAt(target: RoomPosition): Array<LookAt>
-    fun lookAtArea(
-        top: Number,
-        left: Number,
-        bottom: Number,
-        right: Number,
-        asArray: Boolean? = definedExternally /* null */
-    ): dynamic /* LookAtResultMatrix<dynamic /* String /* "creep" */ | String /* "source" */ | String /* "energy" */ | String /* "resource" */ | String /* "mineral" */ | String /* "structure" */ | String /* "flag" */ | String /* "constructionSite" */ | String /* "nuke" */ | String /* "terrain" */ */> | Array<Any? /* Any? & `T$79` & `T$95` */> */
+class Entry<K, V>(override val key: K, override val value: V) : Map.Entry<K, V>
 
-    fun findPath(fromPos: RoomPosition, toPos: RoomPosition, opts: FindPathOpts? = definedExternally): Array<PathStep>
+@Suppress("NOTHING_TO_INLINE")
+inline operator fun <K, V> JsDict<K, V>.iterator(): Iterator<Map.Entry<K, V>> {
+    return object : Iterator<Map.Entry<K, V>> {
+        val keys: Array<K> = js("Object").keys(this@iterator) as? Array<K> ?: emptyArray()
+        var currentIndex = 0
 
-    fun <T : RoomObject> find(FIND_CONSTANT: Number): Array<T>
-    fun <T : RoomObject> find(FIND_CONSTANT: Number, opts: Filter): Array<T>
+        init {
+            //for some reason this prints the same time across multiple ticks??
+            println("creating iterator in tick ${Game.time} with keys=$keys")
+        }
+
+        override fun hasNext(): Boolean = currentIndex < keys.size
+
+        override fun next(): Map.Entry<K, V> {
+            val key = keys[currentIndex]
+            currentIndex += 1
+            val value = this@iterator.asDynamic()[key] as V
+            return Entry(key, value)
+        }
+    }
 }
 
-external class LookAt {
-    val type: LookConstant
-    val creep: Creep?
-    val structure: Structure?
-    val terrain: String?
-    val constructionSite: ConstructionSite?
-    val resource: Resource?
+external interface MutableJsDict<K, V> : JsDict<K, V>
+
+@Suppress("NOTHING_TO_INLINE")
+inline operator fun <K, V> MutableJsDict<K, V>.set(key: K, value: V) {
+    asDynamic()[key] = value
 }
 
 class Filter(val filter: dynamic)
-
-class FindPathOpts(
-        val ignoreCreeps: Boolean = false,
-        val ignoreDestructibleStructures: Boolean = false,
-        val ignoreRoads: Boolean = false,
-        val maxOps: Int = 2000,
-        val heuristicWeight: Double = 1.2,
-        val serialize: Boolean = false,
-        val maxRooms: Int = 16,
-        val range: Int = 0
-)
-
-external interface PathStep {
-    var x: Int
-    var dx: Int
-    var y: Int
-    var dy: Int
-    var direction: dynamic /* Number /* 1 */ | Number /* 2 */ | Number /* 3 */ | Number /* 4 */ | Number /* 5 */ | Number /* 6 */ | Number /* 7 */ | Number /* 8 */ */
-}
-
-fun Room.findCreeps() = find<Creep>(FIND_CREEPS)
-fun Room.findEnergy() = find<Source>(FIND_SOURCES)
-fun Room.findConstructionSites() = find<ConstructionSite>(FIND_CONSTRUCTION_SITES)
-fun Room.findStructures() = find<Structure>(FIND_STRUCTURES)
-fun Room.findDroppedEnergy() = find<Resource>(FIND_DROPPED_RESOURCES, Filter("energy"))
-
-
 external interface CPUShardLimits
 
 @Suppress("NOTHING_TO_INLINE")
@@ -108,12 +71,13 @@ external interface Shard {
     var ptr: Boolean
 }
 
+
 external class ConstructionSite : RoomObject {
-    var my: Boolean
-    var owner: Owner
-    var progress: Number
-    var progressTotal: Number
-    var structureType: String
+    val my: Boolean
+    val owner: Owner
+    val progress: Number
+    val progressTotal: Number
+    val structureType: BuildableStructureConstant
     fun remove(): Number
 
     override val pos: RoomPosition
@@ -133,26 +97,5 @@ external interface SignDefinition {
     var datetime: Date
 }
 
-external interface CreepMemory
-external interface FlagMemory
-external interface RoomMemory
-external interface SpawnMemory
-external interface CreepMap : TMap<Creep>
-external interface RoomMap : TMap<Room>
-external interface SpawnsMap : TMap<StructureSpawn>
-external interface StructuresMap : TMap<Structure>
-external interface ConstructionSiteMap : TMap<ConstructionSite>
-external interface TMap<T> {
-
-    val length: Number?
-}
-
-@Suppress("NOTHING_TO_INLINE")
-inline operator fun <T> TMap<T>.get(name: String): T? = asDynamic()[name]
-
-@Suppress("NOTHING_TO_INLINE")
-inline operator fun <T> TMap<T>.set(roomName: String, value: T) {
-    asDynamic()[roomName] = value
-}
 
 

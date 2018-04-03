@@ -1,6 +1,6 @@
 package screeps.game.one
 
-import types.CreepMemory
+import types.base.global.CreepMemory
 
 var CreepMemory.state: CreepState
     get() = try {

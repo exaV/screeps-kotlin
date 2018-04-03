@@ -1,171 +1,163 @@
+@file:Suppress("unused")
+
 package types
 
-import kotlin.js.Json
+external interface StringConstant
+external interface IntegerConstant
 
-typealias FindConstant = Number
-typealias StructureConstant = String
-external var OK: Number /* 0 */ = definedExternally
-external var ERR_NOT_OWNER: Number /* -1 */ = definedExternally
-external var ERR_NO_PATH: Number /* -2 */ = definedExternally
-external var ERR_NAME_EXISTS: Number /* -3 */ = definedExternally
-external var ERR_BUSY: Number /* -4 */ = definedExternally
-external var ERR_NOT_FOUND: Number /* -5 */ = definedExternally
-external var ERR_NOT_ENOUGH_RESOURCES: Number /* -6 */ = definedExternally
-external var ERR_NOT_ENOUGH_ENERGY: Number /* -6 */ = definedExternally
-external var ERR_INVALID_TARGET: Number /* -7 */ = definedExternally
-external var ERR_FULL: Number /* -8 */ = definedExternally
-external var ERR_NOT_IN_RANGE: Number /* -9 */ = definedExternally
-external var ERR_INVALID_ARGS: Number /* -10 */ = definedExternally
-external var ERR_TIRED: Number /* -11 */ = definedExternally
-external var ERR_NO_BODYPART: Number /* -12 */ = definedExternally
-external var ERR_NOT_ENOUGH_EXTENSIONS: Number /* -6 */ = definedExternally
-external var ERR_RCL_NOT_ENOUGH: Number /* -14 */ = definedExternally
-external var ERR_GCL_NOT_ENOUGH: Number /* -15 */ = definedExternally
-external var FIND_EXIT_TOP: FindConstant /* 1 */ = definedExternally
-external var FIND_EXIT_RIGHT: FindConstant /* 3 */ = definedExternally
-external var FIND_EXIT_BOTTOM: FindConstant /* 5 */ = definedExternally
-external var FIND_EXIT_LEFT: FindConstant /* 7 */ = definedExternally
-external var FIND_EXIT: FindConstant /* 10 */ = definedExternally
-external var FIND_CREEPS: FindConstant /* 101 */ = definedExternally
-external var FIND_MY_CREEPS: FindConstant /* 102 */ = definedExternally
-external var FIND_HOSTILE_CREEPS: FindConstant /* 103 */ = definedExternally
-external var FIND_SOURCES_ACTIVE: FindConstant /* 104 */ = definedExternally
-external var FIND_SOURCES: FindConstant /* 105 */ = definedExternally
-external var FIND_DROPPED_ENERGY: FindConstant /* -106 */ = definedExternally
-external var FIND_DROPPED_RESOURCES: FindConstant /* 106 */ = definedExternally
-external var FIND_STRUCTURES: FindConstant /* 107 */ = definedExternally
-external var FIND_MY_STRUCTURES: FindConstant /* 108 */ = definedExternally
-external var FIND_HOSTILE_STRUCTURES: FindConstant /* 109 */ = definedExternally
-external var FIND_FLAGS: FindConstant /* 110 */ = definedExternally
-external var FIND_CONSTRUCTION_SITES: FindConstant /* 111 */ = definedExternally
-external var FIND_MY_SPAWNS: FindConstant /* 112 */ = definedExternally
-external var FIND_HOSTILE_SPAWNS: FindConstant /* 113 */ = definedExternally
-external var FIND_MY_CONSTRUCTION_SITES: FindConstant /* 114 */ = definedExternally
-external var FIND_HOSTILE_CONSTRUCTION_SITES: FindConstant /* 115 */ = definedExternally
-external var FIND_MINERALS: FindConstant /* 116 */ = definedExternally
-external var FIND_NUKES: FindConstant /* 117 */ = definedExternally
-external var TOP: Number /* 1 */ = definedExternally
-external var TOP_RIGHT: Number /* 2 */ = definedExternally
-external var RIGHT: Number /* 3 */ = definedExternally
-external var BOTTOM_RIGHT: Number /* 4 */ = definedExternally
-external var BOTTOM: Number /* 5 */ = definedExternally
-external var BOTTOM_LEFT: Number /* 6 */ = definedExternally
-external var LEFT: Number /* 7 */ = definedExternally
-external var TOP_LEFT: Number /* 8 */ = definedExternally
-external var COLOR_RED: Number /* 1 */ = definedExternally
-external var COLOR_PURPLE: Number /* 2 */ = definedExternally
-external var COLOR_BLUE: Number /* 3 */ = definedExternally
-external var COLOR_CYAN: Number /* 4 */ = definedExternally
-external var COLOR_GREEN: Number /* 5 */ = definedExternally
-external var COLOR_YELLOW: Number /* 6 */ = definedExternally
-external var COLOR_ORANGE: Number /* 7 */ = definedExternally
-external var COLOR_BROWN: Number /* 8 */ = definedExternally
-external var COLOR_GREY: Number /* 9 */ = definedExternally
-external var COLOR_WHITE: Number /* 10 */ = definedExternally
-external var COLORS_ALL: Array<dynamic /* Number /* 1 */ | Number /* 2 */ | Number /* 3 */ | Number /* 4 */ | Number /* 5 */ | Number /* 6 */ | Number /* 7 */ | Number /* 8 */ | Number /* 9 */ | Number /* 10 */ */> = definedExternally
-external var CREEP_SPAWN_TIME: Number /* 3 */ = definedExternally
-external var CREEP_LIFE_TIME: Number /* 1500 */ = definedExternally
-external var CREEP_CLAIM_LIFE_TIME: Number /* 500 */ = definedExternally
-external var CREEP_CORPSE_RATE: Number /* 0.2 */ = definedExternally
-external var OBSTACLE_OBJECT_TYPES: dynamic /* JsTuple<String /* "spawn" */, String /* "creep" */, String /* "wall" */, String /* "source" */, String /* "constructedWall" */, String /* "extension" */, String /* "link" */, String /* "carry" */, String /* "tower" */, String /* "observer" */, String /* "powerSpawn" */, String /* "powerBank" */, String /* "lab" */, String /* "terminal" */, String /* "nuker" */> */ =
-    definedExternally
-external var ENERGY_REGEN_TIME: Number /* 300 */ = definedExternally
-external var ENERGY_DECAY: Number /* 1000 */ = definedExternally
-external var REPAIR_COST: Number /* 0.01 */ = definedExternally
-external var RAMPART_DECAY_AMOUNT: Number /* 300 */ = definedExternally
-external var RAMPART_DECAY_TIME: Number /* 100 */ = definedExternally
-external var RAMPART_HITS: Number /* 1 */ = definedExternally
-external var ROAD_HITS: Number /* 5000 */ = definedExternally
-external var ROAD_WEAROUT: Number /* 1 */ = definedExternally
-external var ROAD_DECAY_AMOUNT: Number /* 100 */ = definedExternally
-external var ROAD_DECAY_TIME: Number /* 1000 */ = definedExternally
-external var LINK_HITS: Number /* 1000 */ = definedExternally
-external var LINK_HITS_MAX: Number /* 1000 */ = definedExternally
-external var LINK_CAPACITY: Number /* 800 */ = definedExternally
-external var LINK_COOLDOWN: Number /* 1 */ = definedExternally
-external var LINK_LOSS_RATIO: Number /* 0.03 */ = definedExternally
-external var STORAGE_CAPACITY: Number /* 1000000 */ = definedExternally
-external var STORAGE_HITS: Number /* 10000 */ = definedExternally
-external var BODYPART_COST: Json = definedExternally
-external var BODYPARTS_ALL: Array<dynamic /* String /* "move" */ | String /* "work" */ | String /* "carry" */ | String /* "attack" */ | String /* "ranged_attack" */ | String /* "tough" */ | String /* "heal" */ | String /* "claim" */ */> = definedExternally
-external var CARRY_CAPACITY: Number /* 50 */ = definedExternally
-external var HARVEST_POWER: Number /* 2 */ = definedExternally
-external var HARVEST_MINERAL_POWER: Number /* 1 */ = definedExternally
-external var REPAIR_POWER: Number /* 100 */ = definedExternally
-external var DISMANTLE_POWER: Number /* 50 */ = definedExternally
-external var BUILD_POWER: Number /* 5 */ = definedExternally
-external var ATTACK_POWER: Number /* 30 */ = definedExternally
-external var UPGRADE_CONTROLLER_POWER: Number /* 1 */ = definedExternally
-external var RANGED_ATTACK_POWER: Number /* 10 */ = definedExternally
-external var HEAL_POWER: Number /* 12 */ = definedExternally
-external var RANGED_HEAL_POWER: Number /* 4 */ = definedExternally
-external var DISMANTLE_COST: Number /* 0.005 */ = definedExternally
-external var CONSTRUCTION_COST: Any? = definedExternally
-external var CONSTRUCTION_COST_ROAD_SWAMP_RATIO: Number /* 5 */ = definedExternally
-external var STRUCTURE_EXTENSION: StructureConstant /* "extension" */ = definedExternally
-external var STRUCTURE_RAMPART: StructureConstant /* "rampart" */ = definedExternally
-external var STRUCTURE_ROAD: StructureConstant /* "road" */ = definedExternally
-external var STRUCTURE_SPAWN: StructureConstant /* "spawn" */ = definedExternally
-external var STRUCTURE_LINK: StructureConstant /* "link" */ = definedExternally
-external var STRUCTURE_WALL: StructureConstant /* "constructedWall" */ = definedExternally
-external var STRUCTURE_KEEPER_LAIR: StructureConstant /* "keeperLair" */ = definedExternally
-external var STRUCTURE_CONTROLLER: StructureConstant /* "controller" */ = definedExternally
-external var STRUCTURE_STORAGE: StructureConstant /* "carry" */ = definedExternally
-external var STRUCTURE_TOWER: StructureConstant /* "tower" */ = definedExternally
-external var STRUCTURE_OBSERVER: StructureConstant /* "observer" */ = definedExternally
-external var STRUCTURE_POWER_BANK: StructureConstant /* "powerBank" */ = definedExternally
-external var STRUCTURE_POWER_SPAWN: StructureConstant /* "powerSpawn" */ = definedExternally
-external var STRUCTURE_EXTRACTOR: StructureConstant /* "extractor" */ = definedExternally
-external var STRUCTURE_LAB: StructureConstant /* "lab" */ = definedExternally
-external var STRUCTURE_TERMINAL: StructureConstant /* "terminal" */ = definedExternally
-external var STRUCTURE_CONTAINER: StructureConstant /* "container" */ = definedExternally
-external var STRUCTURE_NUKER: StructureConstant /* "nuker" */ = definedExternally
-external var STRUCTURE_PORTAL: StructureConstant /* "portal" */ = definedExternally
-external var RESOURCE_ENERGY: String /* "energy" */ = definedExternally
-external var RESOURCE_POWER: String /* "power" */ = definedExternally
-external var RESOURCE_UTRIUM: String /* "U" */ = definedExternally
-external var RESOURCE_LEMERGIUM: String /* "L" */ = definedExternally
-external var RESOURCE_KEANIUM: String /* "K" */ = definedExternally
-external var RESOURCE_GHODIUM: String /* "G" */ = definedExternally
-external var RESOURCE_ZYNTHIUM: String /* "Z" */ = definedExternally
-external var RESOURCE_OXYGEN: String /* "O" */ = definedExternally
-external var RESOURCE_HYDROGEN: String /* "H" */ = definedExternally
-external var RESOURCE_CATALYST: String /* "X" */ = definedExternally
-external var RESOURCE_HYDROXIDE: String /* "OH" */ = definedExternally
-external var RESOURCE_ZYNTHIUM_KEANITE: String /* "ZK" */ = definedExternally
-external var RESOURCE_UTRIUM_LEMERGITE: String /* "UL" */ = definedExternally
-external var RESOURCE_UTRIUM_HYDRIDE: String /* "UH" */ = definedExternally
-external var RESOURCE_UTRIUM_OXIDE: String /* "UO" */ = definedExternally
-external var RESOURCE_KEANIUM_HYDRIDE: String /* "KH" */ = definedExternally
-external var RESOURCE_KEANIUM_OXIDE: String /* "KO" */ = definedExternally
-external var RESOURCE_LEMERGIUM_HYDRIDE: String /* "LH" */ = definedExternally
-external var RESOURCE_LEMERGIUM_OXIDE: String /* "LO" */ = definedExternally
-external var RESOURCE_ZYNTHIUM_HYDRIDE: String /* "ZH" */ = definedExternally
-external var RESOURCE_ZYNTHIUM_OXIDE: String /* "ZO" */ = definedExternally
-external var RESOURCE_GHODIUM_HYDRIDE: String /* "GH" */ = definedExternally
-external var RESOURCE_GHODIUM_OXIDE: String /* "GO" */ = definedExternally
-external var RESOURCE_UTRIUM_ACID: String /* "UH2O" */ = definedExternally
-external var RESOURCE_UTRIUM_ALKALIDE: String /* "UHO2" */ = definedExternally
-external var RESOURCE_KEANIUM_ACID: String /* "KH2O" */ = definedExternally
-external var RESOURCE_KEANIUM_ALKALIDE: String /* "KHO2" */ = definedExternally
-external var RESOURCE_LEMERGIUM_ACID: String /* "LH2O" */ = definedExternally
-external var RESOURCE_LEMERGIUM_ALKALIDE: String /* "LHO2" */ = definedExternally
-external var RESOURCE_ZYNTHIUM_ACID: String /* "ZH2O" */ = definedExternally
-external var RESOURCE_ZYNTHIUM_ALKALIDE: String /* "ZHO2" */ = definedExternally
-external var RESOURCE_GHODIUM_ACID: String /* "GH2O" */ = definedExternally
-external var RESOURCE_GHODIUM_ALKALIDE: String /* "GHO2" */ = definedExternally
-external var RESOURCE_CATALYZED_UTRIUM_ACID: String /* "XUH2O" */ = definedExternally
-external var RESOURCE_CATALYZED_UTRIUM_ALKALIDE: String /* "XUHO2" */ = definedExternally
-external var RESOURCE_CATALYZED_KEANIUM_ACID: String /* "XKH2O" */ = definedExternally
-external var RESOURCE_CATALYZED_KEANIUM_ALKALIDE: String /* "XKHO2" */ = definedExternally
-external var RESOURCE_CATALYZED_LEMERGIUM_ACID: String /* "XLH2O" */ = definedExternally
-external var RESOURCE_CATALYZED_LEMERGIUM_ALKALIDE: String /* "XLHO2" */ = definedExternally
-external var RESOURCE_CATALYZED_ZYNTHIUM_ACID: String /* "XZH2O" */ = definedExternally
-external var RESOURCE_CATALYZED_ZYNTHIUM_ALKALIDE: String /* "ZXHO2" */ = definedExternally
-external var RESOURCE_CATALYZED_GHODIUM_ACID: String /* "XGH2O" */ = definedExternally
-external var RESOURCE_CATALYZED_GHODIUM_ALKALIDE: String /* "XGHO2" */ = definedExternally
+@Suppress("NOTHING_TO_INLINE")
+inline fun StringConstant.stringValue(): String = this.asDynamic() as String
 
-typealias LookConstant = String
+@Suppress("NOTHING_TO_INLINE")
+inline fun IntegerConstant.stringValue(): String = this.toString()
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun IntegerConstant.intValue(): Int = this.asDynamic() as Int
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun IntegerConstant.numberValue(): Number = this.asDynamic() as Number
+
+external interface FindConstant : IntegerConstant
+external interface ScreepsReturnCode : IntegerConstant
+external interface BodyPartConstant : StringConstant
+external interface StructureConstant : StringConstant
+external interface BuildableStructureConstant : StructureConstant
+external interface LookConstant : StringConstant
+external interface DirectionConstant : IntegerConstant
+external interface ResourceConstant : StringConstant
+external interface MineralConstant : ResourceConstant
+external interface ColorConstant : IntegerConstant
+external interface Terrain
+
+external val OK: ScreepsReturnCode /* 0 */ = definedExternally
+external val ERR_NOT_OWNER: ScreepsReturnCode /* -1 */ = definedExternally
+external val ERR_NO_PATH: ScreepsReturnCode /* -2 */ = definedExternally
+external val ERR_NAME_EXISTS: ScreepsReturnCode /* -3 */ = definedExternally
+external val ERR_BUSY: ScreepsReturnCode /* -4 */ = definedExternally
+external val ERR_NOT_FOUND: ScreepsReturnCode /* -5 */ = definedExternally
+external val ERR_NOT_ENOUGH_RESOURCES: ScreepsReturnCode /* -6 */ = definedExternally
+external val ERR_NOT_ENOUGH_ENERGY: ScreepsReturnCode /* -6 */ = definedExternally
+external val ERR_INVALID_TARGET: ScreepsReturnCode /* -7 */ = definedExternally
+external val ERR_FULL: ScreepsReturnCode /* -8 */ = definedExternally
+external val ERR_NOT_IN_RANGE: ScreepsReturnCode /* -9 */ = definedExternally
+external val ERR_INVALID_ARGS: ScreepsReturnCode /* -10 */ = definedExternally
+external val ERR_TIRED: ScreepsReturnCode /* -11 */ = definedExternally
+external val ERR_NO_BODYPART: ScreepsReturnCode /* -12 */ = definedExternally
+external val ERR_NOT_ENOUGH_EXTENSIONS: ScreepsReturnCode /* -6 */ = definedExternally
+external val ERR_RCL_NOT_ENOUGH: ScreepsReturnCode /* -14 */ = definedExternally
+external val ERR_GCL_NOT_ENOUGH: ScreepsReturnCode /* -15 */ = definedExternally
+
+external val FIND_EXIT_TOP: FindConstant /* 1 */ = definedExternally
+external val FIND_EXIT_RIGHT: FindConstant /* 3 */ = definedExternally
+external val FIND_EXIT_BOTTOM: FindConstant /* 5 */ = definedExternally
+external val FIND_EXIT_LEFT: FindConstant /* 7 */ = definedExternally
+external val FIND_EXIT: FindConstant /* 10 */ = definedExternally
+external val FIND_CREEPS: FindConstant /* 101 */ = definedExternally
+external val FIND_MY_CREEPS: FindConstant /* 102 */ = definedExternally
+external val FIND_HOSTILE_CREEPS: FindConstant /* 103 */ = definedExternally
+external val FIND_SOURCES_ACTIVE: FindConstant /* 104 */ = definedExternally
+external val FIND_SOURCES: FindConstant /* 105 */ = definedExternally
+external val FIND_DROPPED_ENERGY: FindConstant /* -106 */ = definedExternally
+external val FIND_DROPPED_RESOURCES: FindConstant /* 106 */ = definedExternally
+external val FIND_STRUCTURES: FindConstant /* 107 */ = definedExternally
+external val FIND_MY_STRUCTURES: FindConstant /* 108 */ = definedExternally
+external val FIND_HOSTILE_STRUCTURES: FindConstant /* 109 */ = definedExternally
+external val FIND_FLAGS: FindConstant /* 110 */ = definedExternally
+external val FIND_CONSTRUCTION_SITES: FindConstant /* 111 */ = definedExternally
+external val FIND_MY_SPAWNS: FindConstant /* 112 */ = definedExternally
+external val FIND_HOSTILE_SPAWNS: FindConstant /* 113 */ = definedExternally
+external val FIND_MY_CONSTRUCTION_SITES: FindConstant /* 114 */ = definedExternally
+external val FIND_HOSTILE_CONSTRUCTION_SITES: FindConstant /* 115 */ = definedExternally
+external val FIND_MINERALS: FindConstant /* 116 */ = definedExternally
+external val FIND_NUKES: FindConstant /* 117 */ = definedExternally
+
+external val TOP: DirectionConstant /* 1 */ = definedExternally
+external val TOP_RIGHT: DirectionConstant /* 2 */ = definedExternally
+external val RIGHT: DirectionConstant /* 3 */ = definedExternally
+external val BOTTOM_RIGHT: DirectionConstant /* 4 */ = definedExternally
+external val BOTTOM: DirectionConstant /* 5 */ = definedExternally
+external val BOTTOM_LEFT: DirectionConstant /* 6 */ = definedExternally
+external val LEFT: DirectionConstant /* 7 */ = definedExternally
+external val TOP_LEFT: DirectionConstant /* 8 */ = definedExternally
+
+external val COLOR_RED: ColorConstant /* 1 */ = definedExternally
+external val COLOR_PURPLE: ColorConstant /* 2 */ = definedExternally
+external val COLOR_BLUE: ColorConstant /* 3 */ = definedExternally
+external val COLOR_CYAN: ColorConstant /* 4 */ = definedExternally
+external val COLOR_GREEN: ColorConstant /* 5 */ = definedExternally
+external val COLOR_YELLOW: ColorConstant /* 6 */ = definedExternally
+external val COLOR_ORANGE: ColorConstant /* 7 */ = definedExternally
+external val COLOR_BROWN: ColorConstant /* 8 */ = definedExternally
+external val COLOR_GREY: ColorConstant /* 9 */ = definedExternally
+external val COLOR_WHITE: ColorConstant /* 10 */ = definedExternally
+external val COLORS_ALL: Array<ColorConstant> = definedExternally
+
+external val STRUCTURE_EXTENSION: BuildableStructureConstant /* "extension" */ = definedExternally
+external val STRUCTURE_RAMPART: BuildableStructureConstant /* "rampart" */ = definedExternally
+external val STRUCTURE_ROAD: BuildableStructureConstant /* "road" */ = definedExternally
+external val STRUCTURE_SPAWN: BuildableStructureConstant /* "spawn" */ = definedExternally
+external val STRUCTURE_LINK: BuildableStructureConstant /* "link" */ = definedExternally
+external val STRUCTURE_WALL: BuildableStructureConstant /* "constructedWall" */ = definedExternally
+external val STRUCTURE_KEEPER_LAIR: StructureConstant /* "keeperLair" */ = definedExternally
+external val STRUCTURE_CONTROLLER: BuildableStructureConstant /* "controller" */ = definedExternally
+external val STRUCTURE_STORAGE: BuildableStructureConstant /* "carry" */ = definedExternally
+external val STRUCTURE_TOWER: BuildableStructureConstant /* "tower" */ = definedExternally
+external val STRUCTURE_OBSERVER: BuildableStructureConstant /* "observer" */ = definedExternally
+external val STRUCTURE_POWER_BANK: StructureConstant /* "powerBank" */ = definedExternally
+external val STRUCTURE_POWER_SPAWN: BuildableStructureConstant /* "powerSpawn" */ = definedExternally
+external val STRUCTURE_EXTRACTOR: BuildableStructureConstant /* "extractor" */ = definedExternally
+external val STRUCTURE_LAB: BuildableStructureConstant /* "lab" */ = definedExternally
+external val STRUCTURE_TERMINAL: BuildableStructureConstant /* "terminal" */ = definedExternally
+external val STRUCTURE_CONTAINER: BuildableStructureConstant /* "container" */ = definedExternally
+external val STRUCTURE_NUKER: BuildableStructureConstant /* "nuker" */ = definedExternally
+external val STRUCTURE_PORTAL: StructureConstant /* "portal" */ = definedExternally
+external val CONSTRUCTION_COST: JsDict<BuildableStructureConstant, Int> = definedExternally
+external val CONSTRUCTION_COST_ROAD_SWAMP_RATIO: Number /* 5 */ = definedExternally
+
+external val RESOURCE_ENERGY: MineralConstant /* "energy" */ = definedExternally
+external val RESOURCE_POWER: ResourceConstant /* "power" */ = definedExternally
+external val RESOURCE_UTRIUM: MineralConstant /* "U" */ = definedExternally
+external val RESOURCE_LEMERGIUM: MineralConstant /* "L" */ = definedExternally
+external val RESOURCE_KEANIUM: MineralConstant /* "K" */ = definedExternally
+external val RESOURCE_GHODIUM: MineralConstant /* "G" */ = definedExternally
+external val RESOURCE_ZYNTHIUM: MineralConstant /* "Z" */ = definedExternally
+external val RESOURCE_OXYGEN: MineralConstant /* "O" */ = definedExternally
+external val RESOURCE_HYDROGEN: MineralConstant /* "H" */ = definedExternally
+external val RESOURCE_CATALYST: MineralConstant /* "X" */ = definedExternally
+
+external val RESOURCE_HYDROXIDE: ResourceConstant /* "OH" */ = definedExternally
+external val RESOURCE_ZYNTHIUM_KEANITE: ResourceConstant /* "ZK" */ = definedExternally
+external val RESOURCE_UTRIUM_LEMERGITE: ResourceConstant /* "UL" */ = definedExternally
+external val RESOURCE_UTRIUM_HYDRIDE: ResourceConstant /* "UH" */ = definedExternally
+external val RESOURCE_UTRIUM_OXIDE: ResourceConstant /* "UO" */ = definedExternally
+external val RESOURCE_KEANIUM_HYDRIDE: ResourceConstant /* "KH" */ = definedExternally
+external val RESOURCE_KEANIUM_OXIDE: ResourceConstant /* "KO" */ = definedExternally
+external val RESOURCE_LEMERGIUM_HYDRIDE: ResourceConstant /* "LH" */ = definedExternally
+external val RESOURCE_LEMERGIUM_OXIDE: ResourceConstant /* "LO" */ = definedExternally
+external val RESOURCE_ZYNTHIUM_HYDRIDE: ResourceConstant /* "ZH" */ = definedExternally
+external val RESOURCE_ZYNTHIUM_OXIDE: ResourceConstant /* "ZO" */ = definedExternally
+external val RESOURCE_GHODIUM_HYDRIDE: ResourceConstant /* "GH" */ = definedExternally
+external val RESOURCE_GHODIUM_OXIDE: ResourceConstant /* "GO" */ = definedExternally
+external val RESOURCE_UTRIUM_ACID: ResourceConstant /* "UH2O" */ = definedExternally
+external val RESOURCE_UTRIUM_ALKALIDE: ResourceConstant /* "UHO2" */ = definedExternally
+external val RESOURCE_KEANIUM_ACID: ResourceConstant /* "KH2O" */ = definedExternally
+external val RESOURCE_KEANIUM_ALKALIDE: ResourceConstant /* "KHO2" */ = definedExternally
+external val RESOURCE_LEMERGIUM_ACID: ResourceConstant /* "LH2O" */ = definedExternally
+external val RESOURCE_LEMERGIUM_ALKALIDE: ResourceConstant /* "LHO2" */ = definedExternally
+external val RESOURCE_ZYNTHIUM_ACID: ResourceConstant /* "ZH2O" */ = definedExternally
+external val RESOURCE_ZYNTHIUM_ALKALIDE: ResourceConstant /* "ZHO2" */ = definedExternally
+external val RESOURCE_GHODIUM_ACID: ResourceConstant /* "GH2O" */ = definedExternally
+external val RESOURCE_GHODIUM_ALKALIDE: ResourceConstant /* "GHO2" */ = definedExternally
+external val RESOURCE_CATALYZED_UTRIUM_ACID: ResourceConstant /* "XUH2O" */ = definedExternally
+external val RESOURCE_CATALYZED_UTRIUM_ALKALIDE: ResourceConstant /* "XUHO2" */ = definedExternally
+external val RESOURCE_CATALYZED_KEANIUM_ACID: ResourceConstant /* "XKH2O" */ = definedExternally
+external val RESOURCE_CATALYZED_KEANIUM_ALKALIDE: ResourceConstant /* "XKHO2" */ = definedExternally
+external val RESOURCE_CATALYZED_LEMERGIUM_ACID: ResourceConstant /* "XLH2O" */ = definedExternally
+external val RESOURCE_CATALYZED_LEMERGIUM_ALKALIDE: ResourceConstant /* "XLHO2" */ = definedExternally
+external val RESOURCE_CATALYZED_ZYNTHIUM_ACID: ResourceConstant /* "XZH2O" */ = definedExternally
+external val RESOURCE_CATALYZED_ZYNTHIUM_ALKALIDE: ResourceConstant /* "ZXHO2" */ = definedExternally
+external val RESOURCE_CATALYZED_GHODIUM_ACID: ResourceConstant /* "XGH2O" */ = definedExternally
+external val RESOURCE_CATALYZED_GHODIUM_ALKALIDE: ResourceConstant /* "XGHO2" */ = definedExternally
 
 external val LOOK_CREEPS: LookConstant = definedExternally
 external val LOOK_ENERGY: LookConstant = definedExternally
@@ -179,7 +171,54 @@ external val LOOK_NUKES: LookConstant = definedExternally
 external val LOOK_TERRAIN: LookConstant = definedExternally
 external val LOOK_TOMBSTONES: LookConstant = definedExternally
 
-typealias BodyType = String
-external val WORK : BodyType
-external val CARRY : BodyType
-external val MOVE : BodyType
+external val WORK: BodyPartConstant = definedExternally
+external val CARRY: BodyPartConstant = definedExternally
+external val MOVE: BodyPartConstant = definedExternally
+external val ATTACK: BodyPartConstant = definedExternally
+external val RANGED_ATTACK: BodyPartConstant = definedExternally
+external val TOUGH: BodyPartConstant = definedExternally
+external val HEAL: BodyPartConstant = definedExternally
+external val CLAIM: BodyPartConstant = definedExternally
+external val BODYPART_COST: JsDict<BodyPartConstant, Int> = definedExternally
+
+
+external var CREEP_SPAWN_TIME: Number /* 3 */ = definedExternally
+external var CREEP_LIFE_TIME: Number /* 1500 */ = definedExternally
+external var CREEP_CLAIM_LIFE_TIME: Number /* 500 */ = definedExternally
+external var CREEP_CORPSE_RATE: Number /* 0.2 */ = definedExternally
+external var OBSTACLE_OBJECT_TYPES: dynamic = definedExternally
+external val ENERGY_REGEN_TIME: Number /* 300 */ = definedExternally
+external val ENERGY_DECAY: Number /* 1000 */ = definedExternally
+external val REPAIR_COST: Number /* 0.01 */ = definedExternally
+external val RAMPART_DECAY_AMOUNT: Number /* 300 */ = definedExternally
+external val RAMPART_DECAY_TIME: Number /* 100 */ = definedExternally
+external val RAMPART_HITS: Number /* 1 */ = definedExternally
+external val ROAD_HITS: Number /* 5000 */ = definedExternally
+external val ROAD_WEAROUT: Number /* 1 */ = definedExternally
+external val ROAD_DECAY_AMOUNT: Number /* 100 */ = definedExternally
+external val ROAD_DECAY_TIME: Number /* 1000 */ = definedExternally
+external val LINK_HITS: Number /* 1000 */ = definedExternally
+external val LINK_HITS_MAX: Number /* 1000 */ = definedExternally
+external val LINK_CAPACITY: Number /* 800 */ = definedExternally
+external val LINK_COOLDOWN: Number /* 1 */ = definedExternally
+external val LINK_LOSS_RATIO: Number /* 0.03 */ = definedExternally
+external val STORAGE_CAPACITY: Number /* 1000000 */ = definedExternally
+external val STORAGE_HITS: Number /* 10000 */ = definedExternally
+external val BODYPARTS_ALL: Array<BodyPartConstant> = definedExternally
+external val CARRY_CAPACITY: Number /* 50 */ = definedExternally
+external val HARVEST_POWER: Number /* 2 */ = definedExternally
+external val HARVEST_MINERAL_POWER: Number /* 1 */ = definedExternally
+external val REPAIR_POWER: Number /* 100 */ = definedExternally
+external val DISMANTLE_POWER: Number /* 50 */ = definedExternally
+external val BUILD_POWER: Number /* 5 */ = definedExternally
+external val ATTACK_POWER: Number /* 30 */ = definedExternally
+external val UPGRADE_CONTROLLER_POWER: Number /* 1 */ = definedExternally
+external val RANGED_ATTACK_POWER: Number /* 10 */ = definedExternally
+external val HEAL_POWER: Number /* 12 */ = definedExternally
+external val RANGED_HEAL_POWER: Number /* 4 */ = definedExternally
+external val DISMANTLE_COST: Number /* 0.005 */ = definedExternally
+
+
+external val SYSTEM_USERNAME: String = definedExternally
+external val SIGN_NOVICE_AREA: String = definedExternally
+external val SIGN_RESPAWN_AREA: String = definedExternally

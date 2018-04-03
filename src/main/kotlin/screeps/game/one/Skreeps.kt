@@ -93,4 +93,11 @@ fun gameLoop() {
     //println("cpu used this tick: ${Game.cpu.getUsed()}")
     var pos = mainSpawn.pos.copy(mainSpawn.pos.x - 2)
 
+    sandbox()
+
+}
+
+fun sandbox() {
+
+
 }

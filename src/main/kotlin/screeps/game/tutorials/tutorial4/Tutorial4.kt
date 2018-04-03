@@ -6,6 +6,7 @@ import screeps.game.tutorials.tutorial3.Builder
 import screeps.game.tutorials.tutorial3.Harvester
 import screeps.game.tutorials.tutorial3.roomsMap
 import types.*
+import types.base.global.CreepMemory
 import types.base.global.Game
 import types.base.global.Memory
 
@@ -97,10 +98,10 @@ public fun houseKeeping(creeps: Map<String, Creep>) {
     val creepsFromMemory = Memory.creeps
     if (creepsFromMemory == null) return
 
-    for ((creepName, _) in jsonToMap<Creep>(creepsFromMemory)) {
+    for ((creepName, _) in Memory.creeps) {
         if (creeps[creepName] == null) {
             console.log("deleting obselete memory entry for creep $creepName")
-            delete(Memory.creeps!![creepName])
+            delete(Memory.asDynamic().creeps[creepName])
         }
     }
 }
