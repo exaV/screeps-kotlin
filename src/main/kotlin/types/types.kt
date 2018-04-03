@@ -1,5 +1,6 @@
 package types
 
+import types.abstractions.lazyPerTick
 import types.base.global.Game
 import kotlin.js.Date
 
@@ -8,18 +9,18 @@ external interface JsDict<K, V>
 @Suppress("NOTHING_TO_INLINE")
 inline operator fun <K, V> JsDict<K, V>.get(key: K): V = asDynamic()[key] as V
 
+val <K, V> JsDict<K, V>.keys: Array<K> by lazyPerTick {
+    val keys = js("Object").keys(this) as? Array<K> ?: emptyArray()
+    println("creating iterator in tick ${Game.time} with keys=$keys")
+    keys
+}
+
 class Entry<K, V>(override val key: K, override val value: V) : Map.Entry<K, V>
 
 @Suppress("NOTHING_TO_INLINE")
 inline operator fun <K, V> JsDict<K, V>.iterator(): Iterator<Map.Entry<K, V>> {
     return object : Iterator<Map.Entry<K, V>> {
-        val keys: Array<K> = js("Object").keys(this@iterator) as? Array<K> ?: emptyArray()
         var currentIndex = 0
-
-        init {
-            //for some reason this prints the same time across multiple ticks??
-            println("creating iterator in tick ${Game.time} with keys=$keys")
-        }
 
         override fun hasNext(): Boolean = currentIndex < keys.size
 

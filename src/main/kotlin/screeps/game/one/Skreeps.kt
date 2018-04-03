@@ -9,6 +9,7 @@ import screeps.game.one.building.buildTowers
 import screeps.game.one.kreeps.BodyDefinition
 import screeps.game.tutorials.tutorial4.houseKeeping
 import types.*
+import types.abstractions.lazyPerTick
 import types.base.global.Game
 
 
@@ -22,7 +23,7 @@ object Context {
     //synthesized
     val targets: Map<String, Creep> by lazyPerTick { creepsByTarget() }
     val towers: List<StructureTower> by lazyPerTick {
-        Context.myStuctures.values.filter { it.structureType == STRUCTURE_TOWER }.map { it as StructureTower }
+        myStuctures.values.filter { it.structureType == STRUCTURE_TOWER }.map { it as StructureTower }
     }
 
     private fun creepsByTarget(): Map<String, Creep> {

@@ -3,6 +3,7 @@ package screeps.game.one.behaviours
 import screeps.game.one.*
 import screeps.game.one.kreeps.BodyDefinition
 import types.*
+import types.abstractions.lazyPerTick
 import types.base.global.Game
 
 class RefillEnergy {
@@ -14,13 +15,12 @@ class RefillEnergy {
     val droppedEnergyByRoom: MutableMap<Room, Array<Resource>> = mutableMapOf()
     val minersByRoom: MutableMap<Room, Array<Creep>> = mutableMapOf()
 
-    val usedSourcesWithCreepCounts by lazyPerTick {
+    val usedSourcesWithCreepCounts: Map<String, Int> by lazyPerTick {
         Context.creeps
-            .map { it.value.memory.assignedEnergySource }
-            .filterNotNull()
-            .groupingBy { it }
-            .eachCount()
-            .toMutableMap()
+                .map { it.value.memory.assignedEnergySource }
+                .filterNotNull()
+                .groupingBy { it }
+                .eachCount()
     }
 
     fun run(creep: Creep) {
@@ -148,7 +148,7 @@ class RefillEnergy {
             // and many could be assigned to same miner
 
             if (isHauler) {
-                val haulers by lazyPerTick { Context.creeps.filter { it.value.name.startsWith(BodyDefinition.HAULER.name) } }
+                val haulers: Map<String, Creep> by lazyPerTick { Context.creeps.filter { it.value.name.startsWith(BodyDefinition.HAULER.name) } }
                 val minerWithoutHauler = miners.filterNot { miner -> haulers.any { hauler -> hauler.value.memory.assignedEnergySource == miner.id } }.firstOrNull()
                 if (minerWithoutHauler != null) return minerWithoutHauler
 

@@ -4,8 +4,6 @@ import screeps.game.one.kreeps.BodyDefinition
 import screeps.game.one.kreeps.CreepSpawnOptions
 import types.*
 import types.base.global.Game
-import kotlin.properties.ReadOnlyProperty
-import kotlin.reflect.KProperty
 
 fun StructureSpawn.spawn(bodyDefinition: BodyDefinition) {
     if (room.energyAvailable < bodyDefinition.getCost()) return
@@ -55,29 +53,4 @@ fun <T : RoomObject> Creep.findClosest(roomObjects: Array<out T>): T? {
 fun <T : RoomObject> Creep.findClosestNotEmpty(roomObjects: Array<out T>): T {
     require(roomObjects.isNotEmpty())
     return findClosest(roomObjects)!!
-}
-
-/**
- * Lazy property that computed at most once per tick
- */
-private class TickLazy<T>(val computeOncePerTick: () -> T) : ReadOnlyProperty<Any?, T> {
-    var value: T? = null
-    var tick: Number = -1
-
-    override fun getValue(thisRef: Any?, property: KProperty<*>): T {
-        val currentTick = Game.time
-
-        if (Game.time != tick) {
-            tick = currentTick
-            value = computeOncePerTick()
-        }
-        return value!!
-    }
-}
-
-/**
- * Creates a lazy property that computed at most once per tick
- */
-fun <T> lazyPerTick(computeOncePerTick: () -> T): ReadOnlyProperty<Any?, T> {
-    return TickLazy(computeOncePerTick)
 }
