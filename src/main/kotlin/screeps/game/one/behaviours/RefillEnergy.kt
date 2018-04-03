@@ -139,14 +139,20 @@ class RefillEnergy {
 
         //assign to a miner
         val miners = minersByRoom.getOrPut(this.room, {
-            Context.creeps.filter { it.key.startsWith(BodyDefinition.MINER.name) && it.value.room.name == this.room.name }
+            Context.creeps.filter { it.key.startsWith(BodyDefinition.MINER.name) && it.value.room.name == this.room.name } //TODO assign to miners in other rooms that serve the same colony
                 .values.toTypedArray()
-        });
+        })
         if (miners.isNotEmpty()) {
             //biggest miner first
             // TODO this could be bad because usedSourcesWithCreepCounts only updated in the beginning of the tick
             // and many could be assigned to same miner
-            return miners.maxBy {
+
+            if (isHauler) {
+                val haulers by lazyPerTick { Context.creeps.filter { it.value.name.startsWith(BodyDefinition.HAULER.name) } }
+                val minerWithoutHauler = miners.filterNot { miner -> haulers.any { hauler -> hauler.value.memory.assignedEnergySource == miner.id } }.firstOrNull()
+                if (minerWithoutHauler != null) return minerWithoutHauler
+
+            } else return miners.maxBy {
                 val creepsAssignedToMiner = usedSourcesWithCreepCounts[it.id] ?: 0
                 val minerOutput = it.body.count { it.partConstant == WORK } * 2
                 minerOutput.toDouble() / (creepsAssignedToMiner + 1)
