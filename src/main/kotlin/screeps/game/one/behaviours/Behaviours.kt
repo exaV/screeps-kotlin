@@ -4,6 +4,7 @@ import screeps.game.one.*
 import screeps.game.one.building.buildRoads
 import screeps.game.one.kreeps.BodyDefinition
 import types.*
+import types.abstractions.travelTo
 import types.base.global.Game
 
 class IdleBehaviour {
@@ -108,7 +109,7 @@ object BusyBehaviour {
                 val code = creep.transfer(target, RESOURCE_ENERGY)
                 when (code) {
                     OK -> kotlin.run { }
-                    ERR_NOT_IN_RANGE -> creep.moveTo(target.pos)
+                    ERR_NOT_IN_RANGE -> creep.travelTo(target.pos)
                     else -> creep.memory.state = CreepState.IDLE
                 }
             } else {
@@ -121,7 +122,7 @@ object BusyBehaviour {
         if (creep.memory.state == CreepState.UPGRADING) {
             val controller = creep.room.controller!!
             if (creep.upgradeController(controller) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(controller.pos, MoveToOpts())
+                creep.travelTo(controller.pos)
             }
         }
 
@@ -129,7 +130,7 @@ object BusyBehaviour {
             val constructionSite = Context.constructionSites[creep.memory.targetId!!]
             if (constructionSite != null) {
                 if (creep.build(constructionSite) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(constructionSite.pos, MoveToOpts());
+                    creep.travelTo(constructionSite.pos);
                 }
             } else {
                 println("construction of ${creep.memory.targetId} is done")
@@ -152,7 +153,7 @@ object BusyBehaviour {
                 done()
             } else {
                 if (creep.repair(structure) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(structure.pos, MoveToOpts())
+                    creep.travelTo(structure.pos)
                 }
             }
         }

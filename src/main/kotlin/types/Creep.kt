@@ -24,7 +24,7 @@ external class Creep : RoomObject {
     fun attack(target: Creep): dynamic
     fun harvest(target: Source): Number
     // fun harvest(target: Mineral): Number
-    fun moveTo(target: RoomPosition, opts: MoveToOpts? = definedExternally): Number
+    fun moveTo(target: RoomPosition, opts: MoveToOpts? = definedExternally): ScreepsReturnCode
 
     fun moveTo(x: Int, y: Int, opts: MoveToOpts? = definedExternally): Number
     fun moveByPath(path: Array<PathStep>): Number

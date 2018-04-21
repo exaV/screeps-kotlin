@@ -4,6 +4,7 @@ import screeps.game.one.*
 import screeps.game.one.kreeps.BodyDefinition
 import types.*
 import types.abstractions.lazyPerTick
+import types.abstractions.travelTo
 import types.base.global.Game
 
 class RefillEnergy {
@@ -77,7 +78,7 @@ class RefillEnergy {
     private fun refillFromStructure(creep: Creep, source: Structure) {
         when (creep.withdraw(source, RESOURCE_ENERGY)) {
             OK -> kotlin.run { }
-            ERR_NOT_IN_RANGE -> creep.moveTo(source.pos, MoveToOpts(visualizePathStyle = Style(stroke = "#ffaa00")))
+            ERR_NOT_IN_RANGE -> creep.travelTo(source.pos, MoveToOpts(visualizePathStyle = Style(stroke = "#ffaa00")))
             ERR_NOT_ENOUGH_RESOURCES -> creep.memory.assignedEnergySource = null
             else -> {
                 println("${creep.name} could now withdraw from (${source.id})")
@@ -89,7 +90,7 @@ class RefillEnergy {
 
     private fun refillFromResource(creep: Creep, resource: Resource) {
         if (creep.pickup(resource) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(resource.pos, MoveToOpts(visualizePathStyle = Style(stroke = "#ffaa00")))
+            creep.travelTo(resource.pos, MoveToOpts(visualizePathStyle = Style(stroke = "#ffaa00")))
         }
     }
 
@@ -195,7 +196,7 @@ class RefillEnergy {
                 val code = creep.harvest(source)
                 when (code) {
                     ERR_NOT_IN_RANGE -> {
-                        val moveCode = creep.moveTo(source.pos, MoveToOpts())
+                        val moveCode = creep.travelTo(source.pos, MoveToOpts())
                         when (moveCode) {
                             OK, ERR_TIRED -> {
                             }
@@ -260,7 +261,7 @@ class RefillEnergy {
                 val container = containers.single()
                 //set target and move to
                 if (creep.pos.x != container.pos.x || creep.pos.y != container.pos.y) {
-                    creep.moveTo(container.pos, MoveToOpts()) //TODO deal with return
+                    creep.travelTo(container.pos, MoveToOpts()) //TODO deal with return
                 } else {
                     creep.harvest(source)
                 }

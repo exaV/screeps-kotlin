@@ -2,6 +2,7 @@ package screeps.game.tutorials.tutorial3
 
 import screeps.game.tutorials.tutorial2.TutorialMemory
 import types.*
+import types.abstractions.travelTo
 
 object Builder {
     fun run(creep: Creep) {
@@ -20,13 +21,13 @@ object Builder {
             val targets = creep.room.findConstructionSites()
             if (targets.isNotEmpty()) {
                 if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0].pos);
+                    creep.travelTo(targets[0].pos);
                 }
             }
         } else {
             val sources = creep.room.findEnergy()
             if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0].pos, MoveToOpts(visualizePathStyle = Style(stroke = "#ffaa00")))
+                creep.travelTo(sources[0].pos, MoveToOpts(visualizePathStyle = Style(stroke = "#ffaa00")))
             }
         }
     }
