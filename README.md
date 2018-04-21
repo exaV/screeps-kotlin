@@ -1,4 +1,5 @@
 # Playing screeps using Kotlin
+clone: `git clone --recurse-submodules https://github.com/exaV/screeps-kotlin`
 
 ### Types
 Most of the types were generated with ts2kt (0.1.3) from https://github.com/screepers/screeps-typescript-starter
