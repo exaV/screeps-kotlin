@@ -1,8 +1,11 @@
 package screeps.game.tutorials.tutorial3
 
 import screeps.game.tutorials.tutorial2.TutorialMemory
-import types.*
+import types.Creep
+import types.ERR_NOT_IN_RANGE
 import types.abstractions.travelTo
+import types.findConstructionSites
+import types.findEnergy
 
 object Builder {
     fun run(creep: Creep) {
@@ -27,7 +30,7 @@ object Builder {
         } else {
             val sources = creep.room.findEnergy()
             if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.travelTo(sources[0].pos, MoveToOpts(visualizePathStyle = Style(stroke = "#ffaa00")))
+                creep.travelTo(sources[0].pos)
             }
         }
     }
