@@ -1,0 +1,3 @@
+[submodule "traveler"]
+	path = traveler
+	url = https://github.com/bonzaiferroni/Traveler.git
