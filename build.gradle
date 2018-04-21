@@ -3,7 +3,7 @@ import groovyx.net.http.RESTClient
 import static groovyx.net.http.ContentType.JSON
 
 buildscript {
-    ext.kotlin_version = '1.2.31'
+    ext.kotlin_version = '1.2.40'
 
     repositories {
         mavenCentral()
