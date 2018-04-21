@@ -45,7 +45,7 @@ compileKotlin2Js {
     kotlinOptions.moduleKind = "umd"
     kotlinOptions.sourceMap = true
 
-    runDceKotlinJs.keep "main.loop"
+    runDceKotlinJs.keep "main.loop" ,"main.Traveler", "Traveler"
 }
 
 /**
@@ -57,13 +57,15 @@ task("deploy") {
     doLast {
         String kotlin = new File("$buildDir/kotlin-js-min/main/kotlin.js").getText('UTF-8')
         String screepsCode = new File("$buildDir/kotlin-js-min/main/main.js").getText('UTF-8')
+        String travelerCode = new File("traveler/Traveler.js").getText('UTF-8')
+
         String branchName = "kotlin"
 
         RESTClient client = new RESTClient()
         client.uri = "https://screeps.com/api/user/code"
         client.headers["Authorization"] = 'Basic ' + ("$screepsUser:$screepsPassword".toString().bytes.encodeBase64())
         client.headers["Content-Type"] = "application/json"
-        client.post(body: [branch: branchName, modules: [main: screepsCode, kotlin: kotlin]],
+        client.post(body: [branch: branchName, modules: [main: screepsCode, kotlin: kotlin, Traveler : travelerCode]],
                 requestContentType: JSON)
         client.handler.success = { resp, data ->
             println resp

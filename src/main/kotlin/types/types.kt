@@ -1,7 +1,6 @@
 package types
 
 import types.abstractions.lazyPerTick
-import types.base.global.Game
 import kotlin.js.Date
 
 external interface JsDict<K, V>
@@ -11,7 +10,7 @@ inline operator fun <K, V> JsDict<K, V>.get(key: K): V = asDynamic()[key] as V
 
 val <K, V> JsDict<K, V>.keys: Array<K> by lazyPerTick {
     val keys = js("Object").keys(this) as? Array<K> ?: emptyArray()
-    println("creating iterator in tick ${Game.time} with keys=$keys")
+    //println("creating iterator in tick ${Game.time} with keys=$keys")
     keys
 }
 
