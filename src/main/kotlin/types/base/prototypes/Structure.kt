@@ -1,4 +1,11 @@
-package types
+package types.base.prototypes
+
+import types.base.Filter
+import types.base.ReservationDefinition
+import types.base.SignDefinition
+import types.base.global.BodyPartConstant
+import types.base.global.FindConstant
+import types.base.global.StructureConstant
 
 external class RoomPosition(x: Int, y: Int, roomName: String) {
     val x: Int
@@ -25,7 +32,8 @@ external class RoomPosition(x: Int, y: Int, roomName: String) {
 
 }
 
-fun RoomPosition.copy(x: Int = this.x, y: Int = this.y, name: String = this.roomName) = RoomPosition(x, y, name)
+fun RoomPosition.copy(x: Int = this.x, y: Int = this.y, name: String = this.roomName) =
+    RoomPosition(x, y, name)
 
 open external class RoomObject : GameObject {
     val pos: RoomPosition

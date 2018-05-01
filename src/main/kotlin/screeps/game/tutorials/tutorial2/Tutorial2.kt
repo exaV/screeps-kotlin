@@ -1,10 +1,10 @@
 package screeps.game.tutorials.tutorial2
 
 import screeps.game.tutorials.tutorial1.Harvester
-import types.Creep
-import types.StructureSpawn
 import types.base.global.Game
-import types.jsonToMap
+import types.base.prototypes.Creep
+import types.base.prototypes.StructureSpawn
+import types.extensions.jsonToMap
 
 fun gameLoop() {
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"]!! as StructureSpawn)

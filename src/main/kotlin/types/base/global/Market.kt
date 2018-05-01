@@ -1,6 +1,6 @@
 package types.base.global
 
-import types.Owner
+import types.base.prototypes.Owner
 
 
 //TODO improve Market types

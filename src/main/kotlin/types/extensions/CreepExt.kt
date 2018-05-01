@@ -2,9 +2,9 @@ package types.extensions
 
 import traveler.TravelToOptions
 import traveler.TravelerCreep
-import types.Creep
-import types.RoomPosition
-import types.ScreepsReturnCode
+import types.base.global.ScreepsReturnCode
+import types.base.prototypes.Creep
+import types.base.prototypes.RoomPosition
 
 /**
  * Use Traveler to travel to target destination.

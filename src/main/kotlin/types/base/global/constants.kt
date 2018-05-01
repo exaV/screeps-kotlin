@@ -1,6 +1,8 @@
 @file:Suppress("unused")
 
-package types
+package types.base.global
+
+import types.base.JsDict
 
 external interface StringConstant
 external interface IntegerConstant
@@ -222,3 +224,7 @@ external val DISMANTLE_COST: Number /* 0.005 */ = definedExternally
 external val SYSTEM_USERNAME: String = definedExternally
 external val SIGN_NOVICE_AREA: String = definedExternally
 external val SIGN_RESPAWN_AREA: String = definedExternally
+
+external val SOURCE_ENERGY_CAPACITY: Int = definedExternally
+external val SOURCE_ENERGY_NEUTRAL_CAPACITY: Int = definedExternally
+external val SOURCE_ENERGY_KEEPER_CAPACITY: Int = definedExternally

@@ -1,6 +1,6 @@
 @file:Suppress("UNCHECKED_CAST")
 
-package types
+package types.extensions
 
 import kotlin.js.Json
 

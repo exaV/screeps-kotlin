@@ -1,9 +1,9 @@
 package types.base.global
 
-import types.CPU
-import types.GameObject
-import types.GlobalControlLevel
-import types.Shard
+import types.base.CPU
+import types.base.GlobalControlLevel
+import types.base.Shard
+import types.base.prototypes.GameObject
 import kotlin.js.Json
 
 external object Game {

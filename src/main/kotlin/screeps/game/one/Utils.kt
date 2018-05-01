@@ -2,8 +2,13 @@ package screeps.game.one
 
 import screeps.game.one.kreeps.BodyDefinition
 import screeps.game.one.kreeps.CreepSpawnOptions
-import types.*
+import types.base.global.ERR_BUSY
+import types.base.global.ERR_NOT_ENOUGH_ENERGY
 import types.base.global.Game
+import types.base.global.OK
+import types.base.prototypes.Creep
+import types.base.prototypes.RoomObject
+import types.base.prototypes.StructureSpawn
 
 fun StructureSpawn.spawn(bodyDefinition: BodyDefinition) {
     if (room.energyAvailable < bodyDefinition.getCost()) return

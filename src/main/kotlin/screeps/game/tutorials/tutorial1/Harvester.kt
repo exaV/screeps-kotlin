@@ -1,6 +1,10 @@
 package screeps.game.tutorials.tutorial1
 
-import types.*
+import types.base.global.ERR_NOT_IN_RANGE
+import types.base.global.RESOURCE_ENERGY
+import types.base.prototypes.Creep
+import types.base.prototypes.StructureSpawn
+import types.base.prototypes.findEnergy
 import types.extensions.travelTo
 
 object Harvester {

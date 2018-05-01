@@ -1,12 +1,33 @@
 package screeps.game.one.kreeps
 
-import types.*
+import types.base.get
+import types.base.global.*
 
 enum class BodyDefinition(val bodyPartConstant: Array<BodyPartConstant>, val maxSize: Int = 0) {
     BASIC_WORKER(arrayOf(WORK, CARRY, MOVE), maxSize = 5),
     MINER(arrayOf(WORK, WORK, MOVE), maxSize = 2),
-    MINER_BIG(arrayOf(WORK, WORK, WORK, WORK, WORK, MOVE, MOVE), maxSize = 1), //completely drains a Source
-    BIG_WORKER(arrayOf(WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE)),
+    MINER_BIG(
+        arrayOf(
+            WORK,
+            WORK,
+            WORK,
+            WORK,
+            WORK,
+            MOVE,
+            MOVE
+        ), maxSize = 1
+    ), //completely drains a Source
+    BIG_WORKER(
+        arrayOf(
+            WORK,
+            WORK,
+            WORK,
+            WORK,
+            CARRY,
+            MOVE,
+            MOVE
+        )
+    ),
     HAULER(arrayOf(CARRY, CARRY, MOVE), maxSize = 5),
     SCOUT(arrayOf(MOVE), maxSize = 1);
 

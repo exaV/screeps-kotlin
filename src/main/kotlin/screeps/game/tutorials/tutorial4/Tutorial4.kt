@@ -5,10 +5,12 @@ import screeps.game.tutorials.tutorial2.Upgrader
 import screeps.game.tutorials.tutorial3.Builder
 import screeps.game.tutorials.tutorial3.Harvester
 import screeps.game.tutorials.tutorial3.roomsMap
-import types.*
-import types.base.global.CreepMemory
-import types.base.global.Game
-import types.base.global.Memory
+import types.base.global.*
+import types.base.iterator
+import types.base.prototypes.Creep
+import types.base.prototypes.StructureSpawn
+import types.extensions.jsonToMap
+
 
 external fun delete(p: dynamic): Boolean = definedExternally
 //...
@@ -47,7 +49,15 @@ fun gameLoop() {
 
         if (room.energyAvailable > 549) {
             mainSpawn.spawnCreep(
-                arrayOf(WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE),
+                arrayOf(
+                    WORK,
+                    WORK,
+                    WORK,
+                    WORK,
+                    CARRY,
+                    MOVE,
+                    MOVE
+                ),
                 "HarvesterBig",
                 CreepOptions(Role.HARVESTER)
             )
@@ -95,9 +105,7 @@ private fun populationControl(
 }
 
 public fun houseKeeping(creeps: Map<String, Creep>) {
-    val creepsFromMemory = Memory.creeps
-    if (creepsFromMemory == null) return
-
+    Memory.creeps
     for ((creepName, _) in Memory.creeps) {
         if (creeps[creepName] == null) {
             console.log("deleting obselete memory entry for creep $creepName")

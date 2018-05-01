@@ -2,8 +2,8 @@ package screeps.game.one.behaviours
 
 import screeps.game.one.*
 import screeps.game.one.kreeps.BodyDefinition
-import types.*
-import types.base.global.Game
+import types.base.global.*
+import types.base.prototypes.*
 import types.extensions.lazyPerTick
 import types.extensions.travelTo
 
@@ -250,7 +250,10 @@ class RefillEnergy {
                     return
                 }
 
-                val code = source.room.createConstructionSite(containertile.x, containertile.y, STRUCTURE_CONTAINER)
+                val code = source.room.createConstructionSite(
+                    containertile.x, containertile.y,
+                    STRUCTURE_CONTAINER
+                )
                 when (code) {
                     OK -> println("building container for source ${source.id}]")
                     else -> println("error placing construction site for source ${source.id}")

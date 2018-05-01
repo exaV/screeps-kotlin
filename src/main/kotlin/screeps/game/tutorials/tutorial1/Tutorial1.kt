@@ -1,7 +1,9 @@
 package screeps.game.tutorials.tutorial1
 
-import types.*
-import types.base.global.Game
+import types.base.global.*
+import types.base.prototypes.Creep
+import types.base.prototypes.StructureSpawn
+import types.extensions.jsonToMap
 
 fun gameLoop() {
 

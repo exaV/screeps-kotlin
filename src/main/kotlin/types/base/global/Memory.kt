@@ -1,6 +1,6 @@
 package types.base.global
 
-import types.MutableJsDict
+import types.base.MutableJsDict
 
 external object Memory {
     var creeps: MutableJsDict<String, CreepMemory>

@@ -8,8 +8,13 @@ import screeps.game.one.building.buildStorage
 import screeps.game.one.building.buildTowers
 import screeps.game.one.kreeps.BodyDefinition
 import screeps.game.tutorials.tutorial4.houseKeeping
-import types.*
+import types.base.ConstructionSite
+import types.base.global.FIND_HOSTILE_CREEPS
 import types.base.global.Game
+import types.base.global.STRUCTURE_STORAGE
+import types.base.global.STRUCTURE_TOWER
+import types.base.prototypes.*
+import types.extensions.jsonToMap
 import types.extensions.lazyPerTick
 
 
@@ -18,7 +23,11 @@ object Context {
     val creeps: Map<String, Creep> by lazyPerTick { jsonToMap<Creep>(Game.creeps) }
     val rooms: Map<String, Room> by lazyPerTick { jsonToMap<Room>(Game.rooms) }
     val myStuctures: Map<String, Structure> by lazyPerTick { jsonToMap<Structure>(Game.structures) }
-    val constructionSites: Map<String, ConstructionSite> by lazyPerTick { jsonToMap<ConstructionSite>(Game.constructionSites) }
+    val constructionSites: Map<String, ConstructionSite> by lazyPerTick {
+        jsonToMap<ConstructionSite>(
+            Game.constructionSites
+        )
+    }
 
     //synthesized
     val targets: Map<String, Creep> by lazyPerTick { creepsByTarget() }

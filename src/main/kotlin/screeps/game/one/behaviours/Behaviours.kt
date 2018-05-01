@@ -3,8 +3,8 @@ package screeps.game.one.behaviours
 import screeps.game.one.*
 import screeps.game.one.building.buildRoads
 import screeps.game.one.kreeps.BodyDefinition
-import types.*
-import types.base.global.Game
+import types.base.global.*
+import types.base.prototypes.*
 import types.extensions.travelTo
 
 class IdleBehaviour {

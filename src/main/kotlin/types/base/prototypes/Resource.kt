@@ -1,4 +1,6 @@
-package types
+package types.base.prototypes
+
+import types.base.global.ResourceConstant
 
 external class Resource : RoomObject {
     val amount: Int

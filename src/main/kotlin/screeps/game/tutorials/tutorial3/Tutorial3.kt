@@ -1,8 +1,14 @@
 package screeps.game.tutorials.tutorial3
 
 import screeps.game.tutorials.tutorial2.TutorialMemory
-import types.*
+import types.base.global.CARRY
 import types.base.global.Game
+import types.base.global.MOVE
+import types.base.global.WORK
+import types.base.prototypes.Creep
+import types.base.prototypes.Room
+import types.base.prototypes.StructureSpawn
+import types.extensions.jsonToMap
 
 fun gameLoop() {
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"]!! as StructureSpawn)
@@ -15,7 +21,17 @@ fun gameLoop() {
         }
 
         if (room.energyAvailable > 549) {
-            mainSpawn.spawnCreep(arrayOf(WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE), "HarvesterBig")
+            mainSpawn.spawnCreep(
+                arrayOf(
+                    WORK,
+                    WORK,
+                    WORK,
+                    WORK,
+                    CARRY,
+                    MOVE,
+                    MOVE
+                ), "HarvesterBig"
+            )
         }
     }
 

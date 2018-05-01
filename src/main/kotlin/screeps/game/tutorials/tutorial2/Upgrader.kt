@@ -1,9 +1,9 @@
 package screeps.game.tutorials.tutorial2
 
-import types.Creep
-import types.ERR_NOT_IN_RANGE
+import types.base.global.ERR_NOT_IN_RANGE
+import types.base.prototypes.Creep
+import types.base.prototypes.findEnergy
 import types.extensions.travelTo
-import types.findEnergy
 
 object Upgrader {
 

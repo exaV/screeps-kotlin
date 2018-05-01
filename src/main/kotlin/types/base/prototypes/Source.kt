@@ -1,4 +1,4 @@
-package types
+package types.base.prototypes
 
 
 external class Source : RoomObject {

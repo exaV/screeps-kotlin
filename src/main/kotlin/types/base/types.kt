@@ -1,5 +1,8 @@
-package types
+package types.base
 
+import types.base.global.BuildableStructureConstant
+import types.base.prototypes.Owner
+import types.base.prototypes.RoomObject
 import types.extensions.lazyPerTick
 import kotlin.js.Date
 

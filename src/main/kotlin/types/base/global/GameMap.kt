@@ -1,8 +1,8 @@
 package types.base.global
 
-import types.FindPathOpts
-import types.Room
-import types.RoomPosition
+import types.base.prototypes.FindPathOpts
+import types.base.prototypes.Room
+import types.base.prototypes.RoomPosition
 import kotlin.js.Json
 
 external class GameMap {

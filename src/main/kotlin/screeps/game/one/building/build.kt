@@ -1,7 +1,9 @@
 package screeps.game.one.building
 
 import screeps.game.one.Context
-import types.*
+import types.base.ConstructionSite
+import types.base.global.*
+import types.base.prototypes.*
 
 val StructureController.availableStorage
     get() = when {

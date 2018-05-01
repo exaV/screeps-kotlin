@@ -1,6 +1,11 @@
-package types
+package types.base.prototypes
 
+import types.base.ConstructionSite
+import types.base.global.BodyPartConstant
 import types.base.global.CreepMemory
+import types.base.global.ResourceConstant
+import types.base.global.ScreepsReturnCode
+import types.extensions.Style
 
 external class Creep : RoomObject {
     val carry: Storage
@@ -36,7 +41,11 @@ external class Creep : RoomObject {
     fun build(target: ConstructionSite): Number
     fun pickup(target: Resource): Number
     fun repair(structure: Structure): Number
-    fun withdraw(structureContainer: Structure, resourceType: ResourceConstant, amount: Number = definedExternally): Number
+    fun withdraw(
+        structureContainer: Structure,
+        resourceType: ResourceConstant,
+        amount: Number = definedExternally
+    ): Number
 }
 
 external interface Storage {
@@ -50,16 +59,18 @@ external interface BodyPart {
     val hits: Int
 }
 
-class MoveToOpts(val reusePath: Int = 5,
-                 val serializeMemory: Boolean = true,
-                 val noPathFinding: Boolean = false,
-                 val visualizePathStyle: Style = Style(),
+class MoveToOpts(
+    val reusePath: Int = 5,
+    val serializeMemory: Boolean = true,
+    val noPathFinding: Boolean = false,
+    val visualizePathStyle: Style = Style(),
 
-                 val ignoreCreeps: Boolean = false,
-                 val ignoreDestructibleStructures: Boolean = false,
-                 val ignoreRoads: Boolean = false,
-                 val maxOps: Int = 2000,
-                 val serialize: Boolean = false,
-                 val maxRooms: Int = 16,
-                 val heuristicWeight: Double = 1.2,
-                 val range: Int = 0) //some options are not included: plaincost, swampcost and costCallback
+    val ignoreCreeps: Boolean = false,
+    val ignoreDestructibleStructures: Boolean = false,
+    val ignoreRoads: Boolean = false,
+    val maxOps: Int = 2000,
+    val serialize: Boolean = false,
+    val maxRooms: Int = 16,
+    val heuristicWeight: Double = 1.2,
+    val range: Int = 0
+) //some options are not included: plaincost, swampcost and costCallback

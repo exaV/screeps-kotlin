@@ -1,11 +1,11 @@
 package screeps.game.tutorials.tutorial3
 
 import screeps.game.tutorials.tutorial2.TutorialMemory
-import types.Creep
-import types.ERR_NOT_IN_RANGE
+import types.base.global.ERR_NOT_IN_RANGE
+import types.base.prototypes.Creep
+import types.base.prototypes.findConstructionSites
+import types.base.prototypes.findEnergy
 import types.extensions.travelTo
-import types.findConstructionSites
-import types.findEnergy
 
 object Builder {
     fun run(creep: Creep) {
