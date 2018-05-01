@@ -38,8 +38,10 @@ inline operator fun <V> JsDict<V>.iterator(): Iterator<Map.Entry<String, V>> {
 fun <V> JsDict<V>.toMap(): Map<String, V> {
     val map: MutableMap<String, V> = linkedMapOf()
     for (key in keys) {
-        val value: V = this[key]!!
-        map[key] = value
+        val value: V? = this[key]
+        if (value != null) {
+            map[key] = value
+        }
     }
     return map
 }

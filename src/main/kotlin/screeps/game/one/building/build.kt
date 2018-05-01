@@ -100,11 +100,11 @@ fun buildTowers(room: Room) {
 
     val numberOfTowers =
         Context.constructionSites.values.count { it.room.name == room.name && it.structureType == STRUCTURE_TOWER } + Context.myStuctures.values.count { it.room.name == room.name && it.structureType == STRUCTURE_TOWER }
-    val towersToPlace = room.controller!!.availableTowers - numberOfTowers
+    val towersToPlace = room.controller.availableTowers - numberOfTowers
     if (towersToPlace == 0) return //no need to place towers
 
 
-    require(room.controller?.my == true)
+    require(room.controller.my == true)
     val spawn = room.find<StructureSpawn>(FIND_MY_SPAWNS).first()
 
     require(towersToPlace >= 0)

@@ -5,14 +5,13 @@ import screeps.game.one.behaviours.BusyBehaviour
 import screeps.game.one.behaviours.IdleBehaviour
 import screeps.game.one.behaviours.RefillEnergy
 import screeps.game.one.building.buildStorage
-import screeps.game.one.building.buildTowers
 import screeps.game.one.kreeps.BodyDefinition
 import screeps.game.tutorials.tutorial4.houseKeeping
 import types.base.get
 import types.base.global.FIND_HOSTILE_CREEPS
 import types.base.global.Game
 import types.base.global.STRUCTURE_STORAGE
-import types.base.global.STRUCTURE_TOWER
+import types.base.keys
 import types.base.prototypes.*
 import types.base.toMap
 import types.extensions.lazyPerTick
@@ -21,15 +20,17 @@ import types.extensions.lazyPerTick
 object Context {
     //built-in
     val creeps: Map<String, Creep> by lazyPerTick { Game.creeps.toMap() }
-    val rooms: Map<String, Room> by lazyPerTick { Game.rooms.toMap() }
+    //val rooms: Map<String, Room> by lazyPerTick { Game.rooms.toMap() }
+    val rooms: Map<String, Room> = Game.rooms.toMap()
     val myStuctures: Map<String, Structure> by lazyPerTick { Game.structures.toMap() }
     val constructionSites: Map<String, ConstructionSite> by lazyPerTick { Game.constructionSites.toMap() }
 
     //synthesized
     val targets: Map<String, Creep> by lazyPerTick { creepsByTarget() }
-    val towers: List<StructureTower> by lazyPerTick {
-        myStuctures.values.filter { it.structureType == STRUCTURE_TOWER }.map { it as StructureTower }
-    }
+    //val towers: List<StructureTower> by lazyPerTick {
+    //    myStuctures.values.filter { it.structureType == STRUCTURE_TOWER }.map { it as StructureTower }
+    //}
+    val towers: List<StructureTower> = emptyList()
 
     private fun creepsByTarget(): Map<String, Creep> {
         return Context.creeps.filter { it.value.memory.targetId != null }
@@ -40,6 +41,7 @@ object Context {
 
 fun gameLoop() {
 
+    println("rooms=${Game.rooms} with keys ${Game.rooms.keys} was mapped to ${Context.rooms}")
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"])!!
 
     houseKeeping(Context.creeps)
@@ -64,7 +66,7 @@ fun gameLoop() {
 
     for ((_, room) in Context.rooms) {
         buildStorage(room)
-        buildTowers(room)
+        //buildTowers(room)
 
         val hostiles = room.find<Creep>(FIND_HOSTILE_CREEPS)
 
