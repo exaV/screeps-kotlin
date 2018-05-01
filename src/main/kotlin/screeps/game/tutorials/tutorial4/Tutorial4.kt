@@ -90,7 +90,7 @@ private fun populationControl(
         val current = creeps.filter { (_, creep) -> TutorialMemory(creep.memory).role == role.name.toLowerCase() }
         if (current.size < min) {
             val newName = "${role.name}_${Game.time}"
-            val body = arrayOf(WORK, CARRY, MOVE)
+            val body = arrayOf<BodyPartConstant>(WORK, CARRY, MOVE)
             val code = spawn.spawnCreep(body, newName, CreepOptions(role))
 
             when (code) {

@@ -22,6 +22,7 @@ inline fun IntegerConstant.numberValue(): Number = this.asDynamic() as Number
 external interface FindConstant : IntegerConstant
 external interface ScreepsReturnCode : IntegerConstant
 external interface BodyPartConstant : StringConstant
+external interface AcitveBodyPartConstant : BodyPartConstant
 external interface StructureConstant : StringConstant
 external interface BuildableStructureConstant : StructureConstant
 external interface LookConstant : StringConstant
@@ -173,13 +174,13 @@ external val LOOK_NUKES: LookConstant = definedExternally
 external val LOOK_TERRAIN: LookConstant = definedExternally
 external val LOOK_TOMBSTONES: LookConstant = definedExternally
 
-external val WORK: BodyPartConstant = definedExternally
-external val CARRY: BodyPartConstant = definedExternally
-external val MOVE: BodyPartConstant = definedExternally
-external val ATTACK: BodyPartConstant = definedExternally
-external val RANGED_ATTACK: BodyPartConstant = definedExternally
-external val TOUGH: BodyPartConstant = definedExternally
-external val HEAL: BodyPartConstant = definedExternally
+external val WORK: AcitveBodyPartConstant = definedExternally
+external val CARRY: AcitveBodyPartConstant = definedExternally
+external val MOVE: AcitveBodyPartConstant = definedExternally
+external val ATTACK: AcitveBodyPartConstant = definedExternally
+external val RANGED_ATTACK: AcitveBodyPartConstant = definedExternally
+external val TOUGH: AcitveBodyPartConstant = definedExternally
+external val HEAL: AcitveBodyPartConstant = definedExternally
 external val CLAIM: BodyPartConstant = definedExternally
 external val BODYPART_COST: JsDict<Int> = definedExternally
 

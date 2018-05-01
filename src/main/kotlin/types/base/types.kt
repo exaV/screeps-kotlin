@@ -1,9 +1,6 @@
 package types.base
 
-import types.base.global.BuildableStructureConstant
 import types.base.global.StringConstant
-import types.base.prototypes.Owner
-import types.base.prototypes.RoomObject
 import types.extensions.lazyPerTick
 import kotlin.js.Date
 
@@ -56,15 +53,6 @@ inline operator fun <V> MutableJsDict<V>.set(key: String, value: V) {
 
 class Filter(val filter: dynamic)
 
-
-external class ConstructionSite : RoomObject {
-    val my: Boolean
-    val owner: Owner
-    val progress: Number
-    val progressTotal: Number
-    val structureType: BuildableStructureConstant
-    fun remove(): Number
-}
 
 external interface ReservationDefinition {
     var username: String

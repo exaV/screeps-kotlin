@@ -1,7 +1,6 @@
 package screeps.game.one.building
 
 import screeps.game.one.Context
-import types.base.ConstructionSite
 import types.base.global.*
 import types.base.prototypes.*
 

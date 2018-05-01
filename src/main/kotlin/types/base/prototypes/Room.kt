@@ -1,6 +1,5 @@
 package types.base.prototypes
 
-import types.base.ConstructionSite
 import types.base.Filter
 import types.base.global.*
 

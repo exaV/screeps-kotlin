@@ -1,6 +1,5 @@
 package types.base.global
 
-import types.base.ConstructionSite
 import types.base.JsDict
 import types.base.prototypes.*
 import kotlin.js.Json

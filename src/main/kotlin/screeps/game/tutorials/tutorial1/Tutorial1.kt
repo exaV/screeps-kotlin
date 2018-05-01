@@ -15,7 +15,7 @@ fun gameLoop() {
     }
 
     if (creeps.size < 2) {
-        val body = arrayOf(WORK, CARRY, MOVE)
+        val body = arrayOf<BodyPartConstant>(WORK, CARRY, MOVE)
         val name = "Harvester_${Game.time}"
         val code = mainSpawn.spawnCreep(body, name);
         when (code) {

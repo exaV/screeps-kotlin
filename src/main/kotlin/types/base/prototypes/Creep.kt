@@ -1,51 +1,61 @@
 package types.base.prototypes
 
-import types.base.ConstructionSite
-import types.base.global.BodyPartConstant
-import types.base.global.CreepMemory
-import types.base.global.ResourceConstant
-import types.base.global.ScreepsReturnCode
+import types.base.global.*
 import types.extensions.Style
 
+
 external class Creep : RoomObject {
+    val body: Array<BodyPart>
     val carry: Storage
-    val memory: CreepMemory
     val carryCapacity: Int
     val fatigue: Number
     val hits: Int
     val hitsMax: Int
+    val memory: CreepMemory
     val my: Boolean
     val name: String
     val owner: Owner
-    val spawning: Boolean
     val saying: String
-    val ticksToLive: Number?
-    val body: Array<BodyPart>
+    val spawning: Boolean
+    val ticksToLive: Int
 
-    fun attack(target: Creep): dynamic
-    fun harvest(target: Source): Number
-    // fun harvest(target: Mineral): Number
-    fun moveTo(target: RoomPosition, opts: MoveToOpts? = definedExternally): ScreepsReturnCode
-
-    fun moveTo(x: Int, y: Int, opts: MoveToOpts? = definedExternally): Number
-    fun moveByPath(path: Array<PathStep>): Number
-    /**
-     * must be serialized path string
-     */
-    fun moveByPath(path: String): Number
-
-    fun transfer(target: Creep, resourceType: ResourceConstant, amount: Number = definedExternally): Number
-    fun transfer(target: Structure, resourceType: ResourceConstant, amount: Number = definedExternally): Number
-    fun upgradeController(target: StructureController): Number
-    fun say(message: String, toPublic: Boolean? = definedExternally): Number
-    fun build(target: ConstructionSite): Number
-    fun pickup(target: Resource): Number
-    fun repair(structure: Structure): Number
+    fun attack(target: Creep): ScreepsReturnCode
+    fun attack(target: Structure): ScreepsReturnCode
+    fun attackController(target: StructureController): ScreepsReturnCode
+    fun build(target: ConstructionSite): ScreepsReturnCode
+    fun cancelOrder(methodName: String): ScreepsReturnCode
+    fun claimController(controller: StructureController): ScreepsReturnCode
+    fun dismantle(target: Structure): ScreepsReturnCode
+    fun drop(resourceType: ResourceConstant, amount: Int = definedExternally): ScreepsReturnCode
+    fun generateSafeMode(target: StructureController): ScreepsReturnCode
+    fun getActiveBodyparts(type: AcitveBodyPartConstant): Int
+    fun harvest(target: Source): ScreepsReturnCode
+    fun harvest(target: Mineral): ScreepsReturnCode
+    fun heal(target: Creep): ScreepsReturnCode
+    fun move(direction: DirectionConstant): ScreepsReturnCode
+    fun moveByPath(path: Array<PathStep>): ScreepsReturnCode
+    fun moveByPath(serializedPath: String): ScreepsReturnCode
+    fun moveTo(target: RoomPosition, opts: MoveToOpts = definedExternally): ScreepsReturnCode
+    fun moveTo(x: Int, y: Int, opts: MoveToOpts = definedExternally): ScreepsReturnCode
+    fun notifyWhenAttacked(enable: Boolean): ScreepsReturnCode
+    fun pickup(target: Resource): ScreepsReturnCode
+    fun rangedAttack(target: Creep): ScreepsReturnCode
+    fun rangedAttack(target: Structure): ScreepsReturnCode
+    fun rangedHeal(target: Creep): ScreepsReturnCode
+    fun rangedMassAttack(): ScreepsReturnCode
+    fun repair(structure: Structure): ScreepsReturnCode
+    fun reserveController(controller: StructureController): ScreepsReturnCode
+    fun say(message: String, toPublic: Boolean = definedExternally): ScreepsReturnCode
+    fun signController(controller: StructureController, text: String): ScreepsReturnCode
+    fun suicide(): ScreepsReturnCode
+    fun transfer(target: Creep, resourceType: ResourceConstant, amount: Int = definedExternally): ScreepsReturnCode
+    fun transfer(target: Structure, resourceType: ResourceConstant, amount: Int = definedExternally): ScreepsReturnCode
+    fun upgradeController(controller: StructureController): ScreepsReturnCode
     fun withdraw(
-        structureContainer: Structure,
+        structure: Structure,
         resourceType: ResourceConstant,
         amount: Number = definedExternally
-    ): Number
+    ): ScreepsReturnCode
 }
 
 external interface Storage {
