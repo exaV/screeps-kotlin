@@ -95,11 +95,11 @@ object BusyBehaviour {
             fun findTarget(): Structure? {
                 val targets = creep.room.findStructures()
                     .filter { (it.structureType == STRUCTURE_EXTENSION || it.structureType == STRUCTURE_SPAWN) }
-                    .map { (it as StructureSpawn) }
+                    .map { (it as EnergyContainingStructure) }
                     .filter { it.energy < it.energyCapacity }
 
                 if (targets.isNotEmpty()) {
-                    return creep.findClosest(targets)!!
+                    return creep.findClosest(targets as List<Structure>)!!
                 } else return null;
             }
 

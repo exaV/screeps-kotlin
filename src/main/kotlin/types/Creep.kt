@@ -17,10 +17,6 @@ external class Creep : RoomObject {
     val ticksToLive: Number?
     val body: Array<BodyPart>
 
-    override val pos: RoomPosition
-    override val room: Room
-    override val id: String
-
     fun attack(target: Creep): dynamic
     fun harvest(target: Source): Number
     // fun harvest(target: Mineral): Number

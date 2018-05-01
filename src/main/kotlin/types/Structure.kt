@@ -27,7 +27,7 @@ external class RoomPosition(x: Int, y: Int, roomName: String) {
 
 fun RoomPosition.copy(x: Int = this.x, y: Int = this.y, name: String = this.roomName) = RoomPosition(x, y, name)
 
-external interface RoomObject : GameObject {
+open external class RoomObject : GameObject {
     val pos: RoomPosition
     val room: Room
 }
@@ -36,7 +36,7 @@ external interface Owner {
     val username: String
 }
 
-external interface Structure : RoomObject {
+open external class Structure : RoomObject {
     val hits: Double
     val hitsMax: Double
     val structureType: StructureConstant
@@ -46,21 +46,27 @@ external interface Structure : RoomObject {
     fun notifyWhenAttacked(enabled: Boolean): Number
 }
 
-external interface OwnedStructure : Structure {
+open external class OwnedStructure : Structure {
     val my: Boolean
     val owner: Owner
 }
 
-external interface StructureSpawn : OwnedStructure {
+external interface EnergyContainingStructure {
     val energy: Int
     val energyCapacity: Int
+}
+
+external class StructureSpawn : OwnedStructure, EnergyContainingStructure {
     val memory: dynamic
     val name: String
+
     val spawning: Spawning?
 
     fun spawnCreep(body: Array<BodyPartConstant>, name: String): Number
     fun spawnCreep(body: Array<BodyPartConstant>, name: String, opts: dynamic): Number
 
+    override val energy: Int = definedExternally
+    override val energyCapacity: Int = definedExternally
 }
 
 external interface Spawning {
@@ -73,7 +79,7 @@ external interface Spawning {
 }
 
 
-external interface StructureController : OwnedStructure {
+external class StructureController : OwnedStructure {
     val level: Int
     val progress: Number
     val progressTotal: Number
@@ -93,54 +99,20 @@ external class StructureContainer : Structure {
     val store: Storage
     val storeCapacity: Int
     val ticksToDecay: Int
-
-    override val pos: RoomPosition
-    override val room: Room
-    override val hits: Double
-    override val hitsMax: Double
-    override val structureType: StructureConstant
-    override fun destroy(): Number
-    override fun isActive(): Boolean
-    override fun notifyWhenAttacked(enabled: Boolean): Number
-    override val id: String
 }
 
 
-external class StructureTower : OwnedStructure {
-    val energy: Int
-    val energyCapacity: Int
+external class StructureTower : OwnedStructure, EnergyContainingStructure {
     fun attack(target: Creep): Number
     fun heal(target: Creep): Number
     fun repair(target: Structure): Number
 
-
-    override val pos: RoomPosition
-    override val room: Room
-    override val hits: Double
-    override val hitsMax: Double
-    override val structureType: StructureConstant
-    override fun destroy(): Number
-    override fun isActive(): Boolean
-    override fun notifyWhenAttacked(enabled: Boolean): Number
-    override val my: Boolean
-    override val owner: Owner
-    override val id: String
+    override val energy: Int = definedExternally
+    override val energyCapacity: Int = definedExternally
 }
 
 external class StructureStorage : OwnedStructure {
     val store: Storage
     val storeCapacity: Int
-
-    override val pos: RoomPosition
-    override val room: Room
-    override val hits: Double
-    override val hitsMax: Double
-    override val structureType: StructureConstant
-    override fun destroy(): Number
-    override fun isActive(): Boolean
-    override fun notifyWhenAttacked(enabled: Boolean): Number
-    override val my: Boolean
-    override val owner: Owner
-    override val id: String
 }
 

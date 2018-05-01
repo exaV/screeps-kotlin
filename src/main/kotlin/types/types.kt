@@ -79,10 +79,6 @@ external class ConstructionSite : RoomObject {
     val progressTotal: Number
     val structureType: BuildableStructureConstant
     fun remove(): Number
-
-    override val pos: RoomPosition
-    override val room: Room
-    override val id: String
 }
 
 external interface ReservationDefinition {

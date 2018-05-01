@@ -1,6 +1,6 @@
 package types
 
-external interface Room {
+external class Room {
     val energyAvailable: Int
     val energyCapacityAvailable: Int
     val memory: dynamic
