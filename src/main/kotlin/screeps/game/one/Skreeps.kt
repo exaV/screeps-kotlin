@@ -9,25 +9,22 @@ import screeps.game.one.building.buildTowers
 import screeps.game.one.kreeps.BodyDefinition
 import screeps.game.tutorials.tutorial4.houseKeeping
 import types.base.ConstructionSite
+import types.base.get
 import types.base.global.FIND_HOSTILE_CREEPS
 import types.base.global.Game
 import types.base.global.STRUCTURE_STORAGE
 import types.base.global.STRUCTURE_TOWER
 import types.base.prototypes.*
-import types.extensions.jsonToMap
+import types.base.toMap
 import types.extensions.lazyPerTick
 
 
 object Context {
     //built-in
-    val creeps: Map<String, Creep> by lazyPerTick { jsonToMap<Creep>(Game.creeps) }
-    val rooms: Map<String, Room> by lazyPerTick { jsonToMap<Room>(Game.rooms) }
-    val myStuctures: Map<String, Structure> by lazyPerTick { jsonToMap<Structure>(Game.structures) }
-    val constructionSites: Map<String, ConstructionSite> by lazyPerTick {
-        jsonToMap<ConstructionSite>(
-            Game.constructionSites
-        )
-    }
+    val creeps: Map<String, Creep> by lazyPerTick { Game.creeps.toMap() }
+    val rooms: Map<String, Room> by lazyPerTick { Game.rooms.toMap() }
+    val myStuctures: Map<String, Structure> by lazyPerTick { Game.structures.toMap() }
+    val constructionSites: Map<String, ConstructionSite> by lazyPerTick { Game.constructionSites.toMap() }
 
     //synthesized
     val targets: Map<String, Creep> by lazyPerTick { creepsByTarget() }
@@ -44,7 +41,7 @@ object Context {
 
 fun gameLoop() {
 
-    val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"]!! as StructureSpawn)
+    val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"])!!
 
     houseKeeping(Context.creeps)
 

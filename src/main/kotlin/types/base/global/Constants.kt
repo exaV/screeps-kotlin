@@ -113,7 +113,7 @@ external val STRUCTURE_TERMINAL: BuildableStructureConstant /* "terminal" */ = d
 external val STRUCTURE_CONTAINER: BuildableStructureConstant /* "container" */ = definedExternally
 external val STRUCTURE_NUKER: BuildableStructureConstant /* "nuker" */ = definedExternally
 external val STRUCTURE_PORTAL: StructureConstant /* "portal" */ = definedExternally
-external val CONSTRUCTION_COST: JsDict<BuildableStructureConstant, Int> = definedExternally
+external val CONSTRUCTION_COST: JsDict<Int> = definedExternally
 external val CONSTRUCTION_COST_ROAD_SWAMP_RATIO: Number /* 5 */ = definedExternally
 
 external val RESOURCE_ENERGY: MineralConstant /* "energy" */ = definedExternally
@@ -181,7 +181,7 @@ external val RANGED_ATTACK: BodyPartConstant = definedExternally
 external val TOUGH: BodyPartConstant = definedExternally
 external val HEAL: BodyPartConstant = definedExternally
 external val CLAIM: BodyPartConstant = definedExternally
-external val BODYPART_COST: JsDict<BodyPartConstant, Int> = definedExternally
+external val BODYPART_COST: JsDict<Int> = definedExternally
 
 
 external var CREEP_SPAWN_TIME: Number /* 3 */ = definedExternally

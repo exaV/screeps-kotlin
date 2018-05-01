@@ -1,18 +1,21 @@
 package types.base
 
 import types.base.global.BuildableStructureConstant
+import types.base.global.StringConstant
 import types.base.prototypes.Owner
 import types.base.prototypes.RoomObject
 import types.extensions.lazyPerTick
 import kotlin.js.Date
 
-external interface JsDict<K, V>
+external interface JsDict<V>
 
 @Suppress("NOTHING_TO_INLINE")
-inline operator fun <K, V> JsDict<K, V>.get(key: K): V = asDynamic()[key] as V
+inline operator fun <V> JsDict<V>.get(key: String): V? = asDynamic()[key] as? V
 
-val <K, V> JsDict<K, V>.keys: Array<K> by lazyPerTick {
-    val keys = js("Object").keys(this) as? Array<K> ?: emptyArray()
+inline operator fun <V> JsDict<V>.get(key: StringConstant): V? = asDynamic()[key] as? V
+
+val <V> JsDict<V>.keys: Array<String> by lazyPerTick {
+    val keys = js("Object").keys(this) as? Array<String> ?: emptyArray()
     //println("creating iterator in tick ${Game.time} with keys=$keys")
     keys
 }
@@ -20,13 +23,13 @@ val <K, V> JsDict<K, V>.keys: Array<K> by lazyPerTick {
 class Entry<K, V>(override val key: K, override val value: V) : Map.Entry<K, V>
 
 @Suppress("NOTHING_TO_INLINE")
-inline operator fun <K, V> JsDict<K, V>.iterator(): Iterator<Map.Entry<K, V>> {
-    return object : Iterator<Map.Entry<K, V>> {
+inline operator fun <V> JsDict<V>.iterator(): Iterator<Map.Entry<String, V>> {
+    return object : Iterator<Map.Entry<String, V>> {
         var currentIndex = 0
 
         override fun hasNext(): Boolean = currentIndex < keys.size
 
-        override fun next(): Map.Entry<K, V> {
+        override fun next(): Map.Entry<String, V> {
             val key = keys[currentIndex]
             currentIndex += 1
             val value = this@iterator.asDynamic()[key] as V
@@ -35,10 +38,19 @@ inline operator fun <K, V> JsDict<K, V>.iterator(): Iterator<Map.Entry<K, V>> {
     }
 }
 
-external interface MutableJsDict<K, V> : JsDict<K, V>
+fun <V> JsDict<V>.toMap(): Map<String, V> {
+    val map: MutableMap<String, V> = linkedMapOf()
+    for (key in keys) {
+        val value: V = this[key]!!
+        map[key] = value
+    }
+    return map
+}
+
+external interface MutableJsDict<V> : JsDict<V>
 
 @Suppress("NOTHING_TO_INLINE")
-inline operator fun <K, V> MutableJsDict<K, V>.set(key: K, value: V) {
+inline operator fun <V> MutableJsDict<V>.set(key: String, value: V) {
     asDynamic()[key] = value
 }
 

@@ -4,12 +4,12 @@ import screeps.game.tutorials.tutorial2.TutorialMemory
 import screeps.game.tutorials.tutorial2.Upgrader
 import screeps.game.tutorials.tutorial3.Builder
 import screeps.game.tutorials.tutorial3.Harvester
-import screeps.game.tutorials.tutorial3.roomsMap
+import types.base.get
 import types.base.global.*
 import types.base.iterator
 import types.base.prototypes.Creep
 import types.base.prototypes.StructureSpawn
-import types.extensions.jsonToMap
+import types.base.toMap
 
 
 external fun delete(p: dynamic): Boolean = definedExternally
@@ -31,9 +31,9 @@ class CreepOptions(role: Role) {
 val minPopulations = arrayOf(Role.HARVESTER to 2, Role.UPGRADER to 1, Role.BUILDER to 2)
 
 fun gameLoop() {
-    val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"]!! as StructureSpawn)
-    val creeps = jsonToMap<Creep>(Game.creeps)
-    val rooms = Game.roomsMap()
+    val mainSpawn: StructureSpawn = Game.spawns["Spawn1"]!!
+    val creeps = Game.creeps.toMap()
+    val rooms = Game.rooms
 
     //delete memories of creeps that have passed away
     houseKeeping(creeps)
