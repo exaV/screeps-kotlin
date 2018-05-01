@@ -43,36 +43,6 @@ inline operator fun <K, V> MutableJsDict<K, V>.set(key: K, value: V) {
 }
 
 class Filter(val filter: dynamic)
-external interface CPUShardLimits
-
-@Suppress("NOTHING_TO_INLINE")
-inline operator fun CPUShardLimits.get(shard: String): Number? = asDynamic()[shard]
-
-@Suppress("NOTHING_TO_INLINE")
-inline operator fun CPUShardLimits.set(shard: String, value: Number) {
-    asDynamic()[shard] = value
-}
-
-external interface CPU {
-    var limit: Int
-    var tickLimit: Int
-    var bucket: Int
-    var shardLimits: CPUShardLimits
-    fun getUsed(): Number
-    fun setShardLimits(limits: CPUShardLimits): dynamic /* Number /* 0 */ | Number /* -4 */ | Number /* -10 */ */
-}
-
-external interface GlobalControlLevel {
-    var level: Number
-    var progress: Number
-    var progressTotal: Number
-}
-
-external interface Shard {
-    var name: String
-    var type: String /* "normal" */
-    var ptr: Boolean
-}
 
 
 external class ConstructionSite : RoomObject {
