@@ -1,10 +1,10 @@
-package types.abstractions
+package types.extensions
 
+import traveler.TravelToOptions
+import traveler.TravelerCreep
 import types.Creep
 import types.RoomPosition
 import types.ScreepsReturnCode
-import types.traveler.TravelToOptions
-import types.traveler.TravelerCreep
 
 /**
  * Use Traveler to travel to target destination.

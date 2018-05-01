@@ -3,9 +3,9 @@ package screeps.game.one.behaviours
 import screeps.game.one.*
 import screeps.game.one.kreeps.BodyDefinition
 import types.*
-import types.abstractions.lazyPerTick
-import types.abstractions.travelTo
 import types.base.global.Game
+import types.extensions.lazyPerTick
+import types.extensions.travelTo
 
 class RefillEnergy {
     companion object {

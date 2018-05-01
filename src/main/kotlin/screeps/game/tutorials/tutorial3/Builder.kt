@@ -3,7 +3,7 @@ package screeps.game.tutorials.tutorial3
 import screeps.game.tutorials.tutorial2.TutorialMemory
 import types.Creep
 import types.ERR_NOT_IN_RANGE
-import types.abstractions.travelTo
+import types.extensions.travelTo
 import types.findConstructionSites
 import types.findEnergy
 

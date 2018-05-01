@@ -1,4 +1,4 @@
-package types.abstractions
+package types.extensions
 
 import types.base.global.Game
 import kotlin.properties.ReadOnlyProperty

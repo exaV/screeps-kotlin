@@ -1,6 +1,6 @@
 package types
 
-import types.abstractions.lazyPerTick
+import types.extensions.lazyPerTick
 import kotlin.js.Date
 
 external interface JsDict<K, V>

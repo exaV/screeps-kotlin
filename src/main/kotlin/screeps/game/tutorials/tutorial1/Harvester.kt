@@ -1,7 +1,7 @@
 package screeps.game.tutorials.tutorial1
 
 import types.*
-import types.abstractions.travelTo
+import types.extensions.travelTo
 
 object Harvester {
     fun run(creep: Creep, spawn: StructureSpawn) {

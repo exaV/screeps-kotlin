@@ -2,7 +2,7 @@ package screeps.game.tutorials.tutorial2
 
 import types.Creep
 import types.ERR_NOT_IN_RANGE
-import types.abstractions.travelTo
+import types.extensions.travelTo
 import types.findEnergy
 
 object Upgrader {

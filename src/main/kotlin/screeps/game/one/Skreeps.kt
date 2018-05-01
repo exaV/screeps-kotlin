@@ -9,8 +9,8 @@ import screeps.game.one.building.buildTowers
 import screeps.game.one.kreeps.BodyDefinition
 import screeps.game.tutorials.tutorial4.houseKeeping
 import types.*
-import types.abstractions.lazyPerTick
 import types.base.global.Game
+import types.extensions.lazyPerTick
 
 
 object Context {
