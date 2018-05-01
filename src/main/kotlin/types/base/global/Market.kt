@@ -3,12 +3,12 @@ package types.base.global
 import types.base.prototypes.Owner
 
 
-//TODO improve Market types
-external interface Market {
-    var credits: Number
-    var incomingTransactions: Array<Transaction>
-    var orders: `T$82`
-    var outgoingTransactions: Array<Transaction>
+//TODO test and improve Market type
+external class Market {
+    val credits: Number
+    val incomingTransactions: Array<Transaction>
+    val orders: dynamic
+    val outgoingTransactions: Array<Transaction>
     fun calcTransactionCost(amount: Number, roomName1: String, roomName2: String): Number
     fun cancelOrder(orderId: String): Number
     fun changeOrderPrice(orderId: String, newPrice: Number): Number
@@ -19,16 +19,6 @@ external interface Market {
     fun getAllOrders(filter: ((o: Order) -> Boolean)? = definedExternally /* null */): Array<Order>
     fun getOrderById(id: String): Order?
     fun getAllOrders(): Array<Order>
-}
-
-external interface `T$82`
-
-@Suppress("NOTHING_TO_INLINE")
-inline operator fun `T$82`.get(key: String): Order? = asDynamic()[key]
-
-@Suppress("NOTHING_TO_INLINE")
-inline operator fun `T$82`.set(key: String, value: Order) {
-    asDynamic()[key] = value
 }
 
 external interface Transaction {

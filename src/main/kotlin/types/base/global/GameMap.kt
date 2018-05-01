@@ -5,6 +5,7 @@ import types.base.prototypes.Room
 import types.base.prototypes.RoomPosition
 import kotlin.js.Json
 
+//TODO test and improve GameMap
 external class GameMap {
     fun describeExits(roomName: String): Json
     fun findExit(fromRoom: Room, toRoom: Room, opts: FindPathOpts = definedExternally): Number
