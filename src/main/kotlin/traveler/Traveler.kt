@@ -7,7 +7,7 @@
     "NESTED_CLASS_IN_EXTERNAL_INTERFACE"
 )
 
-package types.traveler
+package traveler
 
 import types.RoomPosition
 import types.ScreepsReturnCode
