@@ -1,6 +1,6 @@
 package types.base.global
 
-import types.base.prototypes.Owner
+import types.base.prototypes.structures.Owner
 
 
 //TODO test and improve Market type

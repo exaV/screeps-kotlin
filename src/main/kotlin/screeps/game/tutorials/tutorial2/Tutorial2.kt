@@ -4,7 +4,7 @@ import screeps.game.tutorials.tutorial1.Harvester
 import types.base.get
 import types.base.global.Game
 import types.base.iterator
-import types.base.prototypes.StructureSpawn
+import types.base.prototypes.structures.StructureSpawn
 
 fun gameLoop() {
     val mainSpawn: StructureSpawn = Game.spawns["Spawn1"]!!

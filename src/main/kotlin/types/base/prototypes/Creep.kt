@@ -1,6 +1,9 @@
 package types.base.prototypes
 
 import types.base.global.*
+import types.base.prototypes.structures.Owner
+import types.base.prototypes.structures.Structure
+import types.base.prototypes.structures.StructureController
 import types.extensions.Style
 
 

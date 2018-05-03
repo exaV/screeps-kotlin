@@ -2,6 +2,8 @@ package types.base.global
 
 import types.base.StringDict
 import types.base.prototypes.*
+import types.base.prototypes.structures.Structure
+import types.base.prototypes.structures.StructureSpawn
 import kotlin.js.Json
 
 external object Game {

@@ -4,6 +4,9 @@ import screeps.game.one.*
 import screeps.game.one.kreeps.BodyDefinition
 import types.base.global.*
 import types.base.prototypes.*
+import types.base.prototypes.structures.Structure
+import types.base.prototypes.structures.StructureContainer
+import types.base.prototypes.structures.StructureStorage
 import types.extensions.lazyPerTick
 import types.extensions.travelTo
 
@@ -13,15 +16,15 @@ class RefillEnergy {
         const val MAX_CREEP_PER_DROPPED_ENERGY = 1
     }
 
-    val droppedEnergyByRoom: MutableMap<Room, Array<Resource>> = mutableMapOf()
+    val droppedEnergyByRoom: MutableMap<Room, List<Resource>> = mutableMapOf()
     val minersByRoom: MutableMap<Room, Array<Creep>> = mutableMapOf()
 
     val usedSourcesWithCreepCounts: Map<String, Int> by lazyPerTick {
         Context.creeps
-                .map { it.value.memory.assignedEnergySource }
-                .filterNotNull()
-                .groupingBy { it }
-                .eachCount()
+            .map { it.value.memory.assignedEnergySource }
+            .filterNotNull()
+            .groupingBy { it }
+            .eachCount()
     }
 
     fun run(creep: Creep) {
@@ -119,15 +122,15 @@ class RefillEnergy {
 
         val isHauler = name.startsWith(BodyDefinition.HAULER.name)
 
-        val droppedEnergy = droppedEnergyByRoom.getOrPut(this.room, {
-            val e = this.room.findDroppedEnergy()
-            e.sort({ a, b -> b.amount - a.amount })
-            e
+        val droppedEnergy = droppedEnergyByRoom.getOrPut(room, {
+            room.findDroppedEnergy().sortedBy { it.amount }
         })
+
         //find a source that is close and has some free spots
         for (energy in droppedEnergy) {
             if (energy.amount >= carryCapacity &&
-                usedSourcesWithCreepCounts.getOrElse(energy.id, { 0 }) < MAX_CREEP_PER_DROPPED_ENERGY) {
+                usedSourcesWithCreepCounts.getOrElse(energy.id, { 0 }) < MAX_CREEP_PER_DROPPED_ENERGY
+            ) {
                 return energy
             }
         }
@@ -149,8 +152,16 @@ class RefillEnergy {
             // and many could be assigned to same miner
 
             if (isHauler) {
-                val haulers: Map<String, Creep> by lazyPerTick { Context.creeps.filter { it.value.name.startsWith(BodyDefinition.HAULER.name) } }
-                val minerWithoutHauler = miners.filterNot { miner -> haulers.any { hauler -> hauler.value.memory.assignedEnergySource == miner.id } }.firstOrNull()
+                val haulers: Map<String, Creep> by lazyPerTick {
+                    Context.creeps.filter {
+                        it.value.name.startsWith(
+                            BodyDefinition.HAULER.name
+                        )
+                    }
+                }
+                val minerWithoutHauler =
+                    miners.filterNot { miner -> haulers.any { hauler -> hauler.value.memory.assignedEnergySource == miner.id } }
+                        .firstOrNull()
                 if (minerWithoutHauler != null) return minerWithoutHauler
 
             } else return miners.maxBy {

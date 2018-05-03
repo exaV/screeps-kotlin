@@ -2,7 +2,6 @@ package types.base
 
 import types.base.global.IntegerConstant
 import types.base.global.StringConstant
-import kotlin.js.Date
 
 typealias StringDict<V> = JsDict<String, V>
 
@@ -58,17 +57,7 @@ inline operator fun <V> MutableStringDict<V>.set(key: String, value: V) {
 class Filter(val filter: dynamic)
 
 
-external interface ReservationDefinition {
-    var username: String
-    var ticksToEnd: Number
-}
 
-external interface SignDefinition {
-    var username: String
-    var text: String
-    var time: Number
-    var datetime: Date
-}
 
 
 

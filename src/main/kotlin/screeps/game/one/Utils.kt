@@ -8,7 +8,7 @@ import types.base.global.Game
 import types.base.global.OK
 import types.base.prototypes.Creep
 import types.base.prototypes.RoomObject
-import types.base.prototypes.StructureSpawn
+import types.base.prototypes.structures.StructureSpawn
 
 fun StructureSpawn.spawn(bodyDefinition: BodyDefinition) {
     if (room.energyAvailable < bodyDefinition.getCost()) return

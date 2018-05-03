@@ -11,7 +11,14 @@ import types.base.get
 import types.base.global.FIND_HOSTILE_CREEPS
 import types.base.global.Game
 import types.base.global.STRUCTURE_STORAGE
-import types.base.prototypes.*
+import types.base.prototypes.ConstructionSite
+import types.base.prototypes.Creep
+import types.base.prototypes.Room
+import types.base.prototypes.findEnergy
+import types.base.prototypes.structures.Structure
+import types.base.prototypes.structures.StructureSpawn
+import types.base.prototypes.structures.StructureTower
+import types.base.prototypes.structures.copy
 import types.base.toMap
 import types.extensions.lazyPerTick
 

@@ -3,7 +3,7 @@ package screeps.game.tutorials.tutorial1
 import types.base.get
 import types.base.global.*
 import types.base.prototypes.Creep
-import types.base.prototypes.StructureSpawn
+import types.base.prototypes.structures.StructureSpawn
 import types.base.toMap
 
 fun gameLoop() {

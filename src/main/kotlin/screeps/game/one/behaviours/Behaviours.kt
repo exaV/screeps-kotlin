@@ -4,7 +4,12 @@ import screeps.game.one.*
 import screeps.game.one.building.buildRoads
 import screeps.game.one.kreeps.BodyDefinition
 import types.base.global.*
-import types.base.prototypes.*
+import types.base.prototypes.Creep
+import types.base.prototypes.findConstructionSites
+import types.base.prototypes.findStructures
+import types.base.prototypes.structures.EnergyContainingStructure
+import types.base.prototypes.structures.Structure
+import types.base.prototypes.structures.StructureSpawn
 import types.extensions.travelTo
 
 class IdleBehaviour {

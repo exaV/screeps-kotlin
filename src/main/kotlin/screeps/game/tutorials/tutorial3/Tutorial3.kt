@@ -7,7 +7,7 @@ import types.base.global.Game
 import types.base.global.MOVE
 import types.base.global.WORK
 import types.base.iterator
-import types.base.prototypes.StructureSpawn
+import types.base.prototypes.structures.StructureSpawn
 
 fun gameLoop() {
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"]!! as StructureSpawn)

@@ -5,9 +5,9 @@ import types.base.global.RESOURCE_ENERGY
 import types.base.global.STRUCTURE_EXTENSION
 import types.base.global.STRUCTURE_SPAWN
 import types.base.prototypes.Creep
-import types.base.prototypes.StructureSpawn
 import types.base.prototypes.findEnergy
 import types.base.prototypes.findStructures
+import types.base.prototypes.structures.StructureSpawn
 import types.extensions.travelTo
 
 object Harvester {
