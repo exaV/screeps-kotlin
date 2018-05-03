@@ -54,11 +54,6 @@ open external class Structure : RoomObject {
     fun notifyWhenAttacked(enabled: Boolean): Number
 }
 
-open external class OwnedStructure : Structure {
-    val my: Boolean
-    val owner: Owner
-}
-
 external interface EnergyContainingStructure {
     val energy: Int
     val energyCapacity: Int
