@@ -1,7 +1,7 @@
 package screeps.game.one
 
 import screeps.game.one.kreeps.BodyDefinition
-import screeps.game.one.kreeps.CreepSpawnOptions
+import screeps.game.one.kreeps.KreepSpawnOptions
 import types.base.global.ERR_BUSY
 import types.base.global.ERR_NOT_ENOUGH_ENERGY
 import types.base.global.Game
@@ -16,7 +16,7 @@ fun StructureSpawn.spawn(bodyDefinition: BodyDefinition) {
     val body = bodyDefinition.getBiggest(room.energyAvailable)
     val newName = "${bodyDefinition.name}_T${body.tier}_${Game.time}"
 
-    val code = this.spawnCreep(body.body.toTypedArray(), newName, CreepSpawnOptions(CreepState.REFILL))
+    val code = this.spawnCreep(body.body.toTypedArray(), newName, KreepSpawnOptions(CreepState.REFILL))
     when (code) {
         OK -> println("spawning $newName with body $body")
         ERR_NOT_ENOUGH_ENERGY, ERR_BUSY -> run { } // do nothing

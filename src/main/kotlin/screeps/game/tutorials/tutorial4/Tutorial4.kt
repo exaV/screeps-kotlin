@@ -8,6 +8,7 @@ import types.base.get
 import types.base.global.*
 import types.base.iterator
 import types.base.prototypes.Creep
+import types.base.prototypes.structures.SpawnOptions
 import types.base.prototypes.structures.StructureSpawn
 import types.base.toMap
 
@@ -22,8 +23,8 @@ enum class Role {
     UPGRADER
 }
 
-class CreepOptions(role: Role) {
-    val memory: CreepMemory = object : CreepMemory {
+class CreepOptions(role: Role) : SpawnOptions() {
+    override val memory: CreepMemory = object : CreepMemory {
         val role: String = role.name.toLowerCase()
     }
 }
