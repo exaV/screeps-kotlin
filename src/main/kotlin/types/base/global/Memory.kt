@@ -1,13 +1,13 @@
 package types.base.global
 
-import types.base.MutableJsDict
+import types.base.MutableStringDict
 
 //TODO the object should probably be empty since all the contents are user defined
 external object Memory {
-    var creeps: MutableJsDict<CreepMemory>
-    var flags: MutableJsDict<FlagMemory>?
-    var rooms: MutableJsDict<RoomMemory>
-    var spawns: MutableJsDict<SpawnMemory>?
+    var creeps: MutableStringDict<CreepMemory>
+    var flags: MutableStringDict<FlagMemory>?
+    var rooms: MutableStringDict<RoomMemory>
+    var spawns: MutableStringDict<SpawnMemory>?
 
 }
 

@@ -1,6 +1,6 @@
 package types.base.global
 
-import types.base.JsDict
+import types.base.StringDict
 import types.base.prototypes.*
 import kotlin.js.Json
 
@@ -8,7 +8,7 @@ external object Game {
     /**
      * A hash containing all your construction sites with their id as hash keys.
      */
-    val constructionSites: JsDict<ConstructionSite>
+    val constructionSites: StringDict<ConstructionSite>
     /**
      * An object containing information about your CPU usage
      */
@@ -16,11 +16,11 @@ external object Game {
     /**
      * A hash containing all your creeps with creep names as hash keys.
      */
-    val creeps: JsDict<Creep>
+    val creeps: StringDict<Creep>
     /**
      * A hash containing all your flags with flag names as hash keys.
      */
-    val flags: JsDict<Flag>
+    val flags: StringDict<Flag>
     val gcl: GlobalControlLevel
     val map: GameMap
     val market: Market
@@ -28,12 +28,12 @@ external object Game {
      * An object with your global resources that are bound to the account, like subscription tokens.
      * Each object key is a resource constant, values are resources amounts.
      */
-    val resources: JsDict<Int>
+    val resources: StringDict<Int>
     /**
      * A hash containing all the rooms available to you with room names as hash keys.
      * A room is visible if you have a creep or an owned structure in it.
      */
-    val rooms: JsDict<Room>
+    val rooms: StringDict<Room>
     /**
      * An object describing the world shard where your script is currently being executed in.
      */
@@ -41,11 +41,11 @@ external object Game {
     /**
      * A hash containing all your spawns with spawn names as hash keys.
      */
-    val spawns: JsDict<StructureSpawn>
+    val spawns: StringDict<StructureSpawn>
     /**
      * A hash containing all your structures with structure id as hash keys.
      */
-    val structures: JsDict<Structure>
+    val structures: StringDict<Structure>
     /**
      * System game tick counter. It is automatically incremented on every tick. [Learn more][http://docs.screeps.com/game-loop.html]
      */
@@ -66,7 +66,7 @@ external object Game {
 }
 
 
-private typealias ShardLimits = JsDict<Int>
+private typealias ShardLimits = StringDict<Int>
 
 external interface CPU {
     var limit: Int

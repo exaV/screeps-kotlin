@@ -3,6 +3,7 @@
 package types.base.global
 
 import types.base.JsDict
+import types.base.StringDict
 
 external interface StringConstant
 external interface IntegerConstant
@@ -30,6 +31,7 @@ external interface DirectionConstant : IntegerConstant
 external interface ResourceConstant : StringConstant
 external interface MineralConstant : ResourceConstant
 external interface ColorConstant : IntegerConstant
+external interface DensityConstant : IntegerConstant
 external interface Terrain
 
 external val OK: ScreepsReturnCode /* 0 */ = definedExternally
@@ -114,10 +116,10 @@ external val STRUCTURE_TERMINAL: BuildableStructureConstant /* "terminal" */ = d
 external val STRUCTURE_CONTAINER: BuildableStructureConstant /* "container" */ = definedExternally
 external val STRUCTURE_NUKER: BuildableStructureConstant /* "nuker" */ = definedExternally
 external val STRUCTURE_PORTAL: StructureConstant /* "portal" */ = definedExternally
-external val CONSTRUCTION_COST: JsDict<Int> = definedExternally
+external val CONSTRUCTION_COST: StringDict<Int> = definedExternally
 external val CONSTRUCTION_COST_ROAD_SWAMP_RATIO: Number /* 5 */ = definedExternally
 
-external val RESOURCE_ENERGY: MineralConstant /* "energy" */ = definedExternally
+external val RESOURCE_ENERGY: ResourceConstant /* "energy" */ = definedExternally
 external val RESOURCE_POWER: ResourceConstant /* "power" */ = definedExternally
 external val RESOURCE_UTRIUM: MineralConstant /* "U" */ = definedExternally
 external val RESOURCE_LEMERGIUM: MineralConstant /* "L" */ = definedExternally
@@ -182,7 +184,7 @@ external val RANGED_ATTACK: AcitveBodyPartConstant = definedExternally
 external val TOUGH: AcitveBodyPartConstant = definedExternally
 external val HEAL: AcitveBodyPartConstant = definedExternally
 external val CLAIM: BodyPartConstant = definedExternally
-external val BODYPART_COST: JsDict<Int> = definedExternally
+external val BODYPART_COST: StringDict<Int> = definedExternally
 
 
 external var CREEP_SPAWN_TIME: Number /* 3 */ = definedExternally
@@ -229,3 +231,14 @@ external val SIGN_RESPAWN_AREA: String = definedExternally
 external val SOURCE_ENERGY_CAPACITY: Int = definedExternally
 external val SOURCE_ENERGY_NEUTRAL_CAPACITY: Int = definedExternally
 external val SOURCE_ENERGY_KEEPER_CAPACITY: Int = definedExternally
+
+external val MINERAL_REGEN_TIME: Int = definedExternally
+external val MINERAL_DENSITY_CHANGE: Double = definedExternally
+external val MINERAL_MIN_AMOUNT: JsDict<MineralConstant, Int>
+external val MINERAL_RANDOM_FACTOR: Double = definedExternally
+external val MINERAL_DENSITY: JsDict<DensityConstant, Int>
+external val MINERAL_DENSITY_PROBABILITY: JsDict<DensityConstant, Double>
+external val DENSITY_LOW: DensityConstant = definedExternally
+external val DENSITY_MODERATE: DensityConstant = definedExternally
+external val DENSITY_HIGH: DensityConstant = definedExternally
+external val DENSITY_ULTRA: DensityConstant = definedExternally
