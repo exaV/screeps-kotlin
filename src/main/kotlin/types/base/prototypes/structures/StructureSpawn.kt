@@ -1,18 +1,60 @@
 package types.base.prototypes.structures
 
-import types.base.global.BodyPartConstant
+import types.base.global.*
+import types.base.prototypes.Creep
 import types.base.prototypes.OwnedStructure
 
-external class StructureSpawn : OwnedStructure,
-    EnergyContainingStructure {
-    val memory: dynamic
+abstract external class StructureSpawn : OwnedStructure, EnergyStructure {
+    val memory: SpawnMemory
     val name: String
 
     val spawning: Spawning?
 
-    fun spawnCreep(body: Array<BodyPartConstant>, name: String): Number
-    fun spawnCreep(body: Array<BodyPartConstant>, name: String, opts: dynamic): Number
+    /**
+     * Start the creep spawning process. The required energy amount can be withdrawn from all spawns and extensions in the room.
+     */
+    fun spawnCreep(body: Array<BodyPartConstant>, name: String): ScreepsReturnCode
 
-    override val energy: Int = definedExternally
-    override val energyCapacity: Int = definedExternally
+    /**
+     * Start the creep spawning process. The required energy amount can be withdrawn from all spawns and extensions in the room.
+     */
+    fun spawnCreep(body: Array<BodyPartConstant>, name: String, opts: SpawnOptions): ScreepsReturnCode
+
+    /**
+     * Kill the creep and drop up to 100% of resources spent on its spawning and boosting depending on remaining life time.
+     * The target should be at adjacent square.
+     */
+    fun recycleCreep(target: Creep): ScreepsReturnCode
+
+    /**
+     * Increase the remaining time to live of the target creep. The target should be at adjacent square.
+     * The spawn should not be busy with the spawning process.
+     * Each execution increases the creep's timer by amount of ticks according to this formula:
+     *
+     *
+     * `floor(600/body_size)`
+     *
+     * Energy required for each execution is determined using this formula:
+     *
+     * `ceil(creep_cost/2.5/body_size)`
+     *
+     * Renewing a creep removes all of its boosts.
+     */
+    fun renewCreep(target: Creep): ScreepsReturnCode
 }
+
+external class Spawning {
+    val directions: Array<DirectionConstant>
+    val name: String
+    val needTime: Int
+    val remainingTime: Int
+
+    fun cancel(): ScreepsReturnCode
+}
+
+class SpawnOptions(
+    memory: CreepMemory? = null,
+    energyContainingStructure: Array<EnergyStructure>? = null,
+    dryRun: Boolean = false,
+    directions: Array<DirectionConstant>? = null
+)

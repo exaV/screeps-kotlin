@@ -4,6 +4,7 @@ import types.base.global.*
 import types.base.prototypes.structures.Structure
 import types.base.prototypes.structures.StructureController
 import types.base.prototypes.structures.StructureStorage
+import types.base.prototypes.structures.StructureTerminal
 
 external class Room {
     val controller: StructureController?

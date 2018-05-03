@@ -1,7 +1,8 @@
 package types.base.prototypes.structures
 
 import types.base.global.StructureConstant
-import types.base.prototypes.*
+import types.base.prototypes.RoomObject
+import types.base.prototypes.RoomPosition
 
 fun RoomPosition.copy(x: Int = this.x, y: Int = this.y, name: String = this.roomName) =
     RoomPosition(x, y, name)
@@ -25,28 +26,15 @@ external interface EnergyContainingStructure {
     val energyCapacity: Int
 }
 
-external interface Spawning {
-    val directions: dynamic
-    val name: String
-    val needTime: Number
-    val remainingTime: Number
+/**
+ * Energy can be used for spawning of creeps.
+ */
+external interface EnergyStructure : EnergyContainingStructure
 
-    fun cancel(): Number
+external interface DecayingStructure {
+    val ticksToDecay: Int
 }
 
 
-external class StructureTower : OwnedStructure,
-    EnergyContainingStructure {
-    fun attack(target: Creep): Number
-    fun heal(target: Creep): Number
-    fun repair(target: Structure): Number
 
-    override val energy: Int = definedExternally
-    override val energyCapacity: Int = definedExternally
-}
-
-external class StructureStorage : OwnedStructure {
-    val store: Storage
-    val storeCapacity: Int
-}
 
