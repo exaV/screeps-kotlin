@@ -242,3 +242,25 @@ external val DENSITY_LOW: DensityConstant = definedExternally
 external val DENSITY_MODERATE: DensityConstant = definedExternally
 external val DENSITY_HIGH: DensityConstant = definedExternally
 external val DENSITY_ULTRA: DensityConstant = definedExternally
+
+external val NUKER_HITS: Int = definedExternally
+external val NUKER_COOLDOWN: Int = definedExternally
+external val NUKER_ENERGY_CAPACITY: Int = definedExternally
+external val NUKER_GHODIUM_CAPACITY: Int = definedExternally
+external val NUKE_LAND_TIME: Int = definedExternally
+external val NUKE_RANGE: Int = definedExternally
+external val NUKE_DAMAGE: JsDict<Int, Int> = definedExternally
+
+external val CONTROLLER_DOWNGRADE: JsDict<Int, Int>
+external val CONTROLLER_DOWNGRADE_RESTORE: Int = definedExternally
+external val CONTROLLER_DOWNGRADE_SAFEMODE_THRESHOLD: Int = definedExternally
+external val CONTROLLER_CLAIM_DOWNGRADE: Int = definedExternally
+external val CONTROLLER_RESERVE: Int = definedExternally
+external val CONTROLLER_RESERVE_MAX: Int = definedExternally
+external val CONTROLLER_MAX_UPGRADE_PER_TICK: Int = definedExternally
+external val CONTROLLER_ATTACK_BLOCKED_UPGRADE: Int = definedExternally
+external val CONTROLLER_NUKE_BLOCKED_UPGRADE: Int = definedExternally
+
+external val SAFE_MODE_DURATION: Int = definedExternally
+external val SAFE_MODE_COOLDOWN: Int = definedExternally
+external val SAFE_MODE_COST: Int = definedExternally
