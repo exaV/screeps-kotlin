@@ -11,7 +11,6 @@ import types.base.get
 import types.base.global.FIND_HOSTILE_CREEPS
 import types.base.global.Game
 import types.base.global.STRUCTURE_STORAGE
-import types.base.keys
 import types.base.prototypes.*
 import types.base.toMap
 import types.extensions.lazyPerTick
@@ -40,8 +39,7 @@ object Context {
 
 
 fun gameLoop() {
-
-    println("rooms=${Game.rooms} with keys ${Game.rooms.keys} was mapped to ${Context.rooms}")
+    
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"])!!
 
     houseKeeping(Context.creeps)

@@ -1,7 +1,6 @@
 package types.base
 
 import types.base.global.StringConstant
-import types.extensions.lazyPerTick
 import kotlin.js.Date
 
 external interface JsDict<V>
@@ -11,11 +10,8 @@ inline operator fun <V> JsDict<V>.get(key: String): V? = asDynamic()[key] as? V
 
 inline operator fun <V> JsDict<V>.get(key: StringConstant): V? = asDynamic()[key] as? V
 
-val <V> JsDict<V>.keys: Array<String> by lazyPerTick {
-    val keys = js("Object").keys(this) as? Array<String> ?: emptyArray()
-    //println("creating iterator in tick ${Game.time} with keys=$keys")
-    keys
-}
+val <V> JsDict<V>.keys: Array<String>
+    get() = js("Object").keys(this) as? Array<String> ?: emptyArray()
 
 class Entry<K, V>(override val key: K, override val value: V) : Map.Entry<K, V>
 
@@ -41,6 +37,8 @@ fun <V> JsDict<V>.toMap(): Map<String, V> {
         val value: V? = this[key]
         if (value != null) {
             map[key] = value
+        } else {
+            println("null value for key $key")
         }
     }
     return map
