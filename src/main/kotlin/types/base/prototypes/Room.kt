@@ -1,29 +1,38 @@
 package types.base.prototypes
 
-import types.base.Filter
 import types.base.global.*
 
 external class Room {
+    val controller: StructureController?
     val energyAvailable: Int
     val energyCapacityAvailable: Int
     val memory: dynamic
     val name: String
-    val controller: StructureController?
     val storage: StructureStorage?
-    val terminal: dynamic
-    val visual: dynamic
+    val terminal: StructureTerminal?
+    val visual: RoomVisual
 
-    fun createConstructionSite(x: Number, y: Number, structureType: StructureConstant): Number
-    fun createConstructionSite(pos: RoomPosition, structureType: StructureConstant): Number
+    fun createConstructionSite(x: Number, y: Number, structureType: StructureConstant): ScreepsReturnCode
+    fun createConstructionSite(pos: RoomPosition, structureType: StructureConstant): ScreepsReturnCode
+    fun createFlag(
+        x: Int,
+        y: Int,
+        name: String = definedExternally,
+        color: ColorConstant = definedExternally,
+        secondaryColor: ColorConstant = definedExternally
+    ): Any
+
     fun createFlag(
         pos: RoomPosition,
-        name: String? = definedExternally,
-        color: dynamic = definedExternally,
-        secondaryColor: dynamic = definedExternally
-    ): dynamic
+        name: String = definedExternally,
+        color: ColorConstant = definedExternally,
+        secondaryColor: ColorConstant = definedExternally
+    ): Any
 
-    fun findExitTo(room: String): dynamic
-    fun findExitTo(room: Room): dynamic
+    fun <T : RoomObject> find(FIND_CONSTANT: FindConstant): Array<T>
+    fun findExitTo(room: String): Any
+    fun findExitTo(room: Room): Any
+    fun findPath(fromPos: RoomPosition, toPos: RoomPosition, opts: FindPathOpts? = definedExternally): Array<PathStep>
     fun getPositionAt(x: Number, y: Number): RoomPosition?
     fun lookAt(x: Number, y: Number): Array<LookAt>
     fun lookAt(target: RoomPosition): Array<LookAt>
@@ -35,10 +44,7 @@ external class Room {
         asArray: Boolean? = definedExternally /* null */
     ): dynamic /* LookAtResultMatrix<dynamic /* String /* "creep" */ | String /* "source" */ | String /* "energy" */ | String /* "resource" */ | String /* "mineral" */ | String /* "structure" */ | String /* "flag" */ | String /* "constructionSite" */ | String /* "nuke" */ | String /* "terrain" */ */> | Array<Any? /* Any? & `T$79` & `T$95` */> */
 
-    fun findPath(fromPos: RoomPosition, toPos: RoomPosition, opts: FindPathOpts? = definedExternally): Array<PathStep>
 
-    fun <T : RoomObject> find(FIND_CONSTANT: FindConstant): Array<T>
-    fun <T : RoomObject> find(FIND_CONSTANT: FindConstant, opts: Filter): Array<T>
 }
 
 external class LookAt {
@@ -54,10 +60,7 @@ fun Room.findCreeps() = find<Creep>(FIND_CREEPS)
 fun Room.findEnergy() = find<Source>(FIND_SOURCES)
 fun Room.findConstructionSites() = find<ConstructionSite>(FIND_CONSTRUCTION_SITES)
 fun Room.findStructures() = find<Structure>(FIND_STRUCTURES)
-fun Room.findDroppedEnergy() = find<Resource>(
-    FIND_DROPPED_RESOURCES,
-    Filter("energy")
-)
+fun Room.findDroppedEnergy() = find<Resource>(FIND_DROPPED_RESOURCES).filter { it.resourceType == RESOURCE_ENERGY }
 
 class FindPathOpts(
     val ignoreCreeps: Boolean = false,
