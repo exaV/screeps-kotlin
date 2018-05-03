@@ -20,7 +20,7 @@ fun StructureSpawn.spawn(bodyDefinition: BodyDefinition) {
     when (code) {
         OK -> println("spawning $newName with body $body")
         ERR_NOT_ENOUGH_ENERGY, ERR_BUSY -> run { } // do nothing
-        else -> console.log("unhandled error code $code")
+        else -> throw IllegalArgumentException("error code $code")
     }
 }
 

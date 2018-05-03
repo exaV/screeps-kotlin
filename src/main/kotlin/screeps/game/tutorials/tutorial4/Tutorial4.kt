@@ -23,8 +23,8 @@ enum class Role {
     UPGRADER
 }
 
-class CreepOptions(role: Role) : SpawnOptions() {
-    override val memory: CreepMemory = object : CreepMemory {
+class CreepOptions(role: Role) : SpawnOptions {
+    override val memory = object : CreepMemory {
         val role: String = role.name.toLowerCase()
     }
 }

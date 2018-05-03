@@ -52,9 +52,13 @@ external class Spawning {
     fun cancel(): ScreepsReturnCode
 }
 
-open class SpawnOptions(
-    open val memory: CreepMemory? = null,
+interface SpawnOptions {
+    val memory: CreepMemory?
+}
+
+open class FullSpawnOptions(
+    override val memory: CreepMemory? = null,
     open val energyContainingStructure: Array<EnergyStructure>? = null,
     open val dryRun: Boolean = false,
     open val directions: Array<DirectionConstant>? = null
-)
+) : SpawnOptions

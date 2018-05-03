@@ -46,7 +46,7 @@ object Context {
 
 
 fun gameLoop() {
-    
+
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"])!!
 
     houseKeeping(Context.creeps)
