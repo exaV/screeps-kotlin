@@ -6,6 +6,7 @@ import screeps.game.one.kreeps.BodyDefinition
 import traveler.travelTo
 import types.base.global.*
 import types.base.prototypes.Creep
+import types.base.prototypes.Room
 import types.base.prototypes.findConstructionSites
 import types.base.prototypes.findStructures
 import types.base.prototypes.structures.EnergyContainingStructure
@@ -35,7 +36,7 @@ class IdleBehaviour {
         val towersInNeedOfRefill = Context.towers.filter { it.room == creep.room && it.energy < it.energyCapacity }
         when {
         //make sure spawn does not dry up
-            creep.room.energyAvailable < BodyDefinition.BASIC_WORKER.cost -> {
+            notEnoughtSpawnEnergy(creep.room) -> {
                 creep.memory.state = CreepState.TRANSFERRING_ENERGY
             }
 
@@ -84,7 +85,14 @@ class IdleBehaviour {
         }
 
     }
+
+    private fun notEnoughtSpawnEnergy(room: Room) =
+        room.energyAvailable < BodyDefinition.BASIC_WORKER.cost
+                // or at least 2/3 of energy available
+                || room.energyCapacityAvailable > BodyDefinition.BASIC_WORKER.cost
+                && room.energyAvailable < room.energyCapacityAvailable * 2.0 / 3.0
 }
+
 
 object BusyBehaviour {
     fun run(creep: Creep) {
