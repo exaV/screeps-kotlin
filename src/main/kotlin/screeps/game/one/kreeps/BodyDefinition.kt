@@ -32,7 +32,7 @@ enum class BodyDefinition(val bodyPartConstant: Array<BodyPartConstant>, val max
     SCOUT(arrayOf(MOVE), maxSize = 1);
 
     val cost: Int
-        get() = bodyPartConstant.sumBy { BODYPART_COST[it]!! }
+        get() = bodyPartConstant.sumBy { BODYPART_COST[it] }
 
     data class Body(val tier: Int, val body: List<BodyPartConstant>)
 
@@ -42,7 +42,7 @@ enum class BodyDefinition(val bodyPartConstant: Array<BodyPartConstant>, val max
         val body = mutableListOf<BodyPartConstant>()
         var size = 0
 
-        while (energyCost - cost > 0 && (maxSize == 0 || size < maxSize)) {
+        while (energyCost - cost >= 0 && (maxSize == 0 || size < maxSize)) {
             energyCost -= cost
             body.addAll(bodyPartConstant)
             size += 1

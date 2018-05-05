@@ -11,7 +11,7 @@ import types.base.prototypes.RoomObject
 import types.base.prototypes.structures.StructureSpawn
 
 fun StructureSpawn.spawn(bodyDefinition: BodyDefinition) {
-    if (room.energyAvailable <= bodyDefinition.cost) return
+    if (room.energyAvailable < bodyDefinition.cost) return
 
     val body = bodyDefinition.getBiggest(room.energyAvailable)
     val newName = "${bodyDefinition.name}_T${body.tier}_${Game.time}"
