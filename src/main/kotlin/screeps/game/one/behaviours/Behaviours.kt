@@ -47,7 +47,7 @@ class IdleBehaviour {
 
             creep.name.startsWith(BodyDefinition.HAULER.name) && creep.room.storage != null -> {
                 creep.memory.state = CreepState.TRANSFERRING_ENERGY
-                creep.memory.targetId = creep.room.storage!!.id
+                creep.memory.targetId = creep.room.storage.id
             }
 
         //check if we need to construct something
@@ -56,7 +56,7 @@ class IdleBehaviour {
                 creep.memory.targetId = constructionSite.id
             }
         //check if we need to upgrade the controller
-            controller != null && controller.level < 8 && Context.creeps.filter { it.value.memory.state == CreepState.UPGRADING }.size < 3 -> {
+            controller != null && controller.level < 8 && Context.creeps.none { it.value.memory.state == CreepState.UPGRADING } -> {
                 creep.memory.state = CreepState.UPGRADING
                 creep.memory.targetId = controller.id
             }
