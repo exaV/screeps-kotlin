@@ -1,6 +1,5 @@
 package types.base.prototypes.structures
 
-import types.base.prototypes.OwnedStructure
 import types.base.prototypes.Storage
 
 external class StructureStorage : OwnedStructure {

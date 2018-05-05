@@ -18,8 +18,8 @@ import types.base.prototypes.findEnergy
 import types.base.prototypes.structures.Structure
 import types.base.prototypes.structures.StructureSpawn
 import types.base.prototypes.structures.StructureTower
-import types.base.prototypes.structures.copy
 import types.base.toMap
+import types.extensions.copy
 import types.extensions.lazyPerTick
 
 

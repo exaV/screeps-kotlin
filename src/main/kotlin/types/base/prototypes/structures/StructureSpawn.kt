@@ -2,7 +2,6 @@ package types.base.prototypes.structures
 
 import types.base.global.*
 import types.base.prototypes.Creep
-import types.base.prototypes.OwnedStructure
 
 abstract external class StructureSpawn : OwnedStructure, EnergyStructure {
     val memory: SpawnMemory

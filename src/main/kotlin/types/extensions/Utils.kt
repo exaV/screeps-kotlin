@@ -2,6 +2,7 @@
 
 package types.extensions
 
+import types.base.prototypes.RoomPosition
 import kotlin.js.Json
 
 fun <T> jsonToMap(json: Json): Map<String, T> {
@@ -29,3 +30,6 @@ class Style(val stroke: String = "#ffffff",
             val opacity: Double = 0.5) {
     val lineStyle: String? = if (lineStyle == LineStyle.SOLID) null else lineStyle.name.toLowerCase()
 }
+
+fun RoomPosition.copy(x: Int = this.x, y: Int = this.y, name: String = this.roomName) =
+    RoomPosition(x, y, name)

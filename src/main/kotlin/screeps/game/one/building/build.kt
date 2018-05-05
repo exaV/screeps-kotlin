@@ -6,7 +6,7 @@ import types.base.prototypes.*
 import types.base.prototypes.structures.Structure
 import types.base.prototypes.structures.StructureController
 import types.base.prototypes.structures.StructureSpawn
-import types.base.prototypes.structures.copy
+import types.extensions.copy
 
 val StructureController.availableStorage
     get() = when {

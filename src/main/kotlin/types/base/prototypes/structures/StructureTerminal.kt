@@ -2,7 +2,6 @@ package types.base.prototypes.structures
 
 import types.base.global.ResourceConstant
 import types.base.global.ScreepsReturnCode
-import types.base.prototypes.OwnedStructure
 import types.base.prototypes.Storage
 
 external class StructureTerminal : OwnedStructure {

@@ -2,14 +2,7 @@ package types.base.prototypes.structures
 
 import types.base.global.StructureConstant
 import types.base.prototypes.RoomObject
-import types.base.prototypes.RoomPosition
 
-fun RoomPosition.copy(x: Int = this.x, y: Int = this.y, name: String = this.roomName) =
-    RoomPosition(x, y, name)
-
-external interface Owner {
-    val username: String
-}
 
 open external class Structure : RoomObject {
     val hits: Double
@@ -19,6 +12,15 @@ open external class Structure : RoomObject {
     fun destroy(): Number
     fun isActive(): Boolean
     fun notifyWhenAttacked(enabled: Boolean): Number
+}
+
+open external class OwnedStructure : Structure {
+    val my: Boolean
+    val owner: Owner
+}
+
+external interface Owner {
+    val username: String
 }
 
 external interface EnergyContainingStructure {
