@@ -35,7 +35,7 @@ class IdleBehaviour {
         val towersInNeedOfRefill = Context.towers.filter { it.room == creep.room && it.energy < it.energyCapacity }
         when {
         //make sure spawn does not dry up
-            creep.room.energyAvailable < BodyDefinition.BASIC_WORKER.getCost() -> {
+            creep.room.energyAvailable < BodyDefinition.BASIC_WORKER.cost -> {
                 creep.memory.state = CreepState.TRANSFERRING_ENERGY
             }
 

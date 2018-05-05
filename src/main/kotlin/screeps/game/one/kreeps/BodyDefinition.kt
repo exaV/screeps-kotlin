@@ -31,13 +31,14 @@ enum class BodyDefinition(val bodyPartConstant: Array<BodyPartConstant>, val max
     HAULER(arrayOf(CARRY, CARRY, MOVE), maxSize = 5),
     SCOUT(arrayOf(MOVE), maxSize = 1);
 
-    fun getCost(): Int = bodyPartConstant.sumBy { BODYPART_COST[it]!! }
+    val cost: Int
+        get() = bodyPartConstant.sumBy { BODYPART_COST[it]!! }
 
     data class Body(val tier: Int, val body: List<BodyPartConstant>)
 
     fun getBiggest(availableEnergy: Int): Body {
         var energyCost = availableEnergy
-        val cost = getCost()
+        val cost = cost
         val body = mutableListOf<BodyPartConstant>()
         var size = 0
 

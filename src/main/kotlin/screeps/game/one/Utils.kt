@@ -11,7 +11,7 @@ import types.base.prototypes.RoomObject
 import types.base.prototypes.structures.StructureSpawn
 
 fun StructureSpawn.spawn(bodyDefinition: BodyDefinition) {
-    if (room.energyAvailable < bodyDefinition.getCost()) return
+    if (room.energyAvailable <= bodyDefinition.cost) return
 
     val body = bodyDefinition.getBiggest(room.energyAvailable)
     val newName = "${bodyDefinition.name}_T${body.tier}_${Game.time}"
@@ -20,7 +20,7 @@ fun StructureSpawn.spawn(bodyDefinition: BodyDefinition) {
     when (code) {
         OK -> println("spawning $newName with body $body")
         ERR_NOT_ENOUGH_ENERGY, ERR_BUSY -> run { } // do nothing
-        else -> throw IllegalArgumentException("error code $code")
+        else -> throw IllegalArgumentException("error code $code when spawning $newName with body $body")
     }
 }
 
