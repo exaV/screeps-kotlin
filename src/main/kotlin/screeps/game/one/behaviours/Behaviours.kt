@@ -3,6 +3,7 @@ package screeps.game.one.behaviours
 import screeps.game.one.*
 import screeps.game.one.building.buildRoads
 import screeps.game.one.kreeps.BodyDefinition
+import traveler.travelTo
 import types.base.global.*
 import types.base.prototypes.Creep
 import types.base.prototypes.findConstructionSites
@@ -10,7 +11,6 @@ import types.base.prototypes.findStructures
 import types.base.prototypes.structures.EnergyContainingStructure
 import types.base.prototypes.structures.Structure
 import types.base.prototypes.structures.StructureSpawn
-import types.extensions.travelTo
 
 class IdleBehaviour {
     fun structuresThatNeedRepairing(): List<Structure> {

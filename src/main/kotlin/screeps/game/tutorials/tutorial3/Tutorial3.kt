@@ -10,7 +10,7 @@ import types.base.iterator
 import types.base.prototypes.structures.StructureSpawn
 
 fun gameLoop() {
-    val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"]!! as StructureSpawn)
+    val mainSpawn: StructureSpawn = Game.spawns["Spawn1"]!!
     val creeps = Game.creeps
     val rooms = Game.rooms
 
@@ -34,7 +34,7 @@ fun gameLoop() {
         }
     }
 
-    for ((creepName, creep) in creeps) {
+    for ((_, creep) in creeps) {
         val creepMemory = TutorialMemory(creep.memory)
 
         if (creepMemory.role == "harvester") {

@@ -10,7 +10,7 @@ fun gameLoop() {
     val mainSpawn: StructureSpawn = Game.spawns["Spawn1"]!!
     val creeps = Game.creeps
 
-    for ((creepName, creep) in creeps) {
+    for ((_, creep) in creeps) {
         val creepMemory = TutorialMemory(creep.memory)
         if (creepMemory.role == "harvester") {
             Harvester.run(creep, mainSpawn)

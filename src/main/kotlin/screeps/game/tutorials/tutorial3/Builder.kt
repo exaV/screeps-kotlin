@@ -5,7 +5,6 @@ import types.base.global.ERR_NOT_IN_RANGE
 import types.base.prototypes.Creep
 import types.base.prototypes.findConstructionSites
 import types.base.prototypes.findEnergy
-import types.extensions.travelTo
 
 object Builder {
     fun run(creep: Creep) {
@@ -24,13 +23,13 @@ object Builder {
             val targets = creep.room.findConstructionSites()
             if (targets.isNotEmpty()) {
                 if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-                    creep.travelTo(targets[0].pos);
+                    creep.moveTo(targets[0].pos);
                 }
             }
         } else {
             val sources = creep.room.findEnergy()
             if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.travelTo(sources[0].pos)
+                creep.moveTo(sources[0].pos)
             }
         }
     }

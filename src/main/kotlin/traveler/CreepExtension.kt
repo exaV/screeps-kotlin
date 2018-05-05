@@ -1,7 +1,5 @@
-package types.extensions
+package traveler
 
-import traveler.TravelToOptions
-import traveler.TravelerCreep
 import types.base.global.ScreepsReturnCode
 import types.base.prototypes.Creep
 import types.base.prototypes.RoomPosition
@@ -11,8 +9,8 @@ import types.base.prototypes.RoomPosition
  */
 fun Creep.travelTo(target: RoomPosition, travelToOptions: TravelToOptions? = null): ScreepsReturnCode {
     return if (travelToOptions == null) {
-        (this as TravelerCreep).travelTo(target)
+        (this.unsafeCast<TravelerCreep>()).travelTo(target)
     } else {
-        (this as TravelerCreep).travelTo(target, travelToOptions)
+        (this.unsafeCast<TravelerCreep>()).travelTo(target, travelToOptions)
     }
 }

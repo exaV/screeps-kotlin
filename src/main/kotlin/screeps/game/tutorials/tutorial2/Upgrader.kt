@@ -3,7 +3,6 @@ package screeps.game.tutorials.tutorial2
 import types.base.global.ERR_NOT_IN_RANGE
 import types.base.prototypes.Creep
 import types.base.prototypes.findEnergy
-import types.extensions.travelTo
 
 object Upgrader {
 
@@ -11,12 +10,12 @@ object Upgrader {
         if (creep.carry.energy == 0) {
             val sources = creep.room.findEnergy()
             if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.travelTo(sources[0].pos);
+                creep.moveTo(sources[0].pos);
             }
         } else {
             creep.room.controller?.let {
                 if (creep.upgradeController(it) == ERR_NOT_IN_RANGE) {
-                    creep.travelTo(it.pos);
+                    creep.moveTo(it.pos);
                 }
             }
         }

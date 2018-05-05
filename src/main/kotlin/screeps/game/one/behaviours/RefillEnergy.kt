@@ -2,13 +2,13 @@ package screeps.game.one.behaviours
 
 import screeps.game.one.*
 import screeps.game.one.kreeps.BodyDefinition
+import traveler.travelTo
 import types.base.global.*
 import types.base.prototypes.*
 import types.base.prototypes.structures.Structure
 import types.base.prototypes.structures.StructureContainer
 import types.base.prototypes.structures.StructureStorage
 import types.extensions.lazyPerTick
-import types.extensions.travelTo
 
 class RefillEnergy {
     companion object {

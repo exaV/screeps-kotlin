@@ -79,7 +79,7 @@ fun buildRoads(room: Room) {
 
 fun buildStorage(room: Room) {
     if (room.controller?.my != true) return //not our room
-    if (room.controller?.availableStorage != 1) return //cannot build storage yet
+    if (room.controller.availableStorage != 1) return //cannot build storage yet
 
     val hasStorage = room.storage != null
             || Context.constructionSites.values.any { it.structureType == STRUCTURE_STORAGE && it.room.name == room.name }
