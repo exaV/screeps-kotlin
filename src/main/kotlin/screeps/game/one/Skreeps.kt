@@ -5,12 +5,14 @@ import screeps.game.one.behaviours.BusyBehaviour
 import screeps.game.one.behaviours.IdleBehaviour
 import screeps.game.one.behaviours.RefillEnergy
 import screeps.game.one.building.buildStorage
+import screeps.game.one.building.buildTowers
 import screeps.game.one.kreeps.BodyDefinition
 import screeps.game.tutorials.tutorial4.houseKeeping
 import types.base.get
 import types.base.global.FIND_HOSTILE_CREEPS
 import types.base.global.Game
 import types.base.global.STRUCTURE_STORAGE
+import types.base.global.STRUCTURE_TOWER
 import types.base.prototypes.ConstructionSite
 import types.base.prototypes.Creep
 import types.base.prototypes.Room
@@ -36,7 +38,7 @@ object Context {
     //val towers: List<StructureTower> by lazyPerTick {
     //    myStuctures.values.filter { it.structureType == STRUCTURE_TOWER }.map { it as StructureTower }
     //}
-    val towers: List<StructureTower> = emptyList()
+    val towers: List<StructureTower> by lazyPerTick { myStuctures.values.filter { it.structureType == STRUCTURE_TOWER } as List<StructureTower> }
 
     private fun creepsByTarget(): Map<String, Creep> {
         return Context.creeps.filter { it.value.memory.targetId != null }
@@ -71,10 +73,9 @@ fun gameLoop() {
 
     for ((_, room) in Context.rooms) {
         buildStorage(room)
-        //buildTowers(room)
+        buildTowers(room)
 
         val hostiles = room.find<Creep>(FIND_HOSTILE_CREEPS)
-
         for (tower in Context.towers) {
             if (tower.room.name != room.name) continue
             if (hostiles.isNotEmpty() && tower.energy > 0) {
