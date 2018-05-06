@@ -59,6 +59,7 @@ task("deploy") {
     dependsOn build
     doLast {
         String kotlin = new File("$buildDir/kotlin-js-min/main/kotlin.js").getText('UTF-8')
+        String screepsTypes = new File("$buildDir/kotlin-js-min/main/screeps-kotlin-types.js").getText('UTF-8')
         String screepsCode = new File("$buildDir/kotlin-js-min/main/main.js").getText('UTF-8')
         String travelerCode = new File("traveler/Traveler.js").getText('UTF-8')
 
@@ -68,7 +69,10 @@ task("deploy") {
         client.uri = "https://screeps.com/api/user/code"
         client.headers["Authorization"] = 'Basic ' + ("$screepsUser:$screepsPassword".toString().bytes.encodeBase64())
         client.headers["Content-Type"] = "application/json"
-        client.post(body: [branch: branchName, modules: [main: screepsCode, kotlin: kotlin, Traveler : travelerCode]],
+        client.post(body: [branch: branchName, modules: [main: screepsCode,
+                                                         'screeps-kotlin-types' : screepsTypes,
+                                                         kotlin: kotlin,
+                                                         Traveler : travelerCode]],
                 requestContentType: JSON)
         client.handler.success = { resp, data ->
             println resp
