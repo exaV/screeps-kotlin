@@ -34,11 +34,14 @@ runDceTestKotlinJs.dceOptions.devMode = true
 repositories {
     mavenCentral()
     mavenLocal()
+    maven {
+        url "https://delconte.bintray.com/screeps-kotlin-types"
+    }
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
-    compile "ch.delconte.screeps-kotlin:screeps-kotlin-types:1.0.0-SNAPSHOT"
+    compile "ch.delconte.screeps-kotlin:screeps-kotlin-types:0.9.0"
 
     testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
 }
@@ -48,7 +51,7 @@ compileKotlin2Js {
     kotlinOptions.moduleKind = "umd"
     kotlinOptions.sourceMap = true
 
-    runDceKotlinJs.keep "main.loop" ,"main.Traveler", "Traveler"
+    runDceKotlinJs.keep "main.loop", "main.Traveler", "Traveler"
 }
 
 /**
