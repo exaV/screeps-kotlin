@@ -1,3 +1,5 @@
+import groovy.json.internal.LazyMap
+import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.RESTClient
 
 import static groovyx.net.http.ContentType.JSON
@@ -59,6 +61,7 @@ compileKotlin2Js {
  *
  */
 task("deploy") {
+    group = 'screeps'
     dependsOn build
     doLast {
         String kotlin = new File("$buildDir/kotlin-js-min/main/kotlin.js").getText('UTF-8')
@@ -72,21 +75,19 @@ task("deploy") {
         client.uri = "https://screeps.com/api/user/code"
         client.headers["Authorization"] = 'Basic ' + ("$screepsUser:$screepsPassword".toString().bytes.encodeBase64())
         client.headers["Content-Type"] = "application/json"
-        client.post(body: [branch: branchName, modules: [main: screepsCode,
-                                                         'screeps-kotlin-types' : screepsTypes,
-                                                         kotlin: kotlin,
-                                                         Traveler : travelerCode]],
-                requestContentType: JSON)
-        client.handler.success = { resp, data ->
-            println resp
-            resp.setData(data)
+        client.handler.success = { HttpResponseDecorator response, LazyMap data->
+            //screeps api is a bit weird, we get 200 OK even if branch does not exist
+            if (data.keySet().any { it.contains("error")}) throw new GradleScriptException(data.toString(),null)
             println data
         }
         client.handler.failure = { resp, data ->
-            println resp
             resp.setData(data)
             println data
         }
+        client.post(body: [branch: branchName, modules: [main: screepsCode,
+                                                         'screeps-kotlin-types' : screepsTypes,
+                                                         kotlin: kotlin,
+                                                         Traveler : travelerCode]], requestContentType: JSON)
     }
 
 
