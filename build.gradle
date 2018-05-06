@@ -33,10 +33,13 @@ runDceTestKotlinJs.dceOptions.devMode = true
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
+    compile "ch.delconte.screeps-kotlin:screeps-kotlin-types:1.0.0-SNAPSHOT"
+
     testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
 }
 
