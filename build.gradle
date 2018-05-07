@@ -8,10 +8,7 @@ buildscript {
     ext.kotlin_version = '1.2.41'
 
     repositories {
-        mavenCentral()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
+        jcenter()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -34,11 +31,8 @@ runDceKotlinJs.dceOptions.devMode = false
 runDceTestKotlinJs.dceOptions.devMode = true
 
 repositories {
-    mavenCentral()
+    jcenter()
     mavenLocal()
-    maven {
-        url "https://dl.bintray.com/exav/screeps-kotlin"
-    }
 }
 
 dependencies {
