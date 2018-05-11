@@ -18,6 +18,11 @@ var CreepMemory.assignedEnergySource: String?
     get() = this.asDynamic().energysource
     set(value) = run { this.asDynamic().energysource = value }
 
+
+var CreepMemory.missionId: String?
+    get() = this.asDynamic().missionId
+    set(value) = run { this.asDynamic().missionId = value }
+
 enum class CreepState {
     UNKNOWN, IDLE, BUSY, REFILL, TRANSFERRING_ENERGY, CONSTRUCTING, UPGRADING, REPAIR
 }
