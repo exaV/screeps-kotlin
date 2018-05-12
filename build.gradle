@@ -5,15 +5,18 @@ import groovyx.net.http.RESTClient
 import static groovyx.net.http.ContentType.JSON
 
 buildscript {
-    ext.kotlin_version = '1.2.41'
+    ext.kotlin_version = '1.2.40'
+    ext.serialization_version = '0.5.0'
 
     repositories {
         jcenter()
+        maven { url "https://kotlin.bintray.com/kotlinx" }
+
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlinx:kotlinx-gradle-serialization-plugin:$serialization_version"
         classpath "org._10ne.gradle:rest-gradle-plugin:0.4.2"
-
     }
 }
 
@@ -25,6 +28,7 @@ group 'egdf'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'kotlin2js'
+apply plugin: 'kotlinx-serialization'
 apply plugin: 'kotlin-dce-js'
 
 runDceKotlinJs.dceOptions.devMode = false
@@ -33,11 +37,13 @@ runDceTestKotlinJs.dceOptions.devMode = true
 repositories {
     jcenter()
     mavenLocal()
+    maven { url "https://kotlin.bintray.com/kotlinx" }
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
     compile "ch.delconte.screeps-kotlin:screeps-kotlin-types:0.9.0"
+    compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$serialization_version"
 
     testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
 }
@@ -59,6 +65,7 @@ task("deploy") {
     dependsOn build
     doLast {
         String kotlin = new File("$buildDir/kotlin-js-min/main/kotlin.js").getText('UTF-8')
+        String kotlinxSerialisation = new File("$buildDir/kotlin-js-min/main/kotlinx-serialization-runtime-js.js").getText('UTF-8')
         String screepsTypes = new File("$buildDir/kotlin-js-min/main/screeps-kotlin-types.js").getText('UTF-8')
         String screepsCode = new File("$buildDir/kotlin-js-min/main/main.js").getText('UTF-8')
         String travelerCode = new File("traveler/Traveler.js").getText('UTF-8')
@@ -69,19 +76,20 @@ task("deploy") {
         client.uri = "https://screeps.com/api/user/code"
         client.headers["Authorization"] = 'Basic ' + ("$screepsUser:$screepsPassword".toString().bytes.encodeBase64())
         client.headers["Content-Type"] = "application/json"
-        client.handler.success = { HttpResponseDecorator response, LazyMap data->
+        client.handler.success = { HttpResponseDecorator response, LazyMap data ->
             //screeps api is a bit weird, we get 200 OK even if branch does not exist
-            if (data.keySet().any { it.contains("error")}) throw new GradleScriptException(data.toString(),null)
+            if (data.keySet().any { it.contains("error") }) throw new GradleScriptException(data.toString(), null)
             println data
         }
         client.handler.failure = { resp, data ->
             resp.setData(data)
             println data
         }
-        client.post(body: [branch: branchName, modules: [main: screepsCode,
-                                                         'screeps-kotlin-types' : screepsTypes,
-                                                         kotlin: kotlin,
-                                                         Traveler : travelerCode]], requestContentType: JSON)
+        client.post(body: [branch: branchName, modules: [main                              : screepsCode,
+                                                         'screeps-kotlin-types'            : screepsTypes,
+                                                         kotlin                            : kotlin,
+                                                         'kotlinx-serialization-runtime-js': kotlinxSerialisation,
+                                                         Traveler                          : travelerCode]], requestContentType: JSON)
     }
 
 

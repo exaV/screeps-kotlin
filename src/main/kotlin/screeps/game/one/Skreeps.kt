@@ -1,6 +1,8 @@
 package screeps.game.one
 
 
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JSON
 import screeps.game.one.behaviours.BusyBehaviour
 import screeps.game.one.behaviours.IdleBehaviour
 import screeps.game.one.behaviours.RefillEnergy
@@ -9,10 +11,7 @@ import screeps.game.one.building.buildTowers
 import screeps.game.one.kreeps.BodyDefinition
 import screeps.game.tutorials.tutorial4.houseKeeping
 import types.base.get
-import types.base.global.FIND_HOSTILE_CREEPS
-import types.base.global.Game
-import types.base.global.STRUCTURE_STORAGE
-import types.base.global.STRUCTURE_TOWER
+import types.base.global.*
 import types.base.prototypes.ConstructionSite
 import types.base.prototypes.Creep
 import types.base.prototypes.Room
@@ -23,7 +22,6 @@ import types.base.prototypes.structures.StructureTower
 import types.base.toMap
 import types.extensions.copy
 import types.extensions.lazyPerTick
-
 
 object Context {
     //built-in
@@ -111,7 +109,39 @@ fun gameLoop() {
 
 }
 
+@Serializable
+data class SuperAge(var age: Int = 21, var deceased: Boolean = false)
+
+@Serializable
+data class CreepRequest(val name: String = "joe", var age: SuperAge = SuperAge())
+
+@Serializable
+data class CreepRequestList(val creeps: List<CreepRequest> = emptyList())
+
+var Memory.list: CreepRequestList?
+    get() {
+        val internal = this.asDynamic().testlist
+        return if (internal == null) null else JSON.parse<CreepRequestList>(internal)
+    }
+    set(value) {
+        val strinversion = if (value == null) null else JSON.stringify(value)
+        println("stringified=$strinversion")
+        this.asDynamic().testlist = strinversion
+    }
+
 fun sandbox() {
+    val list = Memory.list
+    if (list == null) {
+        Memory.list = CreepRequestList(listOf(CreepRequest(), CreepRequest("phillip")))
+        println("inserting $list of ${Memory.list!!.creeps.first()}")
+    } else {
+        println("list is $list}")
+        for ((name, age) in list.creeps) {
+            println("$name is $age old")
+        }
+        Memory.list = null
+
+    }
 
 
 }
