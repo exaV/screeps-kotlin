@@ -56,8 +56,6 @@ object GlobalSpawnQueue {
                 modified = true
             }
         }
-
-        modified = true;
     }
 
     /**

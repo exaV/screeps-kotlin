@@ -58,7 +58,7 @@ fun gameLoop() {
     val workerCount = Context.creeps.count { it.key.startsWith(BodyDefinition.BASIC_WORKER.name) }
     val haulerCount = Context.creeps.count { it.key.startsWith(BodyDefinition.HAULER.name) }
     if (minerCount < minMiners) {
-        if (GlobalSpawnQueue.spawnQueue.count { it.bodyDefinition.name == BodyDefinition.MINER.name } < minMiners - minerCount) {
+        if (GlobalSpawnQueue.spawnQueue.count { it.bodyDefinition.name.startsWith(BodyDefinition.MINER.name) } < minMiners - minerCount) {
             // TODO we cannot spawn small miners
             GlobalSpawnQueue.push(BodyDefinition.MINER_BIG)
         }
