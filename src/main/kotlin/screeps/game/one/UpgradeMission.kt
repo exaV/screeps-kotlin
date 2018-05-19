@@ -21,39 +21,38 @@ var Memory.missions: Missions
 
 
 /**
- * Mission to upgrade a controller
+ * Mission to upgrade a controller using multiple creeps to carry energy
  * Can be cached safely
+ *
+ * @throws IllegalStateException if it can't be initialized
  */
 class UpgradeMission(val controllerId: String) {
     private val controller: StructureController
-    val missionId = controllerId
-    val minWorkerCount = 3
-    val workers: MutableList<Creep> = mutableListOf()
+    private val missionId = controllerId
+    private val minWorkerCount = 3
+    private val workers: MutableList<Creep> = mutableListOf()
 
     init {
 
         val controllerFromMemory = Game.getObjectById<StructureController>(controllerId)
-        if (controllerFromMemory == null) {
-            //somehow the controller got destroyed or captured
-            println()
-            throw IllegalStateException("could not load controller for id $controllerId")
-        } else controller = controllerFromMemory
+        controller = controllerFromMemory ?:
+                throw IllegalStateException("could not load controller for id $controllerId") // captured
 
         workers.addAll(Context.creeps.values.filter { it.memory.missionId == missionId })
-
-
-        // make sure we have everything in memory we need to restore ourselves
-        Memory.missions
     }
 
 
     fun execute() {
 
         if (workers.size < minWorkerCount) {
-            // check if there are any that are not yet assigned to us
-            requestCreep(BodyDefinition.BASIC_WORKER, KreepSpawnOptions(CreepState.UPGRADING, missionId))
-        }
+            workers.clear()
+            workers.addAll(Context.creeps.values.filter { it.memory.missionId == missionId })
 
+            if (workers.size < minWorkerCount) {
+                // check if there are any that are not yet assigned to us
+                requestCreep(BodyDefinition.BASIC_WORKER, KreepSpawnOptions(CreepState.UPGRADING, missionId))
+            }
+        }
 
         for (worker in workers) {
             if (worker.upgradeController(controller) == ERR_NOT_IN_RANGE) {

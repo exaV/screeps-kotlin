@@ -1,8 +1,10 @@
 package screeps.game.one.kreeps
 
+import kotlinx.serialization.Serializable
 import types.base.get
 import types.base.global.*
 
+@Serializable
 enum class BodyDefinition(val bodyPartConstant: Array<BodyPartConstant>, val maxSize: Int = 0) {
     BASIC_WORKER(arrayOf(WORK, CARRY, MOVE), maxSize = 5),
     MINER(arrayOf(WORK, WORK, MOVE), maxSize = 2),
