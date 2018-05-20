@@ -21,7 +21,7 @@ fun StructureSpawn.spawn(bodyDefinition: BodyDefinition, spawnOptions: KreepSpaw
     )
     return when (code) {
         OK -> {
-            println("spawning $newName with body $body")
+            println("spawning $newName with spawnOptions $spawnOptions")
             true
         }
         ERR_NOT_ENOUGH_ENERGY, ERR_BUSY -> false // do nothing
@@ -57,12 +57,12 @@ object GlobalSpawnQueue {
 
     fun spawnCreeps(spawns: List<StructureSpawn>) {
         if (queue.isEmpty()) return
-
+        if (queue.size > 5) println("spawnqueue has size ${queue.size} with first 10 ${queue.take(10)}")
         for (spawn in spawns) {
             if (queue.isEmpty() || spawn.spawning != null) continue
-            val (bodyDefinition) = queue.first()
+            val (bodyDefinition, spawnOptions) = queue.first()
 
-            if (spawn.spawn(bodyDefinition, null)) {
+            if (spawn.spawn(bodyDefinition, spawnOptions)) {
                 queue.removeAt(0)
                 modified = true
             }
@@ -109,11 +109,11 @@ data class SpawnInfo(val bodyDefinition: BodyDefinition, val spawnOptions: Kreep
 data class CreepSpawnList(val queue: List<SpawnInfo>)
 
 @Serializable
-class KreepSpawnOptions(
-    private val state: CreepState = CreepState.IDLE,
-    private val missionId: String? = null,
-    private val targetId: String? = null,
-    private val assignedEnergySource: String? = null
+data class KreepSpawnOptions(
+    val state: CreepState = CreepState.IDLE,
+    val missionId: String? = null,
+    val targetId: String? = null,
+    val assignedEnergySource: String? = null
 ) {
     fun toSpawnOptions(): SpawnOptions {
         return object : SpawnOptions {

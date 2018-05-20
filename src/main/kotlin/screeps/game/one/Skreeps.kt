@@ -60,7 +60,7 @@ fun gameLoop() {
     if (minerCount < minMiners) {
         if (GlobalSpawnQueue.spawnQueue.count { it.bodyDefinition.name.startsWith(BodyDefinition.MINER.name) } < minMiners - minerCount) {
             // TODO we cannot spawn small miners
-            GlobalSpawnQueue.push(BodyDefinition.MINER_BIG)
+            GlobalSpawnQueue.push(BodyDefinition.MINER_BIG, KreepSpawnOptions(CreepState.REFILL))
         }
     }
     if (workerCount < minWorkers) {
@@ -73,6 +73,14 @@ fun gameLoop() {
             GlobalSpawnQueue.push(BodyDefinition.HAULER)
         }
     }
+
+
+//    if (Missions.activeMissions.isEmpty() && Missions.missionMemory.upgradeMissions.isEmpty()) {
+//        val q = RoomUpgradeMission(mainSpawn.room.controller!!.id)
+//        Missions.missionMemory.upgradeMissions.add(q.memory)
+//        Missions.activeMissions.add(q)
+//    }
+
 
     GlobalSpawnQueue.spawnCreeps(listOf(mainSpawn))
 
@@ -95,6 +103,13 @@ fun gameLoop() {
 
     val refillEnergy = RefillEnergy()
     val idleBehaviour = IdleBehaviour()
+
+    Missions.load()
+
+    for (mission in Missions.activeMissions) {
+        mission.update();
+    }
+
     for ((_, creep) in Context.creeps) {
         if (creep.spawning) continue
 
@@ -110,6 +125,7 @@ fun gameLoop() {
     }
 
     GlobalSpawnQueue.save()
+    Missions.save()
 
     sandbox()
 }

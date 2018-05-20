@@ -5,7 +5,8 @@ import kotlinx.serialization.json.JSON
 import types.base.global.Memory
 
 abstract class Mission(open val parent: Mission? = null) {
-
+    abstract val id: String
+    abstract fun update();
 }
 
 
@@ -14,9 +15,18 @@ data class MissionMemory(val upgradeMissions: MutableList<UpgradeMissionMemory>)
 
 object Missions {
     val missionMemory: MissionMemory
+    val activeMissions: MutableList<Mission> = mutableListOf()
 
     init {
         missionMemory = Memory.missionMemory ?: MissionMemory(mutableListOf())
+    }
+
+    fun load() {
+        for (upgrademission in missionMemory.upgradeMissions) {
+            if (activeMissions.none { it.id == upgrademission.id }) {
+                activeMissions.add(RoomUpgradeMission(upgrademission.controllerId))
+            }
+        }
     }
 
     fun save() {
@@ -30,7 +40,6 @@ object Missions {
         }
         set(value) {
             val stringyfied = if (value == null) null else JSON.stringify(value)
-            println("missionMemory=$stringyfied")
             this.asDynamic().missionMemory = stringyfied
         }
 }
