@@ -67,6 +67,12 @@ class IdleBehaviour {
                 creep.memory.targetId = structure.id
                 println("repairing ${structure.structureType} (${structure.id})")
             }
+
+            controller?.level == 8 && controller.ticksToDowngrade < 10_000 && Context.creeps.none { it.value.memory.state == CreepState.UPGRADING } -> {
+                creep.memory.state = CreepState.UPGRADING
+                creep.memory.targetId = controller.id
+            }
+
             creep.room.energyAvailable < creep.room.energyCapacityAvailable -> {
                 creep.memory.state = CreepState.TRANSFERRING_ENERGY
 
