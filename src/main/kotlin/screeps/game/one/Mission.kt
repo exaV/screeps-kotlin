@@ -5,7 +5,7 @@ import kotlinx.serialization.json.JSON
 import types.base.global.Memory
 
 abstract class Mission(open val parent: Mission? = null) {
-    abstract val id: String
+    abstract val missionId: String
     abstract fun update();
 }
 
@@ -23,7 +23,7 @@ object Missions {
 
     fun load() {
         for (upgrademission in missionMemory.upgradeMissions) {
-            if (activeMissions.none { it.id == upgrademission.id }) {
+            if (activeMissions.none { it.missionId == upgrademission.id }) {
                 activeMissions.add(RoomUpgradeMission(upgrademission.controllerId))
             }
         }

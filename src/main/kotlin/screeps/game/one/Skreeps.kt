@@ -76,7 +76,7 @@ fun gameLoop() {
 
 
 //    if (Missions.activeMissions.isEmpty() && Missions.missionMemory.upgradeMissions.isEmpty()) {
-//        val q = RoomUpgradeMission(mainSpawn.room.controller!!.id)
+//        val q = RoomUpgradeMission(mainSpawn.room.controller!!.missionId)
 //        Missions.missionMemory.upgradeMissions.add(q.memory)
 //        Missions.activeMissions.add(q)
 //    }

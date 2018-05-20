@@ -21,30 +21,35 @@ import types.base.prototypes.structures.StructureController
  * @throws IllegalStateException if it can't be initialized
  */
 abstract class UpgradeMission(controllerId: String) : Mission() {
-    override val id = "upgrade_$controllerId"
+    override val missionId = "upgrade_$controllerId"
     val controller: StructureController
-    val missionId = controllerId
 
     init {
         val controllerFromMemory = Game.getObjectById<StructureController>(controllerId)
         controller = controllerFromMemory ?:
                 throw IllegalStateException("could not load controller for controllerId $controllerId") // captured
     }
+
+    abstract fun abort()
 }
 
 
 class RoomUpgradeMission(controllerId: String) : UpgradeMission(controllerId) {
+
+    companion object {
+        const val maxLevel = 8
+    }
 
     enum class State {
         EARLY, LINK, RCL8_MAINTENANCE, RCL8_IDLE
     }
 
     val memory: UpgradeMissionMemory
-    var mission: UpgradeMission
+    var mission: UpgradeMission?
 
     init {
-        memory = Missions.missionMemory.upgradeMissions.find { it.id == id } ?:
-                UpgradeMissionMemory(id, controllerId, State.EARLY)
+        memory = Missions.missionMemory.upgradeMissions.find { it.id == missionId } ?:
+                UpgradeMissionMemory(missionId, controllerId, State.EARLY)
 
         @Suppress("WhenWithOnlyElse")
         when (memory.state) {
@@ -53,7 +58,22 @@ class RoomUpgradeMission(controllerId: String) : UpgradeMission(controllerId) {
     }
 
     override fun update() {
-        mission.update()
+        if (controller.level == maxLevel) {
+            if (memory.state == State.RCL8_IDLE && controller.ticksToDowngrade < 100_000) {
+                memory.state = State.RCL8_MAINTENANCE
+                mission = EarlyGameUpgradeMission(this, controller.id, 1)
+            } else if (controller.ticksToDowngrade > 140_000) {
+                memory.state = State.RCL8_IDLE
+                mission?.abort()
+                mission = null
+            }
+        }
+
+        mission?.update()
+    }
+
+    override fun abort() {
+        if (controller.my) throw IllegalStateException("stopping to upgrade my controller in Room ${controller.room}")
     }
 }
 
@@ -88,6 +108,14 @@ class EarlyGameUpgradeMission(
                 worker.memory.state = CreepState.UPGRADING
                 worker.memory.targetId = controller.id
             }
+        }
+    }
+
+    override fun abort() {
+        // return workers to pool
+        for (worker in workers) {
+            worker.memory.missionId = null
+            worker.memory.state = CreepState.IDLE
         }
     }
 }
