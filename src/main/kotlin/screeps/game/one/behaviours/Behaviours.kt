@@ -28,7 +28,9 @@ class IdleBehaviour {
     var structureThatNeedRepairingIndex = 0
 
     fun run(creep: Creep, spawn: StructureSpawn) {
+        if (creep.memory.missionId != null) return // we do not care about creeps on a mission
         creep.memory.targetId = null //just making sure it is reset
+
 
         val constructionSite = creep.findClosest(creep.room.findConstructionSites())
         val controller = creep.room.controller
