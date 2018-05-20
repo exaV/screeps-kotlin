@@ -11,7 +11,9 @@ import types.base.prototypes.findConstructionSites
 import types.base.prototypes.findStructures
 import types.base.prototypes.structures.EnergyContainingStructure
 import types.base.prototypes.structures.Structure
+import types.base.prototypes.structures.StructureRoad
 import types.base.prototypes.structures.StructureSpawn
+import kotlin.js.Math.random
 
 class IdleBehaviour {
     fun structuresThatNeedRepairing(): List<Structure> {
@@ -85,13 +87,30 @@ class IdleBehaviour {
                 creep.memory.targetId = controller.id
             }
             else -> { //get out of the way
-                //val xScale = random()
-                //val yScale = random()
-                //creep.moveTo(RoomPosition(spawn.pos.x + xScale * 10, spawn.pos.y + yScale * 10, ""))
+                if (creep.pos.look().any { it.structure is StructureRoad }) {
+                    println("${creep.name}! Quit stadning on a road like a dumbass!")
+                    creep.moveInRandomDirection()
+                }
             }
 
         }
 
+    }
+
+    fun Creep.moveInRandomDirection() {
+        val rand = random()
+
+        val direction = when {
+            rand < 0.125 -> TOP
+            rand < 0.25 -> TOP_RIGHT
+            rand < 0.375 -> RIGHT
+            rand < 0.5 -> BOTTOM_RIGHT
+            rand < 0.625 -> BOTTOM
+            rand < 0.75 -> BOTTOM_LEFT
+            rand < 0.875 -> LEFT
+            else -> TOP_LEFT
+        }
+        move(direction)
     }
 
     private fun notEnoughtSpawnEnergy(room: Room) =
