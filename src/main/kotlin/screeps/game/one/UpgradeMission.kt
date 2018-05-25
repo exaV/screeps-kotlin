@@ -37,12 +37,13 @@ class RoomUpgradeMission(private val memory: UpgradeMissionMemory) : UpgradeMiss
 
     companion object {
         const val maxLevel = 8
-        fun forRoom(room: Room): RoomUpgradeMission {
+        fun forRoom(room: Room, state: State = State.EARLY): RoomUpgradeMission {
             val controller = room.controller ?: throw IllegalStateException("Roomcontroller null")
-            val memory = UpgradeMissionMemory(controller.id, State.EARLY)
+            val memory = UpgradeMissionMemory(controller.id, state)
             val mission = RoomUpgradeMission(memory)
-            Missions.missionMemory.missions.add(memory)
+            Missions.missionMemory.upgradeMissionMemory.add(memory)
             Missions.activeMissions.add(mission)
+            println("spawning persistent RoomUpgradeMission for room ${room.name}")
             return mission
         }
     }

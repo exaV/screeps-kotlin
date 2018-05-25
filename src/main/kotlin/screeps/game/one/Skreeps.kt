@@ -106,7 +106,7 @@ fun gameLoop() {
 
     Missions.load()
 
-    if (Missions.activeMissions.isEmpty() && Missions.missionMemory.missions.isEmpty()) {
+    if (Missions.activeMissions.isEmpty() && Missions.missionMemory.upgradeMissionMemory.isEmpty()) {
         val mission = RoomUpgradeMission.forRoom(mainSpawn.room)
     }
 

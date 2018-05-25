@@ -11,7 +11,13 @@ abstract class Mission(open val parent: Mission? = null) {
 
 
 @Serializable
-data class ActiveMissionMemory(val missions: MutableList<MissionMemory<out Mission>>)
+data class ActiveMissionMemory(
+    /*
+    Rightnow there is no polymorphic serializer for kotlin-js so we have to resort to this
+     */
+    val upgradeMissionMemory: MutableList<UpgradeMissionMemory> = mutableListOf(),
+    val colonizeMissionMemory: MutableList<ColonizeMissionMemory> = mutableListOf()
+)
 
 object Missions {
     val missionMemory: ActiveMissionMemory
@@ -22,7 +28,12 @@ object Missions {
     }
 
     fun load() {
-        for (memory in missionMemory.missions) {
+        for (memory in missionMemory.upgradeMissionMemory) {
+            if (activeMissions.none { it.missionId == memory.missionId }) {
+                activeMissions.add(memory.restoreMission())
+            }
+        }
+        for (memory in missionMemory.colonizeMissionMemory) {
             if (activeMissions.none { it.missionId == memory.missionId }) {
                 activeMissions.add(memory.restoreMission())
             }
