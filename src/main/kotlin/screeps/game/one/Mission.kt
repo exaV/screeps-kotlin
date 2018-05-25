@@ -11,14 +11,14 @@ abstract class Mission(open val parent: Mission? = null) {
 
 
 @Serializable
-data class MissionMemory(val upgradeMissions: MutableList<UpgradeMissionMemory>)
+data class ActiveMissionMemory(val upgradeMissions: MutableList<UpgradeMissionMemory>)
 
 object Missions {
-    val missionMemory: MissionMemory
+    val missionMemory: ActiveMissionMemory
     val activeMissions: MutableList<Mission> = mutableListOf()
 
     init {
-        missionMemory = Memory.missionMemory ?: MissionMemory(mutableListOf())
+        missionMemory = Memory.activeMissionMemory ?: ActiveMissionMemory(mutableListOf())
     }
 
     fun load() {
@@ -30,10 +30,10 @@ object Missions {
     }
 
     fun save() {
-        Memory.missionMemory = missionMemory
+        Memory.activeMissionMemory = missionMemory
     }
 
-    private var Memory.missionMemory: MissionMemory?
+    private var Memory.activeMissionMemory: ActiveMissionMemory?
         get() {
             val internal = this.asDynamic().missionMemory
             return if (internal == null) null else JSON.parse(internal)
