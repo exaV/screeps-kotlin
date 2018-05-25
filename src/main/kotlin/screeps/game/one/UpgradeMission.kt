@@ -62,7 +62,7 @@ class RoomUpgradeMission(controllerId: String) : UpgradeMission(controllerId) {
             if (memory.state == State.RCL8_IDLE && controller.ticksToDowngrade < 100_000) {
                 memory.state = State.RCL8_MAINTENANCE
                 mission = EarlyGameUpgradeMission(this, controller.id, 1)
-            } else if (controller.ticksToDowngrade > 140_000) {
+            } else if (memory.state == State.RCL8_MAINTENANCE && controller.ticksToDowngrade > 140_000) {
                 memory.state = State.RCL8_IDLE
                 mission?.abort()
                 mission = null
