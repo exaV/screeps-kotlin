@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 import screeps.game.one.kreeps.BodyDefinition
 import types.base.global.Game
 import types.base.prototypes.Creep
+import types.base.prototypes.Room
 import types.base.prototypes.structures.StructureController
 
 //sealed class UpgradeMission1
@@ -21,44 +22,52 @@ import types.base.prototypes.structures.StructureController
  * @throws IllegalStateException if it can't be initialized
  */
 abstract class UpgradeMission(controllerId: String) : Mission() {
-    override val missionId = "upgrade_$controllerId"
     val controller: StructureController
 
     init {
         val controllerFromMemory = Game.getObjectById<StructureController>(controllerId)
-        controller = controllerFromMemory ?:
-                throw IllegalStateException("could not load controller for controllerId $controllerId") // captured
+        controller = controllerFromMemory ?: throw IllegalStateException("could not load controller for controllerId $controllerId") // captured
     }
 
     abstract fun abort()
 }
 
 
-class RoomUpgradeMission(controllerId: String) : UpgradeMission(controllerId) {
+class RoomUpgradeMission(private val memory: UpgradeMissionMemory) : UpgradeMission(memory.controllerId) {
 
     companion object {
         const val maxLevel = 8
+        fun forRoom(room: Room): RoomUpgradeMission {
+            val controller = room.controller ?: throw IllegalStateException("Roomcontroller null")
+            val memory = UpgradeMissionMemory(controller.id, State.EARLY)
+            val mission = RoomUpgradeMission(memory)
+            Missions.missionMemory.missions.add(memory)
+            Missions.activeMissions.add(mission)
+            return mission
+        }
     }
 
     enum class State {
         EARLY, LINK, RCL8_MAINTENANCE, RCL8_IDLE
     }
 
-    val memory: UpgradeMissionMemory
+    override val missionId: String = memory.missionId
     var mission: UpgradeMission?
 
     init {
-        memory = Missions.missionMemory.upgradeMissions.find { it.id == missionId } ?:
-                UpgradeMissionMemory(missionId, controllerId, State.EARLY)
 
         @Suppress("WhenWithOnlyElse")
         when (memory.state) {
-            else -> mission = EarlyGameUpgradeMission(this, controllerId, if (controller.level == 8) 1 else 3)
+            else -> mission = EarlyGameUpgradeMission(this, memory.controllerId, if (controller.level == 8) 1 else 3)
         }
     }
 
     override fun update() {
         if (controller.level == maxLevel) {
+            if (memory.state == State.EARLY) {
+                memory.state = State.RCL8_MAINTENANCE
+            }
+
             if (memory.state == State.RCL8_IDLE && controller.ticksToDowngrade < 100_000) {
                 memory.state = State.RCL8_MAINTENANCE
                 mission = EarlyGameUpgradeMission(this, controller.id, 1)
@@ -82,6 +91,9 @@ class EarlyGameUpgradeMission(
     controllerId: String,
     private val minWorkerCount: Int
 ) : UpgradeMission(controllerId) {
+
+    override val missionId: String
+        get() = parent.missionId
 
     private val workers: MutableList<Creep> = mutableListOf()
 
@@ -121,4 +133,11 @@ class EarlyGameUpgradeMission(
 }
 
 @Serializable
-class UpgradeMissionMemory(val id: String, val controllerId: String, var state: RoomUpgradeMission.State)
+class UpgradeMissionMemory(val controllerId: String, var state: RoomUpgradeMission.State) : MissionMemory<RoomUpgradeMission>() {
+    override val missionId: String
+        get() = "upgrade_$controllerId"
+
+    override fun restoreMission(): RoomUpgradeMission {
+        return RoomUpgradeMission(this)
+    }
+}

@@ -106,8 +106,12 @@ fun gameLoop() {
 
     Missions.load()
 
+    if (Missions.activeMissions.isEmpty() && Missions.missionMemory.missions.isEmpty()) {
+        val mission = RoomUpgradeMission.forRoom(mainSpawn.room)
+    }
+
     for (mission in Missions.activeMissions) {
-        mission.update();
+        mission.update()
     }
 
     for ((_, creep) in Context.creeps) {

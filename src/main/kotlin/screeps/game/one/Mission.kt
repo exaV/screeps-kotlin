@@ -6,12 +6,12 @@ import types.base.global.Memory
 
 abstract class Mission(open val parent: Mission? = null) {
     abstract val missionId: String
-    abstract fun update();
+    abstract fun update()
 }
 
 
 @Serializable
-data class ActiveMissionMemory(val upgradeMissions: MutableList<UpgradeMissionMemory>)
+data class ActiveMissionMemory(val missions: MutableList<MissionMemory<out Mission>>)
 
 object Missions {
     val missionMemory: ActiveMissionMemory
@@ -22,9 +22,9 @@ object Missions {
     }
 
     fun load() {
-        for (upgrademission in missionMemory.upgradeMissions) {
-            if (activeMissions.none { it.missionId == upgrademission.id }) {
-                activeMissions.add(RoomUpgradeMission(upgrademission.controllerId))
+        for (memory in missionMemory.missions) {
+            if (activeMissions.none { it.missionId == memory.missionId }) {
+                activeMissions.add(memory.restoreMission())
             }
         }
     }
@@ -35,11 +35,16 @@ object Missions {
 
     private var Memory.activeMissionMemory: ActiveMissionMemory?
         get() {
-            val internal = this.asDynamic().missionMemory
+            val internal = this.asDynamic()._missionMemory
             return if (internal == null) null else JSON.parse(internal)
         }
         set(value) {
             val stringyfied = if (value == null) null else JSON.stringify(value)
-            this.asDynamic().missionMemory = stringyfied
+            this.asDynamic()._missionMemory = stringyfied
         }
+}
+
+abstract class MissionMemory<T : Mission> {
+    abstract val missionId: String
+    abstract fun restoreMission(): T
 }

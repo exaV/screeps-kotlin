@@ -17,7 +17,7 @@ class ColonizeMission(val memory: ColonizeMissionMemory) : Mission() {
         }
     }
 
-    override val missionId: String = memory.id
+    override val missionId: String = memory.missionId
     val pos = RoomPosition(memory.x, memory.y, memory.roomName)
 
     init {
@@ -32,14 +32,11 @@ class ColonizeMission(val memory: ColonizeMissionMemory) : Mission() {
 @Serializable
 class ColonizeMissionMemory(val x: Int, val y: Int, val roomName: String) : MissionMemory<ColonizeMission>() {
 
-    val id: String
+    override val missionId: String
         get() = "colonize_$roomName"
 
-    override fun restore(): ColonizeMission {
+    override fun restoreMission(): ColonizeMission {
         return ColonizeMission(this)
     }
 }
 
-abstract class MissionMemory<T : Mission> {
-    abstract fun restore(): T
-}
