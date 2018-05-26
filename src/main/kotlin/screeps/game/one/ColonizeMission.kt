@@ -43,7 +43,7 @@ class ColonizeMission(val memory: ColonizeMissionMemory) : Mission() {
 
     }
 
-    var claimer: Creep? = null
+    var claimerName: String? = null
 
     override fun update() {
         when (memory.state) {
@@ -52,23 +52,23 @@ class ColonizeMission(val memory: ColonizeMissionMemory) : Mission() {
                 if (claimer == null) {
                     requestCreepOnce(BodyDefinition.CLAIMER, KreepSpawnOptions(CreepState.CLAIM, missionId))
                 } else {
-                    this.claimer = claimer
+                    this.claimerName = claimer.name
                     memory.state = State.CLAIM
                 }
             }
 
             State.CLAIM -> {
-                val claimer = this.claimer
-                if (claimer == null || claimer.ticksToLive < 5) {
+                if (claimerName == null || claimerName !in Context.creeps) {
                     memory.state = State.SPAWNING_CLAIMER
                 } else {
+                    val claimer = Context.creeps[claimerName!!]!!
                     if (claimer.pos.inRangeTo(pos, 1)) {
                         if (claimer.room.controller?.my == true) {
                             memory.state == State.DONE
                         } else {
                             claimer.claimController(claimer.room.controller!!)
+                            //claimer.reserveController(claimer.room.controller!!)
                         }
-                        //claimer.reserveController(claimer.room.controller!!)
                     } else {
                         val res = claimer.travelTo(pos)
                         if (res != OK) {

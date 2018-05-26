@@ -38,7 +38,7 @@ val StructureController.availableExtensions
 
 fun buildRoads(room: Room) {
     val controller = room.controller
-    if (controller == null) {
+    if (controller == null || !controller.my) {
         println("cannot buildRoads() in room which is not under our control")
         return
     }
@@ -78,7 +78,7 @@ fun buildRoads(room: Room) {
 
 
 fun buildStorage(room: Room) {
-    if (room.controller?.my != true) return //not our room
+    if (room.controller == null || room.controller?.my == false) return //not our room
     if (room.controller!!.availableStorage != 1) return //cannot build storage yet
 
     val hasStorage = room.storage != null

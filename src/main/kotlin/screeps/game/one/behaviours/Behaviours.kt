@@ -17,8 +17,7 @@ import kotlin.js.Math.random
 
 class IdleBehaviour {
     fun structuresThatNeedRepairing(): List<Structure> {
-        if (Context.rooms.size > 1) println("not repairing myStuctures in all rooms")
-        val room = Context.rooms.values.first()
+        val room = Context.rooms.values.filter { it.controller?.my == true }.first()
 
         return room.findStructures().filterNot { Context.targets.containsKey(it.id) }
             .filter { it.hits < it.hitsMax / 2 }
