@@ -93,13 +93,20 @@ object GlobalSpawnQueue {
 
 fun requestCreep(bodyDefinition: BodyDefinition, spawnOptions: KreepSpawnOptions) {
 
-    val candidate = Context.creeps.values.firstOrNull { it.body.contentEquals(bodyDefinition.bodyPartConstant) }
+    val candidate = Context.creeps.values.firstOrNull { it.memory.state == CreepState.IDLE && it.body.contentEquals(bodyDefinition.bodyPartConstant) }
     if (candidate != null) {
         spawnOptions.transfer(candidate.memory)
     } else {
         GlobalSpawnQueue.push(bodyDefinition, spawnOptions)
     }
 
+}
+
+fun requestCreepOnce(bodyDefinition: BodyDefinition, spawnOptions: KreepSpawnOptions) {
+
+    if (GlobalSpawnQueue.spawnQueue.none { it.spawnOptions == spawnOptions && it.bodyDefinition == bodyDefinition }) {
+        requestCreep(bodyDefinition, spawnOptions)
+    }
 }
 
 @Serializable

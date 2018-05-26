@@ -31,7 +31,9 @@ enum class BodyDefinition(val bodyPartConstant: Array<BodyPartConstant>, val max
         )
     ),
     HAULER(arrayOf(CARRY, CARRY, MOVE), maxSize = 5),
-    SCOUT(arrayOf(MOVE), maxSize = 1);
+    SCOUT(arrayOf(MOVE), maxSize = 1),
+
+    CLAIMER(arrayOf(CLAIM, MOVE), maxSize = 1);
 
     val cost: Int
         get() = bodyPartConstant.sumBy { BODYPART_COST[it] }

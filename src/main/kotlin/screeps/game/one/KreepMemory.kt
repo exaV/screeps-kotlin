@@ -24,5 +24,5 @@ var CreepMemory.missionId: String?
     set(value) = run { this.asDynamic().missionId = value }
 
 enum class CreepState {
-    UNKNOWN, IDLE, BUSY, REFILL, TRANSFERRING_ENERGY, CONSTRUCTING, UPGRADING, REPAIR
+    UNKNOWN, IDLE, BUSY, REFILL, TRANSFERRING_ENERGY, CONSTRUCTING, UPGRADING, REPAIR, CLAIM
 }
