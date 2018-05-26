@@ -3,6 +3,7 @@ package screeps.game.one
 import kotlinx.serialization.Serializable
 import screeps.game.one.kreeps.BodyDefinition
 import traveler.travelTo
+import types.base.global.OK
 import types.base.prototypes.Creep
 import types.base.prototypes.Room
 import types.base.prototypes.RoomPosition
@@ -16,7 +17,13 @@ class ColonizeMission(val memory: ColonizeMissionMemory) : Mission() {
         }
 
         fun forRoom(room: RoomPosition): ColonizeMission {
-            return ColonizeMission(ColonizeMissionMemory(room.x, room.y, room.roomName))
+            val memory = ColonizeMissionMemory(room.x, room.y, room.roomName)
+            val mission = ColonizeMission(memory)
+            Missions.missionMemory.colonizeMissionMemory.add(memory)
+            Missions.activeMissions.add(mission)
+            println("spawning persistent ColonizeMission for room ${room.roomName}")
+
+            return mission
         }
     }
 
@@ -55,7 +62,6 @@ class ColonizeMission(val memory: ColonizeMissionMemory) : Mission() {
                 if (claimer == null || claimer.ticksToLive < 5) {
                     memory.state = State.SPAWNING_CLAIMER
                 } else {
-
                     if (claimer.pos.inRangeTo(pos, 1)) {
                         if (claimer.room.controller?.my == true) {
                             memory.state == State.DONE
@@ -64,7 +70,10 @@ class ColonizeMission(val memory: ColonizeMissionMemory) : Mission() {
                         }
                         //claimer.reserveController(claimer.room.controller!!)
                     } else {
-                        claimer.travelTo(pos)
+                        val res = claimer.travelTo(pos)
+                        if (res != OK) {
+                            println("claimer could not move to room ${pos.roomName} because of $res")
+                        }
                     }
                 }
             }

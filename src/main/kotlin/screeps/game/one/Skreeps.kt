@@ -12,6 +12,7 @@ import types.base.get
 import types.base.global.FIND_HOSTILE_CREEPS
 import types.base.global.Game
 import types.base.global.STRUCTURE_TOWER
+import types.base.iterator
 import types.base.prototypes.ConstructionSite
 import types.base.prototypes.Creep
 import types.base.prototypes.Room
@@ -105,6 +106,14 @@ fun gameLoop() {
     val idleBehaviour = IdleBehaviour()
 
     Missions.load()
+
+    //scan flags
+
+    for ((name, flag) in Game.flags) {
+        if (name == "colonize" && Missions.activeMissions.none { it is ColonizeMission && it.pos.roomName == flag.pos.roomName }) {
+            ColonizeMission.forRoom(flag.pos)
+        }
+    }
 
     if (Missions.activeMissions.isEmpty() && Missions.missionMemory.upgradeMissionMemory.isEmpty()) {
         val mission = RoomUpgradeMission.forRoom(mainSpawn.room)
