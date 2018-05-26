@@ -23,6 +23,7 @@ class ColonizeMission(val memory: ColonizeMissionMemory) : Mission() {
         SPAWNING_BUILDER,
         BUILD_SPAWN,
         NO_SPAWN_LOCATION,
+        DONE_BUILD,
         DONE
     }
 
@@ -98,6 +99,15 @@ class ColonizeMission(val memory: ColonizeMissionMemory) : Mission() {
                 }
             }
 
+            State.DONE_BUILD -> {
+                
+                workernames.map { Context.creeps[it] }.filterNotNull().forEach {
+                    it.memory.state = CreepState.IDLE
+                    it.memory.missionId = null
+                }
+                memory.state = State.DONE
+            }
+
             else -> {
             }
         }
@@ -113,13 +123,11 @@ class ColonizeMission(val memory: ColonizeMissionMemory) : Mission() {
                 val constructionSite = findSpawnPosition(Context.rooms[memory.roomName]!!)
                 if (constructionSite == null) {
                     if (worker.room.findStructures().any { it is StructureSpawn && it.my }) {
-                        memory.state = State.DONE
-                        worker.memory.state = CreepState.IDLE
-                        worker.memory.missionId = null
+                        memory.state = State.DONE_BUILD
                     } else {
                         memory.state = State.NO_SPAWN_LOCATION
-                        return
                     }
+                    return
 
                 } else {
                     worker.memory.targetId = constructionSite.id
