@@ -7,6 +7,9 @@ import types.base.global.Memory
 abstract class Mission(open val parent: Mission? = null) {
     abstract val missionId: String
     abstract fun update()
+
+    open var complete = false
+        protected set
 }
 
 
@@ -40,6 +43,14 @@ object Missions {
         }
     }
 
+    fun update() {
+        for (mission in activeMissions) {
+            mission.update()
+        }
+        activeMissions.removeAll { it.complete }
+        missionMemory.colonizeMissionMemory.removeAll { it.isComplete() }
+    }
+
     fun save() {
         Memory.activeMissionMemory = missionMemory
     }
@@ -58,4 +69,6 @@ object Missions {
 abstract class MissionMemory<T : Mission> {
     abstract val missionId: String
     abstract fun restoreMission(): T
+
+    open fun isComplete(): Boolean = false
 }

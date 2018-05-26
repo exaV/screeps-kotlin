@@ -12,24 +12,7 @@ import types.base.prototypes.structures.StructureSpawn
 
 class ColonizeMission(val memory: ColonizeMissionMemory) : Mission() {
 
-    companion object {
-        private const val MIN_WORKERS = 2
-        fun forRoom(room: Room): ColonizeMission {
-            val controller = room.controller ?: throw IllegalStateException("Room $room has no controller")
-            return forRoom(controller.pos)
-        }
-
-        fun forRoom(room: RoomPosition): ColonizeMission {
-            val memory = ColonizeMissionMemory(room.x, room.y, room.roomName)
-            val mission = ColonizeMission(memory)
-            Missions.missionMemory.colonizeMissionMemory.add(memory)
-            Missions.activeMissions.add(mission)
-            println("spawning persistent ColonizeMission for room ${room.roomName}")
-
-            return mission
-        }
-    }
-
+    override var complete = memory.isComplete()
     override val missionId: String = memory.missionId
     val pos = RoomPosition(memory.x, memory.y, memory.roomName)
 
@@ -166,6 +149,24 @@ class ColonizeMission(val memory: ColonizeMissionMemory) : Mission() {
             return null
         } else return constructionSite
     }
+
+    companion object {
+        private const val MIN_WORKERS = 2
+        fun forRoom(room: Room): ColonizeMission {
+            val controller = room.controller ?: throw IllegalStateException("Room $room has no controller")
+            return forRoom(controller.pos)
+        }
+
+        fun forRoom(room: RoomPosition): ColonizeMission {
+            val memory = ColonizeMissionMemory(room.x, room.y, room.roomName)
+            val mission = ColonizeMission(memory)
+            Missions.missionMemory.colonizeMissionMemory.add(memory)
+            Missions.activeMissions.add(mission)
+            println("spawning persistent ColonizeMission for room ${room.roomName}")
+
+            return mission
+        }
+    }
 }
 
 @Serializable
@@ -179,6 +180,8 @@ class ColonizeMissionMemory(var x: Int, var y: Int, val roomName: String) : Miss
     }
 
     var state: ColonizeMission.State = ColonizeMission.State.CLAIM
+
+    override fun isComplete() = state == ColonizeMission.State.DONE
 }
 
 sealed class ColonizeSubMission() {

@@ -49,7 +49,9 @@ fun gameLoop() {
 
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"])!!
 
-    houseKeeping(Context.creeps)
+    if (Game.time % 20 == 0) {
+        houseKeeping(Context.creeps)
+    }
 
     val energySources = mainSpawn.room.findEnergy()
     val minWorkers = energySources.size * 2
@@ -107,21 +109,16 @@ fun gameLoop() {
 
     Missions.load()
 
-    //scan flags
-
     for ((name, flag) in Game.flags) {
         if (name == "colonize" && Missions.activeMissions.none { it is ColonizeMission && it.pos.roomName == flag.pos.roomName }) {
             ColonizeMission.forRoom(flag.pos)
         }
     }
-
     if (Missions.activeMissions.isEmpty() && Missions.missionMemory.upgradeMissionMemory.isEmpty()) {
         val mission = RoomUpgradeMission.forRoom(mainSpawn.room)
     }
 
-    for (mission in Missions.activeMissions) {
-        mission.update()
-    }
+    Missions.update()
 
     for ((_, creep) in Context.creeps) {
         if (creep.spawning) continue
