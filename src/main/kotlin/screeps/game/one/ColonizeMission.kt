@@ -8,10 +8,12 @@ import types.base.global.OK
 import types.base.global.STRUCTURE_SPAWN
 import types.base.iterator
 import types.base.prototypes.*
+import types.base.prototypes.structures.StructureSpawn
 
 class ColonizeMission(val memory: ColonizeMissionMemory) : Mission() {
 
     companion object {
+        private const val MIN_WORKERS = 2
         fun forRoom(room: Room): ColonizeMission {
             val controller = room.controller ?: throw IllegalStateException("Room $room has no controller")
             return forRoom(controller.pos)
@@ -46,7 +48,8 @@ class ColonizeMission(val memory: ColonizeMissionMemory) : Mission() {
     }
 
     var claimerName: String? = null
-    var workerName: String? = null
+    val workernames: MutableList<String> = mutableListOf()
+
 
     override fun update() {
         when (memory.state) {
@@ -87,52 +90,67 @@ class ColonizeMission(val memory: ColonizeMissionMemory) : Mission() {
             }
 
             State.SPAWNING_BUILDER -> {
-                val worker = Context.creeps.values.find {
+                val workers = Context.creeps.values.filter {
                     it.memory.missionId == missionId && it.name.startsWith(BodyDefinition.BASIC_WORKER.name)
                 }
-                if (worker == null) {
+
+                if (workers.size < MIN_WORKERS) {
                     requestCreepOnce(BodyDefinition.BASIC_WORKER, KreepSpawnOptions(CreepState.REFILL, missionId))
                 } else {
-                    this.workerName = worker.name
+                    this.workernames.addAll(workers.map { it.name })
                     memory.state = State.BUILD_SPAWN
                 }
             }
 
             State.BUILD_SPAWN -> {
-                if (workerName == null || workerName !in Context.creeps) {
+                if (workernames.count { it in Context.creeps } < MIN_WORKERS) {
                     memory.state = State.SPAWNING_BUILDER
-                    return
+                    workernames.clear()
                 }
 
-                val worker = Context.creeps[workerName!!]!!
-                if (worker.carry.energy < worker.carryCapacity) return
-                worker.memory.state = CreepState.MISSION
-
-                if (worker.pos.roomName == pos.roomName) {
-                    if (worker.memory.targetId == null) {
-                        val constructionSite = findSpawnPosition(Context.rooms[memory.roomName]!!)
-                        if (constructionSite == null) {
-                            memory.state = State.NO_SPAWN_LOCATION
-                            return
-                        }
-                        worker.memory.targetId = constructionSite.id
-                    }
-                    if (worker.memory.state != CreepState.REFILL && worker.memory.state != CreepState.CONSTRUCTING) {
-                        worker.memory.state = CreepState.CONSTRUCTING
-                    }
-                } else {
-                    val res = worker.travelTo(pos)
-                    if (res != OK) {
-                        println("claimer could not move to room ${pos.roomName} because of $res")
-                    }
+                for (workerName in workernames) {
+                    if (workerName !in Context.creeps) continue
+                    val worker = Context.creeps[workerName]!!
+                    buildSpawn(worker)
                 }
-
             }
 
             else -> {
             }
         }
 
+    }
+
+    private fun buildSpawn(worker: Creep) {
+        if (worker.carry.energy < worker.carryCapacity) return
+        worker.memory.state = CreepState.MISSION
+
+        if (worker.pos.roomName == pos.roomName) {
+            if (worker.memory.targetId == null) {
+                val constructionSite = findSpawnPosition(Context.rooms[memory.roomName]!!)
+                if (constructionSite == null) {
+                    if (worker.room.findStructures().any { it is StructureSpawn && it.my }) {
+                        memory.state = State.DONE
+                        worker.memory.state = CreepState.IDLE
+                        worker.memory.missionId = null
+                    } else {
+                        memory.state = State.NO_SPAWN_LOCATION
+                        return
+                    }
+
+                } else {
+                    worker.memory.targetId = constructionSite.id
+                }
+            }
+            if (worker.memory.state != CreepState.REFILL && worker.memory.state != CreepState.CONSTRUCTING) {
+                worker.memory.state = CreepState.CONSTRUCTING
+            }
+        } else {
+            val res = worker.travelTo(pos)
+            if (res != OK) {
+                println("worker ${worker.name} could not move to room ${pos.roomName} because of $res")
+            }
+        }
     }
 
     private fun findSpawnPosition(room: Room): ConstructionSite? {
