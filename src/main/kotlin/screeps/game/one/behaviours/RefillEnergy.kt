@@ -12,19 +12,22 @@ import types.extensions.lazyPerTick
 
 class RefillEnergy {
     companion object {
-        const val MAX_MINER_PER_SOURCE = 1
+        const val MAX_MINER_WORK_PARTS_PER_SOURCE = 5
         const val MAX_CREEP_PER_DROPPED_ENERGY = 1
     }
 
     val droppedEnergyByRoom: MutableMap<Room, List<Resource>> = mutableMapOf()
     val minersByRoom: MutableMap<Room, Array<Creep>> = mutableMapOf()
 
-    val usedSourcesWithCreepCounts: Map<String, Int> by lazyPerTick {
-        Context.creeps
-            .map { it.value.memory.assignedEnergySource }
-            .filterNotNull()
-            .groupingBy { it }
-            .eachCount()
+    val usedSourcesWithCreepWORKCounts: MutableMap<String, Int> by lazyPerTick {
+
+        val sources = Context.creeps.values.mapNotNull { it.memory.assignedEnergySource }
+        val m = mutableMapOf<String, Int>()
+        for (source in sources) {
+            m[source] = Context.creeps.values.filter { it.memory.assignedEnergySource == source }
+                .sumBy { it.body.count { it.type == WORK } }
+        }
+        m
     }
 
     fun run(creep: Creep) {
@@ -32,6 +35,7 @@ class RefillEnergy {
             miner(creep)
         } else {
             val canWork = worker(creep)
+            miner(creep)
         }
     }
 
@@ -56,7 +60,7 @@ class RefillEnergy {
 
             when (source) {
                 is Creep -> refillFromMinerCreep(creep, source)
-                is Source -> println("my source is Source")
+                is Source -> run {} //println("my source is Source")
                 is Resource -> refillFromResource(creep, source)
                 is StructureContainer -> refillFromStructure(creep, source)
                 is StructureStorage -> refillFromStructure(creep, source)
@@ -129,7 +133,7 @@ class RefillEnergy {
         //find a source that is close and has some free spots
         for (energy in droppedEnergy) {
             if (energy.amount >= carryCapacity &&
-                usedSourcesWithCreepCounts.getOrElse(energy.id, { 0 }) < MAX_CREEP_PER_DROPPED_ENERGY
+                usedSourcesWithCreepWORKCounts.getOrElse(energy.id, { 0 }) < MAX_CREEP_PER_DROPPED_ENERGY
             ) {
                 return energy
             }
@@ -148,7 +152,7 @@ class RefillEnergy {
         })
         if (miners.isNotEmpty()) {
             //biggest miner first
-            // TODO this could be bad because usedSourcesWithCreepCounts only updated in the beginning of the tick
+            // TODO this could be bad because usedSourcesWithCreepWORKCounts only updated in the beginning of the tick
             // and many could be assigned to same miner
 
             if (isHauler) {
@@ -165,8 +169,8 @@ class RefillEnergy {
                 if (minerWithoutHauler != null) return minerWithoutHauler
 
             } else return miners.maxBy {
-                val creepsAssignedToMiner = usedSourcesWithCreepCounts[it.id] ?: 0
-                val minerOutput = it.body.count { it.partConstant == WORK } * 2
+                val creepsAssignedToMiner = usedSourcesWithCreepWORKCounts[it.id] ?: 0
+                val minerOutput = it.body.count { it.type == WORK } * 2
                 minerOutput.toDouble() / (creepsAssignedToMiner + 1)
             }
         }
@@ -291,14 +295,16 @@ class RefillEnergy {
 
     private fun Creep.requestSource(energySources: Array<Source>): Source? {
 
-        println("usedSourcesWithCreepCounts=$usedSourcesWithCreepCounts")
+        println("usedSourcesWithCreepWORKCounts=$usedSourcesWithCreepWORKCounts")
 
         //find a source that is close and has some free spots
         energySources.sort({ a, b -> (dist2(this.pos, a.pos) - dist2(this.pos, b.pos)) })
 
         for (energySource in energySources) {
-            if (usedSourcesWithCreepCounts.getOrElse(energySource.id, { 0 }) < MAX_MINER_PER_SOURCE) {
+            val bodyPartsUsed = usedSourcesWithCreepWORKCounts.getOrElse(energySource.id, { 0 })
+            if (bodyPartsUsed < MAX_MINER_WORK_PARTS_PER_SOURCE) {
                 //assign creep to energy source
+                usedSourcesWithCreepWORKCounts[energySource.id] = bodyPartsUsed + body.count { it.type == WORK }
                 return energySource
             }
         }

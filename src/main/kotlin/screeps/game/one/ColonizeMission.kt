@@ -99,19 +99,15 @@ class ColonizeMission(val memory: ColonizeMissionMemory) : Mission() {
             }
 
             State.BUILD_SPAWN -> {
-                println("build spawn with $workerName")
-
                 if (workerName == null || workerName !in Context.creeps) {
                     memory.state = State.SPAWNING_BUILDER
                     return
                 }
 
                 val worker = Context.creeps[workerName!!]!!
-                worker.say("hey!")
                 if (worker.carry.energy < worker.carryCapacity) return
                 worker.memory.state = CreepState.MISSION
 
-                println("worker $workerName preparing to move")
                 if (worker.pos.roomName == pos.roomName) {
                     if (worker.memory.targetId == null) {
                         val constructionSite = findSpawnPosition(Context.rooms[memory.roomName]!!)

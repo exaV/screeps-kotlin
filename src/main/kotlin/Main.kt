@@ -4,6 +4,8 @@ import screeps.game.one.gameLoop
 private object Traveler {
     init {
         js("var Traveler = require('Traveler');")
+        println("global reset!")
+        println("============================================================================================")
         println("imported traveler")
     }
 }
