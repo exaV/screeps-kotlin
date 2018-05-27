@@ -10,6 +10,7 @@ import screeps.game.one.kreeps.BodyDefinition
 import screeps.game.tutorials.tutorial4.houseKeeping
 import types.base.get
 import types.base.global.FIND_HOSTILE_CREEPS
+import types.base.global.FIND_MY_CREEPS
 import types.base.global.Game
 import types.base.global.STRUCTURE_TOWER
 import types.base.iterator
@@ -48,6 +49,15 @@ object Context {
 fun gameLoop() {
 
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"])!!
+    val secondarySpawn: StructureSpawn? = (Game.spawns["Spawn5"]) //FIXME 
+    secondarySpawn?.also {
+        val creeps = secondarySpawn.room.find<Creep>(FIND_MY_CREEPS)
+        if (creeps.count { it.name.startsWith(BodyDefinition.BASIC_WORKER.name) } < 3) {
+            secondarySpawn.spawn(BodyDefinition.BASIC_WORKER)
+        }
+
+    }
+
 
     if (Game.time % 20 == 0) {
         houseKeeping(Context.creeps)

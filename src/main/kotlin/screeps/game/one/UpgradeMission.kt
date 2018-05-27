@@ -112,7 +112,7 @@ class EarlyGameUpgradeMission(
                 && workers.size + GlobalSpawnQueue.spawnQueue.count { it.spawnOptions.missionId == missionId } < minWorkerCount
             ) {
                 requestCreep(BodyDefinition.BASIC_WORKER, KreepSpawnOptions(CreepState.UPGRADING, missionId))
-                println("requested creep for mission EarlyGameUpgradeMission in room ${controller.room}")
+                println("requested creep for EarlyGameUpgradeMission $missionId in ${controller.room}")
             }
         }
 
