@@ -9,10 +9,7 @@ import types.base.prototypes.Creep
 import types.base.prototypes.Room
 import types.base.prototypes.findConstructionSites
 import types.base.prototypes.findStructures
-import types.base.prototypes.structures.EnergyContainingStructure
-import types.base.prototypes.structures.Structure
-import types.base.prototypes.structures.StructureRoad
-import types.base.prototypes.structures.StructureSpawn
+import types.base.prototypes.structures.*
 import kotlin.js.Math.random
 
 class IdleBehaviour {
@@ -159,7 +156,7 @@ object BusyBehaviour {
 
 
         if (creep.memory.state == CreepState.UPGRADING) {
-            val controller = creep.room.controller!!
+            val controller = creep.memory.targetId?.let { Game.getObjectById(it) as? StructureController } ?: creep.room.controller!!
             if (creep.upgradeController(controller) == ERR_NOT_IN_RANGE) {
                 creep.travelTo(controller.pos)
             }

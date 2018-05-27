@@ -114,8 +114,10 @@ fun gameLoop() {
             ColonizeMission.forRoom(flag.pos)
         }
     }
-    if (Missions.activeMissions.isEmpty() && Missions.missionMemory.upgradeMissionMemory.isEmpty()) {
-        val mission = RoomUpgradeMission.forRoom(mainSpawn.room)
+    for ((name, spawn) in Game.spawns) {
+        if (spawn.my && Missions.missionMemory.upgradeMissionMemory.none { it.controllerId == spawn.room.controller!!.id }) {
+            RoomUpgradeMission.forRoom(spawn.room)
+        }
     }
 
     Missions.update()
