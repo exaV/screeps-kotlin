@@ -21,13 +21,9 @@ import types.base.prototypes.structures.StructureController
  *
  * @throws IllegalStateException if it can't be initialized
  */
-abstract class UpgradeMission(controllerId: String) : Mission() {
+abstract class UpgradeMission(val controllerId: String) : Mission() {
     val controller: StructureController
-
-    init {
-        val controllerFromMemory = Game.getObjectById<StructureController>(controllerId)
-        controller = controllerFromMemory ?: throw IllegalStateException("could not load controller for controllerId $controllerId") // captured
-    }
+        get() = Game.getObjectById(controllerId) ?: throw IllegalStateException("could not find controller $controllerId probably due to lack of vision")
 
     abstract fun abort()
 }
