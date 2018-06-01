@@ -58,11 +58,6 @@ fun gameLoop() {
 
     }
 
-
-    if (Game.time % 20 == 0) {
-        houseKeeping(Context.creeps)
-    }
-
     val energySources = mainSpawn.room.findEnergy()
     val minWorkers = energySources.size * 2
     val minMiners = energySources.size
@@ -148,6 +143,8 @@ fun gameLoop() {
 
     GlobalSpawnQueue.save()
     Missions.save()
+
+    houseKeeping(Context.creeps)
 
     sandbox()
 }

@@ -36,6 +36,9 @@ runDceTestKotlinJs.dceOptions.devMode = true
 
 repositories {
     jcenter()
+    maven {
+        url  "https://dl.bintray.com/exav/screeps-kotlin"
+    }
     mavenLocal()
     maven { url "https://kotlin.bintray.com/kotlinx" }
 }

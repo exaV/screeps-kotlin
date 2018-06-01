@@ -107,11 +107,8 @@ fun buildTowers(room: Room) {
     val towersToPlace = room.controller!!.availableTowers - numberOfTowers
     if (towersToPlace == 0) return //no need to place towers
 
-
-    require(room.controller!!.my == true)
     val spawn = room.find<StructureSpawn>(FIND_MY_SPAWNS).first()
 
-    require(towersToPlace >= 0)
     var placed = 0
 
     var x = spawn.pos.x

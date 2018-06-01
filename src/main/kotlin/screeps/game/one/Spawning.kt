@@ -21,7 +21,7 @@ fun StructureSpawn.spawn(bodyDefinition: BodyDefinition, spawnOptions: KreepSpaw
     )
     return when (code) {
         OK -> {
-            println("spawning $newName with spawnOptions $spawnOptions")
+            println("spawning $newName with spawnOptions $actualSpawnOptions")
             true
         }
         ERR_NOT_ENOUGH_ENERGY, ERR_BUSY -> false // do nothing
