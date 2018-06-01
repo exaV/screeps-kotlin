@@ -19,6 +19,7 @@ import types.base.prototypes.Creep
 import types.base.prototypes.Room
 import types.base.prototypes.findEnergy
 import types.base.prototypes.structures.Structure
+import types.base.prototypes.structures.StructureController
 import types.base.prototypes.structures.StructureSpawn
 import types.base.prototypes.structures.StructureTower
 import types.base.toMap
@@ -47,6 +48,7 @@ object Context {
 
 
 fun gameLoop() {
+
 
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"])!!
     val secondarySpawn: StructureSpawn? = (Game.spawns["Spawn5"]) //FIXME 
@@ -112,6 +114,17 @@ fun gameLoop() {
     val refillEnergy = RefillEnergy()
     val idleBehaviour = IdleBehaviour()
 
+    // remove completed mission TODO do this with mission.complete = true
+    val removed = Missions.missionMemory.upgradeMissionMemory.removeAll {
+        val controller = Game.getObjectById<StructureController>(it.controllerId)
+        controller == null || !controller.my
+    }
+    if (removed) {
+        println("removed a mission")
+        Missions.activeMissions.clear()
+        Missions.save()
+    }
+
     Missions.load()
 
     for ((name, flag) in Game.flags) {
@@ -120,7 +133,7 @@ fun gameLoop() {
         }
     }
     for ((name, spawn) in Game.spawns) {
-        if (spawn.my && Missions.missionMemory.upgradeMissionMemory.none { it.controllerId == spawn.room.controller!!.id }) {
+        if (spawn.my && spawn.room.controller!!.my && Missions.missionMemory.upgradeMissionMemory.none { it.controllerId == spawn.room.controller!!.id }) {
             RoomUpgradeMission.forRoom(spawn.room)
         }
     }
