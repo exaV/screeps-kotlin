@@ -14,6 +14,7 @@ fun StructureSpawn.spawn(bodyDefinition: BodyDefinition, spawnOptions: KreepSpaw
     val newName = "${bodyDefinition.name}_T${body.tier}_${Game.time}"
 
     val actualSpawnOptions = spawnOptions ?: GlobalSpawnQueue.defaultSpawnOptions
+    println("actual mission = ${actualSpawnOptions.toSpawnOptions().memory?.missionId}")
     val code = this.spawnCreep(
         body.body.toTypedArray(),
         newName,

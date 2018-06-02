@@ -49,6 +49,7 @@ object Context {
 
 fun gameLoop() {
 
+    houseKeeping(Context.creeps)
 
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"])!!
     val secondarySpawn: StructureSpawn? = (Game.spawns["Spawn5"]) //FIXME 
@@ -143,6 +144,8 @@ fun gameLoop() {
     for ((_, creep) in Context.creeps) {
         if (creep.spawning) continue
 
+
+
         when (creep.memory.state) {
             CreepState.UNKNOWN -> {
                 println("creep ${creep.name} was in UKNOWN state. Resuming from IDLE")
@@ -157,7 +160,6 @@ fun gameLoop() {
     GlobalSpawnQueue.save()
     Missions.save()
 
-    houseKeeping(Context.creeps)
 
     sandbox()
 }

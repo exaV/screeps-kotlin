@@ -84,7 +84,7 @@ class IdleBehaviour {
             }
             else -> { //get out of the way
                 if (creep.pos.look().any { it.structure is StructureRoad }) {
-                    println("${creep.name}! Quit stadning on a road like a dumbass!")
+//                    println("${creep.name}! Quit stadning on a road like a dumbass!")
                     creep.moveInRandomDirection()
                 }
             }
