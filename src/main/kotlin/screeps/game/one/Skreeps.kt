@@ -7,7 +7,6 @@ import screeps.game.one.behaviours.RefillEnergy
 import screeps.game.one.building.buildStorage
 import screeps.game.one.building.buildTowers
 import screeps.game.one.kreeps.BodyDefinition
-import screeps.game.tutorials.tutorial4.houseKeeping
 import types.base.get
 import types.base.global.FIND_HOSTILE_CREEPS
 import types.base.global.FIND_MY_CREEPS
@@ -49,7 +48,7 @@ object Context {
 
 fun gameLoop() {
 
-    houseKeeping(Context.creeps)
+    houseKeeping()
 
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"])!!
     val secondarySpawn: StructureSpawn? = (Game.spawns["Spawn5"]) //FIXME 
@@ -167,4 +166,17 @@ fun gameLoop() {
 fun sandbox() {
 
 
+}
+
+public fun houseKeeping() {
+    js(
+        """
+        for (var name in Memory.creeps) {
+            if (!Game.creeps[name]) {
+                delete Memory.creeps[name];
+                console.log('Clearing non-existing creep memory:', name);
+            }
+        }
+        """
+    )
 }
