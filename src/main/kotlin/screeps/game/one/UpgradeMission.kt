@@ -52,9 +52,8 @@ class RoomUpgradeMission(private val memory: UpgradeMissionMemory) : UpgradeMiss
     var mission: UpgradeMission?
 
     init {
-
-        @Suppress("WhenWithOnlyElse")
         when (memory.state) {
+            State.RCL8_IDLE -> mission = null
             else -> mission = EarlyGameUpgradeMission(this, memory.controllerId, if (controller.level == 8) 1 else 3)
         }
     }
@@ -80,6 +79,10 @@ class RoomUpgradeMission(private val memory: UpgradeMissionMemory) : UpgradeMiss
 
     override fun abort() {
         if (controller.my) throw IllegalStateException("stopping to upgrade my controller in Room ${controller.room}")
+        else {
+            mission = null
+            complete = true
+        }
     }
 }
 
