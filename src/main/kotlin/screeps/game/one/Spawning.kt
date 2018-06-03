@@ -86,8 +86,6 @@ object GlobalSpawnQueue {
         }
         set(value) {
             val stringyfied = if (value == null) null else JSON.stringify(value)
-            println("stringyfied=$stringyfied")
-
             this.asDynamic().globalSpawnQueue = stringyfied
         }
 }
