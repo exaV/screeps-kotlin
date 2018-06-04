@@ -95,6 +95,7 @@ class EarlyGameUpgradeMission(
     override val missionId: String
         get() = parent.missionId
 
+    // TODO must not cache workers!!
     private val workers: MutableList<Creep> = mutableListOf()
 
     init {
@@ -121,6 +122,7 @@ class EarlyGameUpgradeMission(
                 worker.memory.targetId = controller.id
             }
         }
+        workers.clear() // TODO do this more efficiently
     }
 
     override fun abort() {
