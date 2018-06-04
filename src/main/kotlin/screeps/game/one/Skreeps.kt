@@ -48,7 +48,9 @@ object Context {
 
 fun gameLoop() {
 
-    houseKeeping()
+    if (Game.time % 100 == 0) { // TODO modulo seems expensive. Use something else
+        houseKeeping()
+    }
 
     val mainSpawn: StructureSpawn = (Game.spawns["Spawn1"])!!
     val secondarySpawn: StructureSpawn? = (Game.spawns["Spawn5"]) //FIXME 
