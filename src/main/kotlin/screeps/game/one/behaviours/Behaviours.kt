@@ -17,7 +17,7 @@ class IdleBehaviour {
         val room = Context.rooms.values.first { it.storage != null }
 
         return room.findStructures().filterNot { Context.targets.containsKey(it.id) }
-            .filter { it.hits < it.hitsMax / 2 }
+            .filter { it.hits < it.hitsMax / 2 && it.hits < 2_000_000 }
             .sortedBy { it.hits }
             .take(5) //TODO only repairing 5 is arbitrary
     }
@@ -156,7 +156,8 @@ object BusyBehaviour {
 
 
         if (creep.memory.state == CreepState.UPGRADING) {
-            val controller = creep.memory.targetId?.let { Game.getObjectById(it) as? StructureController } ?: creep.room.controller!!
+            val controller =
+                creep.memory.targetId?.let { Game.getObjectById(it) as? StructureController } ?: creep.room.controller!!
             if (creep.upgradeController(controller) == ERR_NOT_IN_RANGE) {
                 creep.travelTo(controller.pos)
             }
