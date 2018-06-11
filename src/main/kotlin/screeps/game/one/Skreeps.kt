@@ -145,8 +145,6 @@ fun gameLoop() {
     for ((_, creep) in Context.creeps) {
         if (creep.spawning) continue
 
-
-
         when (creep.memory.state) {
             CreepState.UNKNOWN -> {
                 println("creep ${creep.name} was in UKNOWN state. Resuming from IDLE")

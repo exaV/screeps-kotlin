@@ -7,8 +7,8 @@ import types.base.global.*
 import types.base.prototypes.structures.SpawnOptions
 import types.base.prototypes.structures.StructureSpawn
 
-fun StructureSpawn.spawn(bodyDefinition: BodyDefinition, spawnOptions: KreepSpawnOptions? = null): Boolean {
-    if (room.energyAvailable < bodyDefinition.cost) return false
+fun StructureSpawn.spawn(bodyDefinition: BodyDefinition, spawnOptions: KreepSpawnOptions? = null): ScreepsReturnCode {
+    if (room.energyAvailable < bodyDefinition.cost) return ERR_NOT_ENOUGH_ENERGY
 
     val body = bodyDefinition.getBiggest(room.energyAvailable)
     val newName = "${bodyDefinition.name}_T${body.tier}_${Game.time}"
@@ -20,14 +20,9 @@ fun StructureSpawn.spawn(bodyDefinition: BodyDefinition, spawnOptions: KreepSpaw
         newName,
         actualSpawnOptions.toSpawnOptions()
     )
-    return when (code) {
-        OK -> {
-            println("spawning $newName with spawnOptions $actualSpawnOptions")
-            true
-        }
-        ERR_NOT_ENOUGH_ENERGY, ERR_BUSY -> false // do nothing
-        else -> throw IllegalArgumentException("error code $code when spawning $newName with body $body")
-    }
+
+    if (code == OK) println("spawning $newName with spawnOptions $actualSpawnOptions")
+    return code
 }
 
 object GlobalSpawnQueue {
@@ -61,11 +56,27 @@ object GlobalSpawnQueue {
         if (queue.size > 5) println("spawnqueue has size ${queue.size} with first 10 ${queue.take(10)}")
         for (spawn in spawns) {
             if (queue.isEmpty() || spawn.spawning != null) continue
-            val (bodyDefinition, spawnOptions) = queue.first()
 
-            if (spawn.spawn(bodyDefinition, spawnOptions)) {
-                queue.removeAt(0)
-                modified = true
+            val (bodyDefinition, spawnOptions) = queue.first()
+            val code = spawn.spawn(bodyDefinition, spawnOptions)
+
+            when (code) {
+                OK -> {
+                    queue.removeAt(0)
+                    modified = true
+                }
+
+                ERR_NOT_ENOUGH_ENERGY -> {
+                    if (bodyDefinition.cost > spawn.room.energyCapacityAvailable) {
+                        println("creep ${bodyDefinition.name} with body ${bodyDefinition.body} (cost ${bodyDefinition.cost}) is to expensive for ${spawn.name}")
+                    }
+
+                    val creep = queue.removeAt(0)
+                    queue.add(creep)
+                    modified = true
+                }
+
+                else -> println("Unexpected return code $code when spawning creep ${bodyDefinition.name} with $spawnOptions")
             }
         }
     }
@@ -92,7 +103,8 @@ object GlobalSpawnQueue {
 
 fun requestCreep(bodyDefinition: BodyDefinition, spawnOptions: KreepSpawnOptions) {
 
-    val candidate = Context.creeps.values.firstOrNull { it.memory.state == CreepState.IDLE && it.body.contentEquals(bodyDefinition.bodyPartConstant) }
+    val candidate =
+        Context.creeps.values.firstOrNull { it.memory.state == CreepState.IDLE && it.body.contentEquals(bodyDefinition.body) }
     if (candidate != null) {
         spawnOptions.transfer(candidate.memory)
     } else {

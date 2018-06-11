@@ -5,7 +5,7 @@ import types.base.get
 import types.base.global.*
 
 @Serializable
-enum class BodyDefinition(val bodyPartConstant: Array<BodyPartConstant>, val maxSize: Int = 0) {
+enum class BodyDefinition(val body: Array<BodyPartConstant>, val maxSize: Int = 0) {
     BASIC_WORKER(arrayOf(WORK, CARRY, MOVE), maxSize = 5),
     MINER(arrayOf(WORK, WORK, MOVE), maxSize = 2),
     MINER_BIG(
@@ -36,7 +36,7 @@ enum class BodyDefinition(val bodyPartConstant: Array<BodyPartConstant>, val max
     CLAIMER(arrayOf(CLAIM, MOVE), maxSize = 1);
 
     val cost: Int
-        get() = bodyPartConstant.sumBy { BODYPART_COST[it] }
+        get() = body.sumBy { BODYPART_COST[it] }
 
     data class Body(val tier: Int, val body: List<BodyPartConstant>)
 
@@ -48,7 +48,7 @@ enum class BodyDefinition(val bodyPartConstant: Array<BodyPartConstant>, val max
 
         while (energyCost - cost >= 0 && (maxSize == 0 || size < maxSize)) {
             energyCost -= cost
-            body.addAll(bodyPartConstant)
+            body.addAll(this.body)
             size += 1
         }
         body.sortBy { it.stringValue() }
