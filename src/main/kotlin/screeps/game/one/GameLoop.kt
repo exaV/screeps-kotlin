@@ -97,6 +97,9 @@ fun gameLoop() {
     GlobalSpawnQueue.spawnCreeps(listOf(mainSpawn))
 
     for ((_, room) in Context.rooms) {
+        Stats.write(room)
+
+
         buildStorage(room)
         buildTowers(room)
 
@@ -159,7 +162,7 @@ fun gameLoop() {
     GlobalSpawnQueue.save()
     Missions.save()
 
-
+    Stats.tickEnds()
     sandbox()
 }
 
