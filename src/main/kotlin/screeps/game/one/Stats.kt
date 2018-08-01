@@ -10,8 +10,6 @@ object Stats {
         get() = this.asDynamic().stats
         set(value) = run { this.asDynamic().stats = value }
 
-    private val stats = Memory.stats
-
     init {
         if (Memory.stats == null) {
             Memory.stats = Any()
@@ -22,17 +20,17 @@ object Stats {
 
         val r = "rooms.${room.name}"
 
-        stats["$r.mine"] = if (room.controller?.my == true) 1 else 0
-        stats["$r.energyAvailable"] = room.energyAvailable
-        stats["$r.energyCapacityAvailable"] = room.energyCapacityAvailable
+        Memory.stats["$r.mine"] = if (room.controller?.my == true) 1 else 0
+        Memory.stats["$r.energyAvailable"] = room.energyAvailable
+        Memory.stats["$r.energyCapacityAvailable"] = room.energyCapacityAvailable
         room.storage?.let {
-            stats["$r.storage"] = it.store
+            Memory.stats["$r.storage"] = it.store
         }
         room.controller?.let {
             val r = "$r.controller"
-            stats["$r.level"] = it.level
-            stats["$r.progress"] = it.progress
-            stats["$r.progressTotal"] = it.progressTotal
+            Memory.stats["$r.level"] = it.level
+            Memory.stats["$r.progress"] = it.progress
+            Memory.stats["$r.progressTotal"] = it.progressTotal
         }
     }
 
@@ -41,8 +39,8 @@ object Stats {
     }
 
     fun tickEnds() {
-        stats["cpu.used"] = Game.cpu.getUsed()
-        stats["cpu.limit"] = Game.cpu.limit
-        stats["cpu.bucket"] = Game.cpu.bucket
+        Memory.stats["cpu.used"] = Game.cpu.getUsed()
+        Memory.stats["cpu.limit"] = Game.cpu.limit
+        Memory.stats["cpu.bucket"] = Game.cpu.bucket
     }
 }
