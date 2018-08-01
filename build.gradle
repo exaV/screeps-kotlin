@@ -5,8 +5,8 @@ import groovyx.net.http.RESTClient
 import static groovyx.net.http.ContentType.JSON
 
 buildscript {
-    ext.kotlin_version = '1.2.50'
-    ext.serialization_version = '0.5.1'
+    ext.kotlin_version = '1.2.51'
+    ext.serialization_version = '0.6.0'
 
     repositories {
         jcenter()
@@ -45,7 +45,7 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
-    compile "ch.delconte.screeps-kotlin:screeps-kotlin-types:0.9.3"
+    compile "ch.delconte.screeps-kotlin:screeps-kotlin-types:0.9.5"
     compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$serialization_version"
 
     testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
