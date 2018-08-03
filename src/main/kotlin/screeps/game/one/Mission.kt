@@ -30,7 +30,7 @@ object Missions {
         missionMemory = Memory.activeMissionMemory ?: ActiveMissionMemory(mutableListOf())
     }
 
-    fun load() {
+    fun load() = profiled("missions.load") {
         for (memory in missionMemory.upgradeMissionMemory) {
             if (activeMissions.none { it.missionId == memory.missionId }) {
                 activeMissions.add(memory.restoreMission())
@@ -43,7 +43,7 @@ object Missions {
         }
     }
 
-    fun update() {
+    fun update() = profiled("missions.update") {
         for (mission in activeMissions) {
             mission.update()
         }
@@ -51,7 +51,7 @@ object Missions {
         missionMemory.colonizeMissionMemory.removeAll { it.isComplete() }
     }
 
-    fun save() {
+    fun save() = profiled("missions.save") {
         Memory.activeMissionMemory = missionMemory
     }
 

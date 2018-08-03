@@ -47,6 +47,7 @@ object Context {
 
 
 fun gameLoop() {
+    Stats.tickStarts()
 
     if (Game.time % 100 == 0) { // TODO modulo seems expensive. Use something else
         houseKeeping()

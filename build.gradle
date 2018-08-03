@@ -45,7 +45,7 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
-    compile "ch.delconte.screeps-kotlin:screeps-kotlin-types:0.9.5"
+    compile "ch.delconte.screeps-kotlin:screeps-kotlin-types:0.9.6"
     compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$serialization_version"
 
     testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
