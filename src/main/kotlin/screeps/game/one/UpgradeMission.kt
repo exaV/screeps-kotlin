@@ -1,11 +1,11 @@
 package screeps.game.one
 
 import kotlinx.serialization.Serializable
+import screeps.api.Creep
+import screeps.api.Game
+import screeps.api.Room
+import screeps.api.structures.StructureController
 import screeps.game.one.kreeps.BodyDefinition
-import types.base.global.Game
-import types.base.prototypes.Creep
-import types.base.prototypes.Room
-import types.base.prototypes.structures.StructureController
 
 //sealed class UpgradeMission1
 //class RoomUpgradeMission : UpgradeMission1()

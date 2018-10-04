@@ -2,7 +2,7 @@ package screeps.game.one
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JSON
-import types.base.global.Memory
+import screeps.api.Memory
 
 abstract class Mission(open val parent: Mission? = null) {
     abstract val missionId: String

@@ -5,8 +5,8 @@ import groovyx.net.http.RESTClient
 import static groovyx.net.http.ContentType.JSON
 
 buildscript {
-    ext.kotlin_version = '1.2.51'
-    ext.serialization_version = '0.6.0'
+    ext.kotlin_version = '1.2.70'
+    ext.serialization_version = '0.6.2'
 
     repositories {
         jcenter()
@@ -24,7 +24,7 @@ plugins {
     id "org.tenne.rest" version "0.4.2"
 }
 
-group 'egdf'
+group 'screeps.game'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'kotlin2js'
@@ -37,16 +37,17 @@ runDceTestKotlinJs.dceOptions.devMode = true
 repositories {
     jcenter()
     maven {
-        url  "https://dl.bintray.com/exav/screeps-kotlin"
+        url "https://dl.bintray.com/exav/screeps-kotlin"
     }
     mavenLocal()
     maven { url "https://kotlin.bintray.com/kotlinx" }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
-    compile "ch.delconte.screeps-kotlin:screeps-kotlin-types:0.9.6"
     compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$serialization_version"
+    implementation 'com.github.exaV:screeps-kotlin-types:feature-1.0.0-SNAPSHOT'
 
     testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
 }

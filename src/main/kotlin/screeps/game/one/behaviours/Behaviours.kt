@@ -1,15 +1,14 @@
 package screeps.game.one.behaviours
 
+import screeps.api.*
+import screeps.api.structures.Structure
+import screeps.api.structures.StructureController
+import screeps.api.structures.StructureRoad
+import screeps.api.structures.StructureSpawn
 import screeps.game.one.*
 import screeps.game.one.building.buildRoads
 import screeps.game.one.kreeps.BodyDefinition
 import traveler.travelTo
-import types.base.global.*
-import types.base.prototypes.Creep
-import types.base.prototypes.Room
-import types.base.prototypes.findConstructionSites
-import types.base.prototypes.findStructures
-import types.base.prototypes.structures.*
 import kotlin.js.Math.random
 
 class IdleBehaviour {
@@ -30,17 +29,17 @@ class IdleBehaviour {
         creep.memory.targetId = null //just making sure it is reset
 
 
-        val constructionSite = creep.findClosest(creep.room.findConstructionSites())
+        val constructionSite = creep.findClosest(creep.room.findMyConstructionSites())
         val controller = creep.room.controller
 
         val towersInNeedOfRefill = Context.towers.filter { it.room == creep.room && it.energy < it.energyCapacity }
         when {
-        //make sure spawn does not dry up
+            //make sure spawn does not dry up
             notEnoughtSpawnEnergy(creep.room) -> {
                 creep.memory.state = CreepState.TRANSFERRING_ENERGY
             }
 
-        //make sure towe does not dry up
+            //make sure towe does not dry up
             towersInNeedOfRefill.isNotEmpty() -> {
                 creep.memory.state = CreepState.TRANSFERRING_ENERGY
                 creep.memory.targetId = towersInNeedOfRefill.first().id
@@ -51,12 +50,12 @@ class IdleBehaviour {
                 creep.memory.targetId = creep.room.storage!!.id
             }
 
-        //check if we need to construct something
+            //check if we need to construct something
             constructionSite != null -> {
                 creep.memory.state = CreepState.CONSTRUCTING
                 creep.memory.targetId = constructionSite.id
             }
-        //check if we need to upgrade the controller
+            //check if we need to upgrade the controller
             controller != null && controller.level < 8 && Context.creeps.none { it.value.memory.state == CreepState.UPGRADING } -> {
                 creep.memory.state = CreepState.UPGRADING
                 creep.memory.targetId = controller.id
@@ -77,7 +76,7 @@ class IdleBehaviour {
                 creep.memory.state = CreepState.TRANSFERRING_ENERGY
 
             }
-        //if still idle upgrade controller
+            //if still idle upgrade controller
             controller != null && controller.level < 8 -> {
                 creep.memory.state = CreepState.UPGRADING
                 creep.memory.targetId = controller.id
@@ -131,15 +130,14 @@ object BusyBehaviour {
             fun findTarget(): Structure? {
                 val targets = creep.room.findStructures()
                     .filter { (it.structureType == STRUCTURE_EXTENSION || it.structureType == STRUCTURE_SPAWN) }
-                    .map { (it as EnergyContainingStructure) }
-                    .filter { it.energy < it.energyCapacity }
+                    .filter { it.unsafeCast<EnergyContainer>().energy < it.unsafeCast<EnergyContainer>().energyCapacity }
 
-                if (targets.isNotEmpty()) {
-                    return creep.findClosest(targets as List<Structure>)!!
-                } else return null;
+                return creep.findClosest(targets)
             }
 
-            val target = if (creep.memory.targetId != null) Game.getObjectById(creep.memory.targetId) else findTarget()
+            val target = if (creep.memory.targetId != null) {
+                Game.getObjectById<Structure>(creep.memory.targetId)
+            } else findTarget()
 
             if (target != null) {
                 val code = creep.transfer(target, RESOURCE_ENERGY)

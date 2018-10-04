@@ -1,8 +1,8 @@
 package screeps.game.one
 
-import types.base.global.Game
-import types.base.global.Memory
-import types.base.prototypes.Room
+import screeps.api.Game
+import screeps.api.Memory
+import screeps.api.Room
 
 object Stats {
 

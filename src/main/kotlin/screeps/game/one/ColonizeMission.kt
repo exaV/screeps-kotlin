@@ -1,14 +1,9 @@
 package screeps.game.one
 
 import kotlinx.serialization.Serializable
+import screeps.api.*
 import screeps.game.one.kreeps.BodyDefinition
 import traveler.travelTo
-import types.base.global.Game
-import types.base.global.OK
-import types.base.global.STRUCTURE_SPAWN
-import types.base.iterator
-import types.base.prototypes.*
-import types.base.prototypes.structures.StructureSpawn
 
 class ColonizeMission(val memory: ColonizeMissionMemory) : Mission() {
 
@@ -122,7 +117,7 @@ class ColonizeMission(val memory: ColonizeMissionMemory) : Mission() {
             if (worker.memory.targetId == null) {
                 val constructionSite = findSpawnPosition(Context.rooms[memory.roomName]!!)
                 if (constructionSite == null) {
-                    if (worker.room.findStructures().any { it is StructureSpawn && it.my }) {
+                    if (worker.room.findMySpawns().isNotEmpty()) {
                         memory.state = State.DONE_BUILD
                     } else {
                         memory.state = State.NO_SPAWN_LOCATION
@@ -145,7 +140,7 @@ class ColonizeMission(val memory: ColonizeMissionMemory) : Mission() {
     }
 
     private fun findSpawnPosition(room: Room): ConstructionSite? {
-        val constructionSite = room.findConstructionSites().firstOrNull { it.structureType == STRUCTURE_SPAWN }
+        val constructionSite = room.findMyConstructionSites().firstOrNull { it.structureType == STRUCTURE_SPAWN }
 
         if (constructionSite == null) {
             for ((name, flag) in Game.flags) {

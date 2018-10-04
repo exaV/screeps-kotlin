@@ -1,28 +1,21 @@
 package screeps.game.one
 
 
+import screeps.api.*
+import screeps.api.structures.Structure
+import screeps.api.structures.StructureController
+import screeps.api.structures.StructureSpawn
+import screeps.api.structures.StructureTower
 import screeps.game.one.behaviours.BusyBehaviour
 import screeps.game.one.behaviours.IdleBehaviour
 import screeps.game.one.behaviours.RefillEnergy
 import screeps.game.one.building.buildStorage
 import screeps.game.one.building.buildTowers
 import screeps.game.one.kreeps.BodyDefinition
-import types.base.get
-import types.base.global.FIND_HOSTILE_CREEPS
-import types.base.global.FIND_MY_CREEPS
-import types.base.global.Game
-import types.base.global.STRUCTURE_TOWER
-import types.base.iterator
-import types.base.prototypes.ConstructionSite
-import types.base.prototypes.Creep
-import types.base.prototypes.Room
-import types.base.prototypes.findEnergy
-import types.base.prototypes.structures.Structure
-import types.base.prototypes.structures.StructureController
-import types.base.prototypes.structures.StructureSpawn
-import types.base.prototypes.structures.StructureTower
-import types.base.toMap
-import types.extensions.lazyPerTick
+import screeps.utils.lazyPerTick
+import screeps.utils.toMap
+import kotlin.collections.component1
+import kotlin.collections.component2
 
 object Context {
     //built-in
@@ -110,10 +103,6 @@ fun gameLoop() {
             if (hostiles.isNotEmpty() && tower.energy > 0) {
                 tower.attack(hostiles.minBy { it.hits }!!)
             }
-        }
-
-        if (room.memory.lastEnergy != room.energyAvailable) {
-            room.memory.lastEnergy = room.energyAvailable
         }
     }
 

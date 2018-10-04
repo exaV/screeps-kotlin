@@ -1,8 +1,7 @@
 package screeps.game.one
 
-import types.base.prototypes.Creep
-import types.base.prototypes.RoomObject
-
+import screeps.api.Creep
+import screeps.api.RoomObject
 
 fun <T : RoomObject> Creep.findClosest(roomObjects: Collection<T>): T? {
 
