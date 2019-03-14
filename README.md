@@ -1,9 +1,15 @@
 # Playing screeps using Kotlin
+
+**start here**: https://github.com/exaV/screeps-kotlin-starter
+
+Standalone types as a library are available too: https://github.com/exaV/screeps-kotlin-types
+
+## Contribute
+If you want to contribute you should definitely checkout out the two repos above and create a PR!
+
+## Using this repo
 clone: `git clone --recurse-submodules https://github.com/exaV/screeps-kotlin`
 
-### Types
-Most of the types were generated with ts2kt (0.1.3) from https://github.com/screepers/screeps-typescript-starter
-and manually improved. The originaltypes are in the [typescript folder](https://github.com/exaV/screeps-kotlin/tree/master/typescript).
 
 ### Deployment
 
