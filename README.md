@@ -4,6 +4,8 @@
 
 Standalone types as a library are available too: https://github.com/exaV/screeps-kotlin-types
 
+Join the official screeps slack on https://chat.screeps.com/ and join #kotlin for help and general screeps kotlin chat.
+
 ## Contribute
 If you want to contribute you should definitely checkout out the two repos above and create a PR!
 
