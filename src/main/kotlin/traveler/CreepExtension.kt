@@ -1,8 +1,8 @@
 package traveler
 
-import types.base.global.ScreepsReturnCode
-import types.base.prototypes.Creep
-import types.base.prototypes.RoomPosition
+import screeps.api.Creep
+import screeps.api.RoomPosition
+import screeps.api.ScreepsReturnCode
 
 /**
  * Use Traveler to travel to target destination.

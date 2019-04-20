@@ -1,11 +1,14 @@
 package screeps.game.one
 
+import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.parse
+import kotlinx.serialization.stringify
+import screeps.api.*
+import screeps.api.structures.SpawnOptions
+import screeps.api.structures.StructureSpawn
 import screeps.game.one.kreeps.BodyDefinition
-import types.base.global.*
-import types.base.prototypes.structures.SpawnOptions
-import types.base.prototypes.structures.StructureSpawn
 
 fun StructureSpawn.spawn(bodyDefinition: BodyDefinition, spawnOptions: KreepSpawnOptions? = null): ScreepsReturnCode {
     if (room.energyAvailable < bodyDefinition.cost) return ERR_NOT_ENOUGH_ENERGY
@@ -90,13 +93,14 @@ object GlobalSpawnQueue {
     }
 
 
+    @UseExperimental(ImplicitReflectionSerializer::class)
     private var Memory.globalSpawnQueue: CreepSpawnList?
         get() {
             val internal = this.asDynamic().globalSpawnQueue
-            return if (internal == null) null else JSON.parse(internal)
+            return if (internal == null) null else Json.parse(internal)
         }
         set(value) {
-            val stringyfied = if (value == null) null else JSON.stringify(value)
+            val stringyfied = if (value == null) null else Json.stringify(value)
             this.asDynamic().globalSpawnQueue = stringyfied
         }
 }
@@ -133,10 +137,8 @@ data class KreepSpawnOptions(
     val targetId: String? = null,
     val assignedEnergySource: String? = null
 ) {
-    fun toSpawnOptions(): SpawnOptions {
-        return object : SpawnOptions {
-            override val memory = object : CreepMemory {}.apply { transfer(this) }
-        }
+    fun toSpawnOptions(): SpawnOptions = options {
+        memory = object : CreepMemory {}.apply { transfer(this) }
     }
 
     fun transfer(memory: CreepMemory) {

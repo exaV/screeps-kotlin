@@ -1,12 +1,12 @@
 package screeps.game.one.building
 
+import screeps.api.*
+import screeps.api.structures.Structure
+import screeps.api.structures.StructureController
+import screeps.api.structures.StructureSpawn
 import screeps.game.one.Context
-import types.base.global.*
-import types.base.prototypes.*
-import types.base.prototypes.structures.Structure
-import types.base.prototypes.structures.StructureController
-import types.base.prototypes.structures.StructureSpawn
-import types.extensions.copy
+import screeps.game.one.findEnergy
+import screeps.utils.copy
 
 val StructureController.availableStorage
     get() = when {
@@ -48,7 +48,7 @@ fun buildRoads(room: Room) {
     val energySources = room.findEnergy()
 
     fun buildRoadBetween(a: RoomPosition, b: RoomPosition) {
-        val path = room.findPath(a, b, FindPathOpts(ignoreCreeps = true))
+        val path = room.findPath(a, b, options { ignoreCreeps = true })
         for (tile in path) {
             val stuff = room.lookAt(tile.x, tile.y)
             val roadExistsAtTile = stuff.any {
@@ -82,7 +82,7 @@ fun buildStorage(room: Room) {
     if (room.controller!!.availableStorage != 1) return //cannot build storage yet
 
     val hasStorage = room.storage != null
-            || Context.constructionSites.values.any { it.structureType == STRUCTURE_STORAGE && it.room.name == room.name }
+            || Context.constructionSites.values.any { it.structureType == STRUCTURE_STORAGE && it.room?.name == room.name }
     if (hasStorage) return //already built or being  built
 
     val spawn = room.find<StructureSpawn>(FIND_MY_SPAWNS).first()
@@ -103,7 +103,7 @@ fun buildTowers(room: Room) {
     if (room.controller?.my != true) return //not under control
 
     val numberOfTowers =
-        Context.constructionSites.values.count { it.room.name == room.name && it.structureType == STRUCTURE_TOWER } + Context.myStuctures.values.count { it.room.name == room.name && it.structureType == STRUCTURE_TOWER }
+        Context.constructionSites.values.count { it.room?.name == room.name && it.structureType == STRUCTURE_TOWER } + Context.myStuctures.values.count { it.room.name == room.name && it.structureType == STRUCTURE_TOWER }
     val towersToPlace = room.controller!!.availableTowers - numberOfTowers
     if (towersToPlace == 0) return //no need to place towers
 

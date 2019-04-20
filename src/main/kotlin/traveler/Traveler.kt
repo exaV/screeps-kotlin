@@ -9,9 +9,9 @@
 
 package traveler
 
-import types.base.global.ScreepsReturnCode
-import types.base.prototypes.CostMatrix
-import types.base.prototypes.RoomPosition
+import screeps.api.PathFinder
+import screeps.api.RoomPosition
+import screeps.api.ScreepsReturnCode
 
 external interface PathfinderReturn {
     var path: Array<RoomPosition>
@@ -77,7 +77,7 @@ external interface TravelToOptions {
      * If it returns false, that room will be excluded. If it returns a matrix, it will be used in place of the default matrix.
      * If it returns undefined the default matrix will be used instead.
      */
-    var roomCallback: ((roomName: String, matrix: CostMatrix) -> dynamic /* CostMatrix | Boolean */)? get() = definedExternally; set(value) = definedExternally
+    var roomCallback: ((roomName: String, matrix: PathFinder.CostMatrix) -> dynamic /* CostMatrix | Boolean */)? get() = definedExternally; set(value) = definedExternally
 
     /**
      * Callback function that accepts one argument, roomName (string) and returns a number representing the foundRoute value that roomName.
@@ -112,7 +112,7 @@ external interface TravelToOptions {
      * The new direction is just added to the path. Default is false.
      */
     var movingTarget: Boolean? get() = definedExternally; set(value) = definedExternally
-    
+
     /**
      * Will guarantee that a new structure matrix is generated.
      * This might be necessary if structures are likely to change often. Default is false.
