@@ -1,7 +1,10 @@
 package screeps.game.one
 
+import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.parse
+import kotlinx.serialization.stringify
 import screeps.api.Memory
 
 abstract class Mission(open val parent: Mission? = null) {
@@ -55,13 +58,14 @@ object Missions {
         Memory.activeMissionMemory = missionMemory
     }
 
+    @UseExperimental(ImplicitReflectionSerializer::class)
     private var Memory.activeMissionMemory: ActiveMissionMemory?
         get() {
             val internal = this.asDynamic()._missionMemory
-            return if (internal == null) null else JSON.parse(internal)
+            return if (internal == null) null else Json.parse(internal)
         }
         set(value) {
-            val stringyfied = if (value == null) null else JSON.stringify(value)
+            val stringyfied = if (value == null) null else Json.stringify(value)
             this.asDynamic()._missionMemory = stringyfied
         }
 }

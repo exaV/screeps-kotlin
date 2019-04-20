@@ -38,6 +38,11 @@ object Context {
     }
 }
 
+fun <T> Iterable<Structure>.filterIsStrucure(structureType: StructureConstant): List<Structure> {
+    return this.filter { it.structureType == structureType }
+
+}
+
 
 fun gameLoop() {
     Stats.tickStarts()

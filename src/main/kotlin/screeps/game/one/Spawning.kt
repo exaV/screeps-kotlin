@@ -1,7 +1,10 @@
 package screeps.game.one
 
+import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.parse
+import kotlinx.serialization.stringify
 import screeps.api.*
 import screeps.api.structures.SpawnOptions
 import screeps.api.structures.StructureSpawn
@@ -90,13 +93,14 @@ object GlobalSpawnQueue {
     }
 
 
+    @UseExperimental(ImplicitReflectionSerializer::class)
     private var Memory.globalSpawnQueue: CreepSpawnList?
         get() {
             val internal = this.asDynamic().globalSpawnQueue
-            return if (internal == null) null else JSON.parse(internal)
+            return if (internal == null) null else Json.parse(internal)
         }
         set(value) {
-            val stringyfied = if (value == null) null else JSON.stringify(value)
+            val stringyfied = if (value == null) null else Json.stringify(value)
             this.asDynamic().globalSpawnQueue = stringyfied
         }
 }

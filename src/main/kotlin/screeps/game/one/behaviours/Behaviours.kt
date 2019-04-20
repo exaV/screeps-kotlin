@@ -9,13 +9,13 @@ import screeps.game.one.*
 import screeps.game.one.building.buildRoads
 import screeps.game.one.kreeps.BodyDefinition
 import traveler.travelTo
-import kotlin.js.Math.random
+import kotlin.random.Random
 
 class IdleBehaviour {
     fun structuresThatNeedRepairing(): List<Structure> {
-        val room = Context.rooms.values.first { it.storage != null }
+        val room = Game.rooms.values.firstOrNull { it.storage != null }
 
-        return room.findStructures().filterNot { Context.targets.containsKey(it.id) }
+        return room?.findStructures().orEmpty().filterNot { Context.targets.containsKey(it.id) }
             .filter { it.hits < it.hitsMax / 2 && it.hits < 2_000_000 }
             .sortedBy { it.hits }
             .take(5) //TODO only repairing 5 is arbitrary
@@ -93,7 +93,7 @@ class IdleBehaviour {
     }
 
     fun Creep.moveInRandomDirection() {
-        val rand = random()
+        val rand = Random.nextDouble()
 
         val direction = when {
             rand < 0.125 -> TOP
@@ -155,7 +155,8 @@ object BusyBehaviour {
 
         if (creep.memory.state == CreepState.UPGRADING) {
             val controller =
-                creep.memory.targetId?.let { Game.getObjectById(it) as? StructureController } ?: creep.room.controller!!
+                creep.memory.targetId?.let { Game.getObjectById(it) as? StructureController }
+                    ?: creep.room.controller!!
             if (creep.upgradeController(controller) == ERR_NOT_IN_RANGE) {
                 creep.travelTo(controller.pos)
             }

@@ -1,22 +1,18 @@
 import groovy.json.internal.LazyMap
 import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.RESTClient
-
-import static groovyx.net.http.ContentType.JSON
+import org._10ne.gradle.rest.RestTask
 
 buildscript {
-    ext.kotlin_version = '1.2.70'
-    ext.serialization_version = '0.6.2'
+    ext.kotlin_version = '1.3.30'
 
     repositories {
-        jcenter()
-        maven { url "https://kotlin.bintray.com/kotlinx" }
+        repositories { jcenter() }
 
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlinx:kotlinx-gradle-serialization-plugin:$serialization_version"
-        classpath "org._10ne.gradle:rest-gradle-plugin:0.4.2"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
     }
 }
 
@@ -45,56 +41,43 @@ repositories {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
-    compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$serialization_version"
-    implementation 'com.github.exaV:screeps-kotlin-types:feature-1.0.0-SNAPSHOT'
+    compile 'org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version'
+    compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:0.11.0"
+    compile "ch.delconte.screeps-kotlin:screeps-kotlin-types:1.3.0"
 
     testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
 }
 
 compileKotlin2Js {
     kotlinOptions.outputFile = "${buildDir}/screeps/main.js"
-    kotlinOptions.moduleKind = "umd"
+    kotlinOptions.moduleKind = "commonjs"
     kotlinOptions.sourceMap = true
+    kotlinOptions.freeCompilerArgs = ["-Xuse-experimental=kotlin.Experimental,kotlinx.serialization.ImplicitReflectionSerializer"]
 
     runDceKotlinJs.keep "main.loop", "main.Traveler", "Traveler"
 }
 
-/**
- * build and deploy to
- *
- */
-task("deploy") {
-    group = 'screeps'
+
+task('deploy', type: RestTask) {
+    group 'screeps'
     dependsOn build
-    doLast {
-        String kotlin = new File("$buildDir/kotlin-js-min/main/kotlin.js").getText('UTF-8')
-        String kotlinxSerialisation = new File("$buildDir/kotlin-js-min/main/kotlinx-serialization-runtime-js.js").getText('UTF-8')
-        String screepsTypes = new File("$buildDir/kotlin-js-min/main/screeps-kotlin-types.js").getText('UTF-8')
-        String screepsCode = new File("$buildDir/kotlin-js-min/main/main.js").getText('UTF-8')
-        String travelerCode = new File("traveler/Traveler.js").getText('UTF-8')
 
-        String branchName = "kotlin"
+    def modules = [:]
 
-        RESTClient client = new RESTClient()
-        client.uri = "https://screeps.com/api/user/code"
-        client.headers["Authorization"] = 'Basic ' + ("$screepsUser:$screepsPassword".toString().bytes.encodeBase64())
-        client.headers["Content-Type"] = "application/json"
-        client.handler.success = { HttpResponseDecorator response, LazyMap data ->
-            //screeps api is a bit weird, we get 200 OK even if branch does not exist
-            if (data.keySet().any { it.contains("error") }) throw new GradleScriptException(data.toString(), null)
-            println data
-        }
-        client.handler.failure = { resp, data ->
-            resp.setData(data)
-            println data
-        }
-        client.post(body: [branch: branchName, modules: [main                              : screepsCode,
-                                                         'screeps-kotlin-types'            : screepsTypes,
-                                                         kotlin                            : kotlin,
-                                                         'kotlinx-serialization-runtime-js': kotlinxSerialisation,
-                                                         Traveler                          : travelerCode]], requestContentType: JSON)
+    httpMethod = "post"
+    uri = "https://screeps.com/api/user/code"
+    requestHeaders = ["X-Token": "$screepsToken"]
+    contentType = groovyx.net.http.ContentType.JSON
+    requestBody = ["branch": "kotlin", "modules": modules]
+
+    doFirst {
+        println "uploading code to screeps.com"
+
+        modules.put('main', file("$buildDir/kotlin-js-min/main/main.js").getText('UTF-8'))
+        modules.put('screeps-kotlin-types', file("$buildDir/kotlin-js-min/main/screeps-kotlin-types.js").getText('UTF-8'))
+        modules.put('kotlin', file("$buildDir/kotlin-js-min/main/kotlin.js").getText('UTF-8'))
+        modules.put('kotlinx-serialization-runtime-js', file("$buildDir/kotlin-js-min/main/kotlinx-serialization-runtime-js.js").getText('UTF-8'))
+        modules.put('Traveler', file("traveler/Traveler.js").getText('UTF-8'))
     }
-
 
 }
